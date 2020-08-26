@@ -115,10 +115,10 @@ void testType4Messages()
     v = cmidi2_ump_cmidi2_pitch_bend(1, 2, 1);
     assert(v == 0x41E2000080000001);
 
-    v = cmidi2_ump_cmidi2_per_note_rpn(1, 2, 56, 0x10, 0x33333333);
+    v = cmidi2_ump_cmidi2_per_note_rcc(1, 2, 56, 0x10, 0x33333333);
     assert(v == 0x4102381033333333);
 
-    v = cmidi2_ump_cmidi2_per_note_nrpn(1, 2, 56, 0x10, 0x33333333);
+    v = cmidi2_ump_cmidi2_per_note_acc(1, 2, 56, 0x10, 0x33333333);
     assert(v == 0x4112381033333333);
 
     v = cmidi2_ump_cmidi2_rpn(1, 2, 0x10, 0x20, 0x12345678);

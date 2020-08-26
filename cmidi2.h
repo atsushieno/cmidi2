@@ -17,8 +17,8 @@ enum cmidi2_status_code {
     CMIDI2_STATUS_PROGRAM = 0xC0,
     CMIDI2_STATUS_CAF = 0xD0,
     CMIDI2_STATUS_PITCH_BEND = 0xE0,
-    CMIDI2_STATUS_PER_NOTE_RPN = 0x00,
-    CMIDI2_STATUS_PER_NOTE_NRPN = 0x10,
+    CMIDI2_STATUS_PER_NOTE_RCC = 0x00,
+    CMIDI2_STATUS_PER_NOTE_ACC = 0x10,
     CMIDI2_STATUS_RPN = 0x20,
     CMIDI2_STATUS_NRPN = 0x30,
     CMIDI2_STATUS_RELATIVE_RPN = 0x40,
@@ -227,12 +227,12 @@ static inline int64_t cmidi2_ump_cmidi2_paf(uint8_t group, uint8_t channel, uint
     return cmidi2_ump_cmidi2_channel_message_8_8_32(group, CMIDI2_STATUS_PAF, channel, note & 0x7F, MIDI_2_0_RESERVED, data);
 }
 
-static inline int64_t cmidi2_ump_cmidi2_per_note_rpn(uint8_t group, uint8_t channel, uint8_t note, uint8_t index, uint32_t data) {
-    return cmidi2_ump_cmidi2_channel_message_8_8_32(group, CMIDI2_STATUS_PER_NOTE_RPN, channel, note & 0x7F, index, data);
+static inline int64_t cmidi2_ump_cmidi2_per_note_rcc(uint8_t group, uint8_t channel, uint8_t note, uint8_t index, uint32_t data) {
+    return cmidi2_ump_cmidi2_channel_message_8_8_32(group, CMIDI2_STATUS_PER_NOTE_RCC, channel, note & 0x7F, index, data);
 }
 
-static inline int64_t cmidi2_ump_cmidi2_per_note_nrpn(uint8_t group, uint8_t channel, uint8_t note, uint8_t index, uint32_t data) {
-    return cmidi2_ump_cmidi2_channel_message_8_8_32(group, CMIDI2_STATUS_PER_NOTE_NRPN, channel, note & 0x7F, index, data);
+static inline int64_t cmidi2_ump_cmidi2_per_note_acc(uint8_t group, uint8_t channel, uint8_t note, uint8_t index, uint32_t data) {
+    return cmidi2_ump_cmidi2_channel_message_8_8_32(group, CMIDI2_STATUS_PER_NOTE_ACC, channel, note & 0x7F, index, data);
 }
 
 static inline int64_t cmidi2_ump_cmidi2_per_note_management(uint8_t group, uint8_t channel, uint8_t note, uint8_t optionFlags) {
