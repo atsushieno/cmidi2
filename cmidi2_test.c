@@ -77,9 +77,9 @@ void testType3Messages()
 
 void testType4Messages()
 {
-    uint16_t pitch = cmidi2_ump_get_pitch_7_9_split(0x20, 0.5);
+    uint16_t pitch = cmidi2_ump_pitch_7_9_split(0x20, 0.5);
     assert(pitch == 0x4100);
-    pitch = cmidi2_ump_get_pitch_7_9(32.5);
+    pitch = cmidi2_ump_pitch_7_9(32.5);
     assert(pitch == 0x4100);
 
     uint64_t v = cmidi2_ump_cmidi2_channel_message_8_8_16_16(1, CMIDI2_STATUS_NOTE_OFF, 2, 0x20, CMIDI2_ATTRIBUTE_TYPE_PITCH7_9, 0xFEDC, pitch);
@@ -235,5 +235,7 @@ int main ()
     testType4Messages();
     testType5Messages();
     testForEach();
+    uint8_t bytes [] = {0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3};
+    printf("%d\n", cmidi2_ump_get_channel((cmidi2_ump*) bytes));
     return 0;
 }
