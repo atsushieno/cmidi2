@@ -34,7 +34,7 @@ enum cmidi2_message_type {
     CMIDI2_MESSAGE_TYPE_MIDI_1_CHANNEL = 2,
     CMIDI2_MESSAGE_TYPE_SYSEX7 = 3,
     CMIDI2_MESSAGE_TYPE_MIDI_2_CHANNEL = 4,
-    CMIDI2_MESSAGE_TYPE_SYSEX8_MIXED = 5,
+    CMIDI2_MESSAGE_TYPE_SYSEX8_MDS = 5,
 };
 
 enum cmidi2_ci_protocol_bytes {
@@ -114,7 +114,7 @@ static inline uint8_t cmidi2_ump_get_num_bytes(uint32_t data) {
     case CMIDI2_MESSAGE_TYPE_MIDI_2_CHANNEL:
     case CMIDI2_MESSAGE_TYPE_SYSEX7:
         return 8;
-    case CMIDI2_MESSAGE_TYPE_SYSEX8_MIXED:
+    case CMIDI2_MESSAGE_TYPE_SYSEX8_MDS:
         return 16;
     }
     return 0xFF; /* wrong */
@@ -286,6 +286,14 @@ static inline int64_t cmidi2_ump_cmidi2_per_note_pitch_bend(uint8_t group, uint8
 
 // Common utility functions for sysex support
 
+static inline uint8_t cmidi2_ump_get_byte_from_uint32(uint32_t src, uint8_t index) {
+    return (uint8_t) (src >> ((7 - index) * 8) & 0xFF);
+}
+
+static inline uint8_t cmidi2_ump_get_byte_from_uint64(uint32_t src, uint8_t index) {
+    return (uint8_t) (src >> ((7 - index) * 8) & 0xFF);
+}
+
 static inline uint8_t cmidi2_ump_sysex_get_num_packets(uint8_t numBytes, uint8_t radix) {
     return numBytes <= radix ? 1 : numBytes / radix + (numBytes % radix ? 1 : 0);
 }
@@ -298,7 +306,7 @@ static inline uint32_t cmidi2_ump_read_uint32_bytes(void *sequence) {
     return ret;
 }
 
-static inline uint64_t cmidi2_ump_read_uint64_bytes(uint8_t *sequence) {
+static inline uint64_t cmidi2_ump_read_uint64_bytes(void *sequence) {
     uint8_t *bytes = (uint8_t*) sequence;
     uint64_t ret = 0;
     for (int i = 0; i < 8; i++)
@@ -392,7 +400,7 @@ static inline int8_t cmidi2_ump_sysex8_get_num_packets(uint8_t numBytes) {
 }
 
 static inline void cmidi2_ump_sysex8_get_packet_of(uint8_t group, uint8_t streamId, uint8_t numBytes, void* srcData, int32_t index, uint64_t* result1, uint64_t* result2) {
-    cmidi2_ump_sysex_get_packet_of(result1, result2, group, numBytes, srcData, index, CMIDI2_MESSAGE_TYPE_SYSEX8_MIXED, 13, true, streamId);
+    cmidi2_ump_sysex_get_packet_of(result1, result2, group, numBytes, srcData, index, CMIDI2_MESSAGE_TYPE_SYSEX8_MDS, 13, true, streamId);
 }
 
 /* process() - more complicated function */
@@ -459,6 +467,13 @@ static inline uint8_t cmidi2_ump_get_system_message_byte2(cmidi2_ump* ump) {
     return _PACKET_(2);
 }
 static inline uint8_t cmidi2_ump_get_system_message_byte3(cmidi2_ump* ump) {
+    return _PACKET_(3);
+}
+
+static inline uint8_t cmidi2_ump_get_midi1_byte2(cmidi2_ump* ump) {
+    return _PACKET_(2);
+}
+static inline uint8_t cmidi2_ump_get_midi1_byte3(cmidi2_ump* ump) {
     return _PACKET_(3);
 }
 
@@ -642,3 +657,4 @@ static inline void* cmidi2_ump_sequence_next(void* ptr) {
 #ifdef __cplusplus
 }
 #endif
+
