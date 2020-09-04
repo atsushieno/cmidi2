@@ -6,7 +6,7 @@
 #define JR_TIMESTAMP_TICKS_PER_SECOND 31250
 
 #ifdef __cplusplus
-namespace cmidi2 {
+extern "C" {
 #endif
 
 enum cmidi2_status_code {
@@ -657,4 +657,3 @@ static inline void* cmidi2_ump_sequence_next(void* ptr) {
 #ifdef __cplusplus
 }
 #endif
-
