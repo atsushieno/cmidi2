@@ -188,10 +188,7 @@ void testForEach()
         for (int b = 0; b < 8; b++) {
             uint8_t v = (ump[i] >> (7 - b) * 8) & 0xFF;
             buf[i * 8 + b] = v;
-printf("%02x", v);
-if (b % 4 == 3) printf(" ");
         }
-if (i % 4 == 3) printf("\n");
     }
 
     uint64_t expected [] = {
