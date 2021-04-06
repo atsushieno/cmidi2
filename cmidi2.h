@@ -189,13 +189,13 @@ static inline int32_t cmidi2_ump_midi1_pitch_bend(uint8_t group, uint8_t channel
 }
 
 // 4.2 MIDI 2.0 Channel Voice Messages
-static inline int64_t cmidi2_ump_cmidi2_channel_message_8_8_16_16(
+static inline int64_t cmidi2_ump_midi2_channel_message_8_8_16_16(
     uint8_t group, uint8_t code, uint8_t channel, uint8_t byte3, uint8_t byte4,
     uint16_t short1, uint16_t short2) {
     return (((uint64_t) (CMIDI2_MESSAGE_TYPE_MIDI_2_CHANNEL << 28) + ((group & 0xF) << 24) + (((code & 0xF0) + (channel & 0xF)) << 16) + (byte3 << 8) + byte4) << 32) + ((uint64_t) short1 << 16) + short2;
 }
 
-static inline int64_t cmidi2_ump_cmidi2_channel_message_8_8_32(
+static inline int64_t cmidi2_ump_midi2_channel_message_8_8_32(
     uint8_t group, uint8_t code, uint8_t channel, uint8_t byte3, uint8_t byte4,
     uint32_t rest) {
     return (((uint64_t) (CMIDI2_MESSAGE_TYPE_MIDI_2_CHANNEL << 28) + ((group & 0xF) << 24) + (((code & 0xF0) + (channel & 0xF)) << 16) + (byte3 << 8) + byte4) << 32) + rest;
@@ -215,73 +215,73 @@ static inline uint16_t cmidi2_ump_pitch_7_9_split(uint8_t semitone, double micro
     return ret;
 }
 
-static inline int64_t cmidi2_ump_cmidi2_note_off(uint8_t group, uint8_t channel, uint8_t note, uint8_t attributeType, uint16_t velocity, uint16_t attributeData) {
-    return cmidi2_ump_cmidi2_channel_message_8_8_16_16(group, CMIDI2_STATUS_NOTE_OFF, channel, note & 0x7F, attributeType, velocity, attributeData);
+static inline int64_t cmidi2_ump_midi2_note_off(uint8_t group, uint8_t channel, uint8_t note, uint8_t attributeType, uint16_t velocity, uint16_t attributeData) {
+    return cmidi2_ump_midi2_channel_message_8_8_16_16(group, CMIDI2_STATUS_NOTE_OFF, channel, note & 0x7F, attributeType, velocity, attributeData);
 }
 
-static inline int64_t cmidi2_ump_cmidi2_note_on(uint8_t group, uint8_t channel, uint8_t note, uint8_t attributeType, uint16_t velocity, uint16_t attributeData) {
-    return cmidi2_ump_cmidi2_channel_message_8_8_16_16(group, CMIDI2_STATUS_NOTE_ON, channel, note & 0x7F, attributeType, velocity, attributeData);
+static inline int64_t cmidi2_ump_midi2_note_on(uint8_t group, uint8_t channel, uint8_t note, uint8_t attributeType, uint16_t velocity, uint16_t attributeData) {
+    return cmidi2_ump_midi2_channel_message_8_8_16_16(group, CMIDI2_STATUS_NOTE_ON, channel, note & 0x7F, attributeType, velocity, attributeData);
 }
 
-static inline int64_t cmidi2_ump_cmidi2_paf(uint8_t group, uint8_t channel, uint8_t note, uint32_t data) {
-    return cmidi2_ump_cmidi2_channel_message_8_8_32(group, CMIDI2_STATUS_PAF, channel, note & 0x7F, MIDI_2_0_RESERVED, data);
+static inline int64_t cmidi2_ump_midi2_paf(uint8_t group, uint8_t channel, uint8_t note, uint32_t data) {
+    return cmidi2_ump_midi2_channel_message_8_8_32(group, CMIDI2_STATUS_PAF, channel, note & 0x7F, MIDI_2_0_RESERVED, data);
 }
 
-static inline int64_t cmidi2_ump_cmidi2_per_note_rcc(uint8_t group, uint8_t channel, uint8_t note, uint8_t index, uint32_t data) {
-    return cmidi2_ump_cmidi2_channel_message_8_8_32(group, CMIDI2_STATUS_PER_NOTE_RCC, channel, note & 0x7F, index, data);
+static inline int64_t cmidi2_ump_midi2_per_note_rcc(uint8_t group, uint8_t channel, uint8_t note, uint8_t index, uint32_t data) {
+    return cmidi2_ump_midi2_channel_message_8_8_32(group, CMIDI2_STATUS_PER_NOTE_RCC, channel, note & 0x7F, index, data);
 }
 
-static inline int64_t cmidi2_ump_cmidi2_per_note_acc(uint8_t group, uint8_t channel, uint8_t note, uint8_t index, uint32_t data) {
-    return cmidi2_ump_cmidi2_channel_message_8_8_32(group, CMIDI2_STATUS_PER_NOTE_ACC, channel, note & 0x7F, index, data);
+static inline int64_t cmidi2_ump_midi2_per_note_acc(uint8_t group, uint8_t channel, uint8_t note, uint8_t index, uint32_t data) {
+    return cmidi2_ump_midi2_channel_message_8_8_32(group, CMIDI2_STATUS_PER_NOTE_ACC, channel, note & 0x7F, index, data);
 }
 
-static inline int64_t cmidi2_ump_cmidi2_per_note_management(uint8_t group, uint8_t channel, uint8_t note, uint8_t optionFlags) {
-    return cmidi2_ump_cmidi2_channel_message_8_8_32(group, CMIDI2_STATUS_PER_NOTE_MANAGEMENT, channel, note & 0x7F, optionFlags & 3, 0);
+static inline int64_t cmidi2_ump_midi2_per_note_management(uint8_t group, uint8_t channel, uint8_t note, uint8_t optionFlags) {
+    return cmidi2_ump_midi2_channel_message_8_8_32(group, CMIDI2_STATUS_PER_NOTE_MANAGEMENT, channel, note & 0x7F, optionFlags & 3, 0);
 }
 
-static inline int64_t cmidi2_ump_cmidi2_cc(uint8_t group, uint8_t channel, uint8_t index, uint32_t data) {
-    return cmidi2_ump_cmidi2_channel_message_8_8_32(group, CMIDI2_STATUS_CC, channel, index & 0x7F, MIDI_2_0_RESERVED, data);
+static inline int64_t cmidi2_ump_midi2_cc(uint8_t group, uint8_t channel, uint8_t index, uint32_t data) {
+    return cmidi2_ump_midi2_channel_message_8_8_32(group, CMIDI2_STATUS_CC, channel, index & 0x7F, MIDI_2_0_RESERVED, data);
 }
 
-static inline int64_t cmidi2_ump_cmidi2_rpn(uint8_t group, uint8_t channel, uint8_t bankAkaMSB, uint8_t indexAkaLSB, uint32_t dataAkaDTE) {
-    return cmidi2_ump_cmidi2_channel_message_8_8_32(group, CMIDI2_STATUS_RPN, channel, bankAkaMSB & 0x7F, indexAkaLSB & 0x7F, dataAkaDTE);
+static inline int64_t cmidi2_ump_midi2_rpn(uint8_t group, uint8_t channel, uint8_t bankAkaMSB, uint8_t indexAkaLSB, uint32_t dataAkaDTE) {
+    return cmidi2_ump_midi2_channel_message_8_8_32(group, CMIDI2_STATUS_RPN, channel, bankAkaMSB & 0x7F, indexAkaLSB & 0x7F, dataAkaDTE);
 }
 
-static inline int64_t cmidi2_ump_cmidi2_nrpn(uint8_t group, uint8_t channel, uint8_t bankAkaMSB, uint8_t indexAkaLSB, uint32_t dataAkaDTE) {
-    return cmidi2_ump_cmidi2_channel_message_8_8_32(group, CMIDI2_STATUS_NRPN, channel, bankAkaMSB & 0x7F, indexAkaLSB & 0x7F, dataAkaDTE);
+static inline int64_t cmidi2_ump_midi2_nrpn(uint8_t group, uint8_t channel, uint8_t bankAkaMSB, uint8_t indexAkaLSB, uint32_t dataAkaDTE) {
+    return cmidi2_ump_midi2_channel_message_8_8_32(group, CMIDI2_STATUS_NRPN, channel, bankAkaMSB & 0x7F, indexAkaLSB & 0x7F, dataAkaDTE);
 }
 
-static inline int64_t cmidi2_ump_cmidi2_relative_rpn(uint8_t group, uint8_t channel, uint8_t bankAkaMSB, uint8_t indexAkaLSB, uint32_t dataAkaDTE) {
-    return cmidi2_ump_cmidi2_channel_message_8_8_32(group, CMIDI2_STATUS_RELATIVE_RPN, channel, bankAkaMSB & 0x7F, indexAkaLSB & 0x7F, dataAkaDTE);
+static inline int64_t cmidi2_ump_midi2_relative_rpn(uint8_t group, uint8_t channel, uint8_t bankAkaMSB, uint8_t indexAkaLSB, uint32_t dataAkaDTE) {
+    return cmidi2_ump_midi2_channel_message_8_8_32(group, CMIDI2_STATUS_RELATIVE_RPN, channel, bankAkaMSB & 0x7F, indexAkaLSB & 0x7F, dataAkaDTE);
 }
 
-static inline int64_t cmidi2_ump_cmidi2_relative_nrpn(uint8_t group, uint8_t channel, uint8_t bankAkaMSB, uint8_t indexAkaLSB, uint32_t dataAkaDTE) {
-    return cmidi2_ump_cmidi2_channel_message_8_8_32(group, CMIDI2_STATUS_RELATIVE_NRPN, channel, bankAkaMSB & 0x7F, indexAkaLSB & 0x7F, dataAkaDTE);
+static inline int64_t cmidi2_ump_midi2_relative_nrpn(uint8_t group, uint8_t channel, uint8_t bankAkaMSB, uint8_t indexAkaLSB, uint32_t dataAkaDTE) {
+    return cmidi2_ump_midi2_channel_message_8_8_32(group, CMIDI2_STATUS_RELATIVE_NRPN, channel, bankAkaMSB & 0x7F, indexAkaLSB & 0x7F, dataAkaDTE);
 }
 
-static inline int64_t cmidi2_ump_cmidi2_program(uint8_t group, uint8_t channel, uint8_t optionFlags, uint8_t program, uint8_t bankMSB, uint8_t bankLSB) {
-    return cmidi2_ump_cmidi2_channel_message_8_8_32(group, CMIDI2_STATUS_PROGRAM, channel, MIDI_2_0_RESERVED, optionFlags & 1,
+static inline int64_t cmidi2_ump_midi2_program(uint8_t group, uint8_t channel, uint8_t optionFlags, uint8_t program, uint8_t bankMSB, uint8_t bankLSB) {
+    return cmidi2_ump_midi2_channel_message_8_8_32(group, CMIDI2_STATUS_PROGRAM, channel, MIDI_2_0_RESERVED, optionFlags & 1,
         ((program & 0x7F) << 24) + (bankMSB << 8) + bankLSB);
 }
 
-static inline int64_t cmidi2_ump_cmidi2_caf(uint8_t group, uint8_t channel, uint32_t data) {
-    return cmidi2_ump_cmidi2_channel_message_8_8_32(group, CMIDI2_STATUS_CAF, channel, MIDI_2_0_RESERVED, MIDI_2_0_RESERVED, data);
+static inline int64_t cmidi2_ump_midi2_caf(uint8_t group, uint8_t channel, uint32_t data) {
+    return cmidi2_ump_midi2_channel_message_8_8_32(group, CMIDI2_STATUS_CAF, channel, MIDI_2_0_RESERVED, MIDI_2_0_RESERVED, data);
 }
 
-static inline int64_t cmidi2_ump_cmidi2_pitch_bend_direct(uint8_t group, uint8_t channel, uint32_t unsignedData) {
-    return cmidi2_ump_cmidi2_channel_message_8_8_32(group, CMIDI2_STATUS_PITCH_BEND, channel, MIDI_2_0_RESERVED, MIDI_2_0_RESERVED, unsignedData);
+static inline int64_t cmidi2_ump_midi2_pitch_bend_direct(uint8_t group, uint8_t channel, uint32_t unsignedData) {
+    return cmidi2_ump_midi2_channel_message_8_8_32(group, CMIDI2_STATUS_PITCH_BEND, channel, MIDI_2_0_RESERVED, MIDI_2_0_RESERVED, unsignedData);
 }
 
-static inline int64_t cmidi2_ump_cmidi2_pitch_bend(uint8_t group, uint8_t channel, int32_t data) {
-    return cmidi2_ump_cmidi2_pitch_bend_direct(group, channel, 0x80000000 + data);
+static inline int64_t cmidi2_ump_midi2_pitch_bend(uint8_t group, uint8_t channel, int32_t data) {
+    return cmidi2_ump_midi2_pitch_bend_direct(group, channel, 0x80000000 + data);
 }
 
-static inline int64_t cmidi2_ump_cmidi2_per_note_pitch_bend_direct(uint8_t group, uint8_t channel, uint8_t note, uint32_t data) {
-    return cmidi2_ump_cmidi2_channel_message_8_8_32(group, CMIDI2_STATUS_PER_NOTE_PITCH_BEND, channel, note & 0x7F, MIDI_2_0_RESERVED, data);
+static inline int64_t cmidi2_ump_midi2_per_note_pitch_bend_direct(uint8_t group, uint8_t channel, uint8_t note, uint32_t data) {
+    return cmidi2_ump_midi2_channel_message_8_8_32(group, CMIDI2_STATUS_PER_NOTE_PITCH_BEND, channel, note & 0x7F, MIDI_2_0_RESERVED, data);
 }
 
-static inline int64_t cmidi2_ump_cmidi2_per_note_pitch_bend(uint8_t group, uint8_t channel, uint8_t note, uint32_t data) {
-    return cmidi2_ump_cmidi2_per_note_pitch_bend_direct(group, channel, note, 0x80000000 + data);
+static inline int64_t cmidi2_ump_midi2_per_note_pitch_bend(uint8_t group, uint8_t channel, uint8_t note, uint32_t data) {
+    return cmidi2_ump_midi2_per_note_pitch_bend_direct(group, channel, note, 0x80000000 + data);
 }
 
 // Common utility functions for sysex support

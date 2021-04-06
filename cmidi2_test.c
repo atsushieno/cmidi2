@@ -82,64 +82,64 @@ void testType4Messages()
     pitch = cmidi2_ump_pitch_7_9(32.5);
     assert(pitch == 0x4100);
 
-    uint64_t v = cmidi2_ump_cmidi2_channel_message_8_8_16_16(1, CMIDI2_STATUS_NOTE_OFF, 2, 0x20, CMIDI2_ATTRIBUTE_TYPE_PITCH7_9, 0xFEDC, pitch);
+    uint64_t v = cmidi2_ump_midi2_channel_message_8_8_16_16(1, CMIDI2_STATUS_NOTE_OFF, 2, 0x20, CMIDI2_ATTRIBUTE_TYPE_PITCH7_9, 0xFEDC, pitch);
     assert(v == 0x41822003FEDC4100);
-    v = cmidi2_ump_cmidi2_channel_message_8_8_32(1, CMIDI2_STATUS_NOTE_OFF, 2, 0x20, CMIDI2_ATTRIBUTE_TYPE_PITCH7_9, 0x12345678);
+    v = cmidi2_ump_midi2_channel_message_8_8_32(1, CMIDI2_STATUS_NOTE_OFF, 2, 0x20, CMIDI2_ATTRIBUTE_TYPE_PITCH7_9, 0x12345678);
     assert(v == 0x4182200312345678);
 
-    v = cmidi2_ump_cmidi2_note_off(1, 2, 64, 0, 0x1234, 0);
+    v = cmidi2_ump_midi2_note_off(1, 2, 64, 0, 0x1234, 0);
     assert(v == 0x4182400012340000);
-    v = cmidi2_ump_cmidi2_note_off(1, 2, 64, 3, 0x1234, pitch);
+    v = cmidi2_ump_midi2_note_off(1, 2, 64, 3, 0x1234, pitch);
     assert(v == 0x4182400312344100);
 
-    v = cmidi2_ump_cmidi2_note_on(1, 2, 64, 0, 0xFEDC, 0);
+    v = cmidi2_ump_midi2_note_on(1, 2, 64, 0, 0xFEDC, 0);
     assert(v == 0x41924000FEDC0000);
-    v = cmidi2_ump_cmidi2_note_on(1, 2, 64, 3, 0xFEDC, pitch);
+    v = cmidi2_ump_midi2_note_on(1, 2, 64, 3, 0xFEDC, pitch);
     assert(v == 0x41924003FEDC4100);
 
-    v = cmidi2_ump_cmidi2_paf(1, 2, 64, 0x87654321);
+    v = cmidi2_ump_midi2_paf(1, 2, 64, 0x87654321);
     assert(v == 0x41A2400087654321);
 
-    v = cmidi2_ump_cmidi2_cc(1, 2, 1, 0x87654321);
+    v = cmidi2_ump_midi2_cc(1, 2, 1, 0x87654321);
     assert(v == 0x41B2010087654321);
 
-    v = cmidi2_ump_cmidi2_program(1, 2, 1, 29, 8, 1);
+    v = cmidi2_ump_midi2_program(1, 2, 1, 29, 8, 1);
     assert(v == 0x41C200011D000801);
 
-    v = cmidi2_ump_cmidi2_caf(1, 2, 0x87654321);
+    v = cmidi2_ump_midi2_caf(1, 2, 0x87654321);
     assert(v == 0x41D2000087654321);
 
-    v = cmidi2_ump_cmidi2_pitch_bend_direct(1, 2, 0x87654321);
+    v = cmidi2_ump_midi2_pitch_bend_direct(1, 2, 0x87654321);
     assert(v == 0x41E2000087654321);
 
-    v = cmidi2_ump_cmidi2_pitch_bend(1, 2, 1);
+    v = cmidi2_ump_midi2_pitch_bend(1, 2, 1);
     assert(v == 0x41E2000080000001);
 
-    v = cmidi2_ump_cmidi2_per_note_rcc(1, 2, 56, 0x10, 0x33333333);
+    v = cmidi2_ump_midi2_per_note_rcc(1, 2, 56, 0x10, 0x33333333);
     assert(v == 0x4102381033333333);
 
-    v = cmidi2_ump_cmidi2_per_note_acc(1, 2, 56, 0x10, 0x33333333);
+    v = cmidi2_ump_midi2_per_note_acc(1, 2, 56, 0x10, 0x33333333);
     assert(v == 0x4112381033333333);
 
-    v = cmidi2_ump_cmidi2_rpn(1, 2, 0x10, 0x20, 0x12345678);
+    v = cmidi2_ump_midi2_rpn(1, 2, 0x10, 0x20, 0x12345678);
     assert(v == 0x4122102012345678);
 
-    v = cmidi2_ump_cmidi2_nrpn(1, 2, 0x10, 0x20, 0x12345678);
+    v = cmidi2_ump_midi2_nrpn(1, 2, 0x10, 0x20, 0x12345678);
     assert(v == 0x4132102012345678);
 
-    v = cmidi2_ump_cmidi2_relative_rpn(1, 2, 0x10, 0x20, 0x12345678);
+    v = cmidi2_ump_midi2_relative_rpn(1, 2, 0x10, 0x20, 0x12345678);
     assert(v == 0x4142102012345678);
 
-    v = cmidi2_ump_cmidi2_relative_nrpn(1, 2, 0x10, 0x20, 0x12345678);
+    v = cmidi2_ump_midi2_relative_nrpn(1, 2, 0x10, 0x20, 0x12345678);
     assert(v == 0x4152102012345678);
 
-    v = cmidi2_ump_cmidi2_per_note_pitch_bend_direct(1, 2, 56, 0x87654321);
+    v = cmidi2_ump_midi2_per_note_pitch_bend_direct(1, 2, 56, 0x87654321);
     assert(v == 0x4162380087654321);
 
-    v = cmidi2_ump_cmidi2_per_note_pitch_bend(1, 2, 56, 1);
+    v = cmidi2_ump_midi2_per_note_pitch_bend(1, 2, 56, 1);
     assert(v == 0x4162380080000001);
 
-    v = cmidi2_ump_cmidi2_per_note_management(1, 2, 56, CMIDI2_PER_NOTE_MANAGEMENT_DETACH);
+    v = cmidi2_ump_midi2_per_note_management(1, 2, 56, CMIDI2_PER_NOTE_MANAGEMENT_DETACH);
     assert(v == 0x41F2380200000000);
 }
 
@@ -178,9 +178,9 @@ void testForEach()
 {
     uint64_t ump[] = {
 	cmidi2_ump_jr_clock(1, 0.0) * 0x100000000 + cmidi2_ump_jr_timestamp(1, 0),
-	cmidi2_ump_cmidi2_note_on(1, 1, 60, 0, 120 * 0x100, 0),
+	cmidi2_ump_midi2_note_on(1, 1, 60, 0, 120 * 0x100, 0),
 	cmidi2_ump_jr_clock(1, 0.0) * 0x100000000 + cmidi2_ump_jr_timestamp(1, 1),
-	cmidi2_ump_cmidi2_note_off(1, 1, 60, 0, 120 * 0x100, 0),
+	cmidi2_ump_midi2_note_off(1, 1, 60, 0, 120 * 0x100, 0),
     };
 
     uint8_t buf[sizeof(ump)];
