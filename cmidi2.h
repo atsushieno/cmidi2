@@ -211,7 +211,7 @@ static inline uint16_t cmidi2_ump_pitch_7_9(double semitone) {
 static inline uint16_t cmidi2_ump_pitch_7_9_split(uint8_t semitone, double microtone) {
     uint16_t ret = (uint16_t) (semitone & 0x7F) << 9;
     double actual = microtone < 0.0 ? 0.0 : microtone > 1.0 ? 1.0 : microtone;
-    ret += (int) (microtone * 512.0);
+    ret += (int) (actual * 512.0);
     return ret;
 }
 
