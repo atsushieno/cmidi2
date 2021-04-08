@@ -404,37 +404,39 @@ static inline void cmidi2_ump_sysex8_get_packet_of(uint8_t group, uint8_t stream
 }
 
 /* process() - more complicated function */
-typedef void(*cmidi2_ump_handler_u128)(uint64_t data1, uint64_t data2, void* context);
+typedef void(*cmidi2_ump_handler_u128)(uint64_t data1, uint64_t data2, size_t index, void* context);
 
 static inline void cmidi2_ump_sysex8_process(uint8_t group, void* sysex, uint32_t length, uint8_t streamId, cmidi2_ump_handler_u128 sendUMP, void* context)
 {
     int32_t numPackets = cmidi2_ump_sysex8_get_num_packets(length);
-    for (int p = 0; p < numPackets; p++) {
+    for (size_t p = 0; p < numPackets; p++) {
         uint64_t result1, result2;
         cmidi2_ump_sysex8_get_packet_of(group, streamId, length, sysex, p, &result1, &result2);
-        sendUMP(result1, result2, context);
+        sendUMP(result1, result2, p, context);
     }
 }
 
 // 4.6 Mixed Data Set Message ... should we come up with complicated chunk splitter function?
 
 
-static inline int8_t cmidi2_ump_mds_get_num_chunks(uint32_t numTotalBytesInMDS) {
+static inline uint16_t cmidi2_ump_mds_get_num_chunks(uint32_t numTotalBytesInMDS) {
     uint32_t radix = 14 * 0x10000;
     return numTotalBytesInMDS / radix + (numTotalBytesInMDS % radix ? 1 : 0);
 }
 
-static inline int8_t cmidi2_ump_mds_get_num_payloads(uint32_t numTotalBytesinChunk) {
+// Returns -1 if input is out of range
+static inline int32_t cmidi2_ump_mds_get_num_payloads(uint32_t numTotalBytesinChunk) {
+    if (numTotalBytesinChunk > 14 * 65535)
+        return -1;
     return numTotalBytesinChunk / 14 + (numTotalBytesinChunk % 14 ? 1 : 0);
 }
 
 static inline void cmidi2_ump_mds_get_header(uint8_t group, uint8_t mdsId,
     uint16_t numBytesInChunk, uint16_t numChunks, uint16_t chunkIndex,
     uint16_t manufacturerId, uint16_t deviceId, uint16_t subId, uint16_t subId2,
-    void* srcData, uint64_t* result1, uint64_t* result2) {
+    uint64_t* result1, uint64_t* result2) {
     uint8_t dst8[16];
     memset(dst8, 0, 16);
-    uint8_t *src8 = (uint8_t*) srcData;
 
     dst8[0] = (CMIDI2_MESSAGE_TYPE_SYSEX8_MDS << 4) + (group & 0xF);
     dst8[1] = CMIDI2_MIXED_DATA_STATUS_HEADER + mdsId;
@@ -451,7 +453,8 @@ static inline void cmidi2_ump_mds_get_header(uint8_t group, uint8_t mdsId,
         *result2 = cmidi2_ump_read_uint64_bytes(dst8 + 8);
 }
 
-static inline void cmidi2_ump_mds_get_payload_of(uint8_t group, uint8_t mdsId, uint16_t numBytes, void* srcData, int32_t index, uint64_t* result1, uint64_t* result2) {
+// srcData points to exact start of the source data.
+static inline void cmidi2_ump_mds_get_payload_of(uint8_t group, uint8_t mdsId, uint16_t numBytes, void* srcData, uint64_t* result1, uint64_t* result2) {
     uint8_t dst8[16];
     memset(dst8, 0, 16);
     uint8_t *src8 = (uint8_t*) srcData;
@@ -462,13 +465,33 @@ static inline void cmidi2_ump_mds_get_payload_of(uint8_t group, uint8_t mdsId, u
     uint8_t radix = 14;
     uint8_t size = numBytes < radix ? numBytes % radix : radix;
 
-    for (uint8_t i = 0, j = index * radix; i < size; i++, j++)
+    for (uint8_t i = 0, j = 0; i < size; i++, j++)
         dst8[i + 2] = src8[j];
 
     *result1 = cmidi2_ump_read_uint64_bytes(dst8);
     if (result2)
         *result2 = cmidi2_ump_read_uint64_bytes(dst8 + 8);
 }
+
+/* process() - more complicated function */
+typedef void(*cmidi2_mds_handler)(uint64_t data1, uint64_t data2, size_t chunkId, size_t payloadId, void* context);
+
+static inline void cmidi2_ump_mds_process(uint8_t group, uint8_t mdsId, void* data, uint32_t length, cmidi2_mds_handler sendUMP, void* context)
+{
+    int32_t numChunks = cmidi2_ump_mds_get_num_chunks(length);
+    for (int c = 0; c < numChunks; c++) {
+        int32_t maxChunkSize = 14 * 65535;
+        int32_t chunkSize = c + 1 == numChunks ? length % maxChunkSize : maxChunkSize;
+        int32_t numPayloads = cmidi2_ump_mds_get_num_payloads(chunkSize);
+        for (int p = 0; p < numPayloads; p++) {
+            uint64_t result1, result2;
+            size_t offset = 14 * (65536 * c + p);
+            cmidi2_ump_mds_get_payload_of(group, mdsId, chunkSize, (uint8_t*) data + offset, &result1, &result2);
+            sendUMP(result1, result2, c, p, context);
+        }
+    }
+}
+
 
 // Strongly-typed(?) UMP.
 // I kind of think those getters are overkill, so I would collect almost use `cmidi2_ump_get_xxx()`

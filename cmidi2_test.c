@@ -143,7 +143,7 @@ void testType4Messages()
     assert(v == 0x41F2380200000000);
 }
 
-void testType5Messages()
+void testType5Messages_sysex()
 {
     uint8_t gsReset[] = {0x41, 0x10, 0x42, 0x12, 0x40, 0x00, 0x7F, 0x00, 0x41};
     uint8_t sysex27[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27};
@@ -172,6 +172,59 @@ void testType5Messages()
     cmidi2_ump_sysex8_get_packet_of(1, 7, length, sysex27, 2, &result1, &result2);
     assert(result1 == 0x5132071B00000000);
     assert(result2 == 0x0000000000000000);
+}
+
+void testType5Messages_mds()
+{
+    int length = cmidi2_ump_mds_get_num_payloads(0);
+    assert(length == 0);
+    length = cmidi2_ump_mds_get_num_payloads(1);
+    assert(length == 1);
+    length = cmidi2_ump_mds_get_num_payloads(14);
+    assert(length == 1);
+    length = cmidi2_ump_mds_get_num_payloads(15);
+    assert(length == 2);
+    length = cmidi2_ump_mds_get_num_payloads(65536);
+    assert(length == 4682);
+    length = cmidi2_ump_mds_get_num_payloads(65535 * 14);
+    assert(length == 65535);
+    length = cmidi2_ump_mds_get_num_payloads(65535 * 14 + 1);
+    assert(length < 0);
+
+    length = cmidi2_ump_mds_get_num_chunks(0);
+    assert(length == 0);
+    length = cmidi2_ump_mds_get_num_chunks(1);
+    assert(length == 1);
+    length = cmidi2_ump_mds_get_num_chunks(14 * 65536);
+    assert(length == 1);
+    length = cmidi2_ump_mds_get_num_chunks(14 * 65536 + 1);
+    assert(length == 2);
+    length = cmidi2_ump_mds_get_num_chunks(4294967295);
+    assert(length == 4682);
+
+    uint64_t result1, result2;
+
+    cmidi2_ump_mds_get_header(1, 2, 100, 4, 3, 100, 101, 102, 103, &result1, &result2);
+    assert(result1 == 0x5182640004000300);
+    assert(result2 == 0x6400650066006700);
+
+    uint8_t srcData[140];
+    memset(srcData, 0, sizeof(srcData));
+    for (int i = 0; i < 100; i++)
+        srcData[i] = i;
+
+    cmidi2_ump_mds_get_payload_of(1, 2, 100, srcData, &result1, &result2);
+    assert(result1 == 0x5192000102030405);
+    assert(result2 == 0x060708090A0B0C0D);
+    cmidi2_ump_mds_get_payload_of(1, 2, 100, srcData + 14 * 7, &result1, &result2);
+    assert(result1 == 0x5192626300000000);
+    assert(result2 == 0);
+}
+
+void testType5Messages()
+{
+    testType5Messages_sysex();
+    testType5Messages_mds();
 }
 
 void testForEach()
