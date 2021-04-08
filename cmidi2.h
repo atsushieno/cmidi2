@@ -419,6 +419,57 @@ static inline void cmidi2_ump_sysex8_process(uint8_t group, void* sysex, uint32_
 // 4.6 Mixed Data Set Message ... should we come up with complicated chunk splitter function?
 
 
+static inline int8_t cmidi2_ump_mds_get_num_chunks(uint32_t numTotalBytesInMDS) {
+    uint32_t radix = 14 * 0x10000;
+    return numTotalBytesInMDS / radix + (numTotalBytesInMDS % radix ? 1 : 0);
+}
+
+static inline int8_t cmidi2_ump_mds_get_num_payloads(uint32_t numTotalBytesinChunk) {
+    return numTotalBytesinChunk / 14 + (numTotalBytesinChunk % 14 ? 1 : 0);
+}
+
+static inline void cmidi2_ump_mds_get_header(uint8_t group, uint8_t mdsId,
+    uint16_t numBytesInChunk, uint16_t numChunks, uint16_t chunkIndex,
+    uint16_t manufacturerId, uint16_t deviceId, uint16_t subId, uint16_t subId2,
+    void* srcData, uint64_t* result1, uint64_t* result2) {
+    uint8_t dst8[16];
+    memset(dst8, 0, 16);
+    uint8_t *src8 = (uint8_t*) srcData;
+
+    dst8[0] = (CMIDI2_MESSAGE_TYPE_SYSEX8_MDS << 4) + (group & 0xF);
+    dst8[1] = CMIDI2_MIXED_DATA_STATUS_HEADER + mdsId;
+    *((uint16_t*) (void*) (dst8 + 2)) = numBytesInChunk;
+    *((uint16_t*) (void*) (dst8 + 4)) = numChunks;
+    *((uint16_t*) (void*) (dst8 + 6)) = chunkIndex;
+    *((uint16_t*) (void*) (dst8 + 8)) = manufacturerId;
+    *((uint16_t*) (void*) (dst8 + 10)) = deviceId;
+    *((uint16_t*) (void*) (dst8 + 12)) = subId;
+    *((uint16_t*) (void*) (dst8 + 14)) = subId2;
+
+    *result1 = cmidi2_ump_read_uint64_bytes(dst8);
+    if (result2)
+        *result2 = cmidi2_ump_read_uint64_bytes(dst8 + 8);
+}
+
+static inline void cmidi2_ump_mds_get_payload_of(uint8_t group, uint8_t mdsId, uint16_t numBytes, void* srcData, int32_t index, uint64_t* result1, uint64_t* result2) {
+    uint8_t dst8[16];
+    memset(dst8, 0, 16);
+    uint8_t *src8 = (uint8_t*) srcData;
+
+    dst8[0] = (CMIDI2_MESSAGE_TYPE_SYSEX8_MDS << 4) + (group & 0xF);
+    dst8[1] = CMIDI2_MIXED_DATA_STATUS_PAYLOAD + mdsId;
+
+    uint8_t radix = 14;
+    uint8_t size = numBytes < radix ? numBytes % radix : radix;
+
+    for (uint8_t i = 0, j = index * radix; i < size; i++, j++)
+        dst8[i + 2] = src8[j];
+
+    *result1 = cmidi2_ump_read_uint64_bytes(dst8);
+    if (result2)
+        *result2 = cmidi2_ump_read_uint64_bytes(dst8 + 8);
+}
+
 // Strongly-typed(?) UMP.
 // I kind of think those getters are overkill, so I would collect almost use `cmidi2_ump_get_xxx()`
 // as those strongly typed functions, so that those who don't want them can safely ignore them.
