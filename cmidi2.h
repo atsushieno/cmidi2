@@ -45,9 +45,9 @@ enum cmidi2_ci_protocol_bytes {
 
 enum cmidi2_ci_protocol_values {
     CMIDI2_PROTOCOL_TYPE_MIDI1 = 1,
-    CMIDI2_PROTOCOL_TYPE_CMIDI2 = 2,
+    CMIDI2_PROTOCOL_TYPE_MIDI2 = 2,
     CMIDI2_PROTOCOL_VERSION_MIDI1 = 0,
-    CMIDI2_PROTOCOL_VERSION_CMIDI2_V1 = 0,
+    CMIDI2_PROTOCOL_VERSION_MIDI2_V1 = 0,
 };
 
 enum cmidi2_ci_protocol_extensions {
