@@ -1,8 +1,8 @@
 name: build dist
 
 on:
-  push:
-  pull_request:
+  create:
+    tags:
 
 jobs:
   linux-build:
