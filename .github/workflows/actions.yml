@@ -1,0 +1,28 @@
+name: build dist
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  linux-build:
+    name: build on linux
+    runs-on: ubuntu-20.04
+    steps:
+    - name: checkout
+      uses: actions/checkout@v1
+      with:
+        submodules: recursive
+    - name: apt update
+      run: |
+        sudo apt-get update
+    - name: apt install
+      run: |
+        echo y | sudo apt-get install doxygen
+    - name: generate documentation
+      run: doxygen
+    - name: deploy to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@4.1.2
+      with:
+        branch: gh-pages
+        folder: html
