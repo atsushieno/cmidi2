@@ -3,6 +3,10 @@
 #include <assert.h>
 #include "cmidi2.h"
 
+
+cmidi2_ump __ump;
+cmidi2_ump* asUMP(int32_t i) { __ump = i; return &__ump; }
+
 void testType0Messages()
 {
     /* type 0 */
@@ -12,6 +16,9 @@ void testType0Messages()
     assert(cmidi2_ump_jr_clock(0, 1.0) == 0x00107A12);
     assert(cmidi2_ump_jr_timestamp(0, 0) == 0x00200000);
     assert(cmidi2_ump_jr_timestamp(1, 1.0) == 0x01207A12);
+
+    assert(cmidi2_ump_get_jr_clock_time(asUMP(0x00107A12)) == 31250);
+    assert(cmidi2_ump_get_jr_timestamp_timestamp(asUMP(0x01207A12)) == 31250);
 }
 
 void testType1Messages()
@@ -19,6 +26,9 @@ void testType1Messages()
     assert(cmidi2_ump_system_message(1, 0xF1, 99, 0) == 0x11F16300);
     assert(cmidi2_ump_system_message(1, 0xF2, 99, 89) == 0x11F26359);
     assert(cmidi2_ump_system_message(1, 0xFF, 0, 0) == 0x11FF0000);
+
+    assert(cmidi2_ump_get_system_message_byte2(asUMP(0x11F26359)) == 99);
+    assert(cmidi2_ump_get_system_message_byte3(asUMP(0x11F26359)) == 89);
 }
 
 void testType2Messages()
@@ -36,6 +46,15 @@ void testType2Messages()
     assert(cmidi2_ump_midi1_pitch_bend(1, 2, 0) == 0x21E20040);
     assert(cmidi2_ump_midi1_pitch_bend(1, 2, -8192) == 0x21E20000);
     assert(cmidi2_ump_midi1_pitch_bend(1, 2, 8191) == 0x21E27F7F);
+
+    assert(cmidi2_ump_get_midi1_note_note(asUMP(0x2182410A)) == 65);
+    assert(cmidi2_ump_get_midi1_note_note(asUMP(0x2192410A)) == 65);
+    assert(cmidi2_ump_get_midi1_paf_note(asUMP(0x21A2410A)) == 65);
+    assert(cmidi2_ump_get_midi1_cc_index(asUMP(0x21B2410A)) == 65);
+    assert(cmidi2_ump_get_midi1_cc_data(asUMP(0x21B2410A)) == 10);
+    assert(cmidi2_ump_get_midi1_program_program(asUMP(0x21C21D00)) == 29);
+    assert(cmidi2_ump_get_midi1_caf_data(asUMP(0x21D20A00)) == 10);
+    assert(cmidi2_ump_get_midi1_pitch_bend_data(asUMP(0x21E27F7F)) == 0x3FFF);
 }
 
 void testType3Messages()
