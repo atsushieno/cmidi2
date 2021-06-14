@@ -500,7 +500,8 @@ static inline void cmidi2_ump_mds_process(uint8_t group, uint8_t mdsId, void* da
 typedef uint32_t cmidi2_ump;
 
 static inline uint8_t cmidi2_ump_get_byte_at(cmidi2_ump *ump, uint8_t at) {
-    switch (at) {
+    ump += at / 4;
+    switch (at % 4) {
     case 0: return (*ump & 0xFF000000) >> 24;
     case 1: return (*ump & 0xFF0000) >> 16;
     case 2: return (*ump & 0xFF00) >> 8;
