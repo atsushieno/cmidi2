@@ -19,6 +19,8 @@ jobs:
     - name: apt install
       run: |
         echo y | sudo apt-get install doxygen
+    - name: run tests
+      run: clang cmidi2_test.c -o cmidi2_test && ./cmidi2_test
     - name: generate documentation
       run: doxygen
     - name: deploy to GitHub Pages
