@@ -1,8 +1,8 @@
 name: build dist
 
 on:
-  push:
-  pull_request:
+  create:
+    tags:
 
 jobs:
   linux-build:
@@ -19,5 +19,10 @@ jobs:
     - name: apt install
       run: |
         echo y | sudo apt-get install doxygen
-    - name: run tests
-      run: clang cmidi2_test.c -o cmidi2_test && ./cmidi2_test
+    - name: generate documentation
+      run: doxygen
+    - name: deploy to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@4.1.2
+      with:
+        branch: gh-pages
+        folder: html
