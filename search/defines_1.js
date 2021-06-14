@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['cmidi2_5fump_5fsequence_5fforeach_404',['CMIDI2_UMP_SEQUENCE_FOREACH',['../cmidi2_8h.html#a191e7ccb92bae9e9da139378745cb7b5',1,'cmidi2.h']]]
+  ['jr_5ftimestamp_5fticks_5fper_5fsecond_399',['JR_TIMESTAMP_TICKS_PER_SECOND',['../cmidi2_8h.html#afca68f9f0963d746a7155e56b62e9ce8',1,'cmidi2.h']]]
 ];

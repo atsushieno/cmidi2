@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['midi_5f2_5f0_5freserved_196',['MIDI_2_0_RESERVED',['../cmidi2_8h.html#aef3c287c3f466f2aa3e4124a0c7bd009',1,'cmidi2.h']]]
+  ['protocol_5ftype_196',['protocol_type',['../structcmidi2__ci__protocol__tag.html#ae77c8aa0882e3038835629cb783967e3',1,'cmidi2_ci_protocol_tag']]]
 ];
