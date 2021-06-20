@@ -777,98 +777,98 @@ typedef struct {
 } cmidi2_profile_id;
 
 // Assumes the input value is already 7-bit encoded if required.
-static inline void cmidi2_ci_put_direct_uint16_at(uint8_t* buf, uint16_t v) {
+static inline void cmidi2_ci_direct_uint16_at(uint8_t* buf, uint16_t v) {
     buf[0] = v & 0xFF;
     buf[1] = (v >> 8) & 0xFF;
 }
 
 // Assumes the input value is already 7-bit encoded if required.
-static inline void cmidi2_ci_put_direct_uint32_at(uint8_t* buf, uint32_t v) {
+static inline void cmidi2_ci_direct_uint32_at(uint8_t* buf, uint32_t v) {
     buf[0] = v & 0xFF;
     buf[1] = (v >> 8) & 0xFF;
     buf[2] = (v >> 16) & 0xFF;
     buf[3] = (v >> 24) & 0xFF;
 }
 
-static inline void cmidi2_ci_put_7bit_int14_at(uint8_t* buf, uint16_t v) {
+static inline void cmidi2_ci_7bit_int14_at(uint8_t* buf, uint16_t v) {
     buf[0] = v & 0x7F;
     buf[1] = (v >> 7) & 0x7F;
 }
 
-static inline void cmidi2_ci_put_7bit_int21_at(uint8_t* buf, uint32_t v) {
+static inline void cmidi2_ci_7bit_int21_at(uint8_t* buf, uint32_t v) {
     buf[0] = v & 0x7F;
     buf[1] = (v >> 7) & 0x7F;
     buf[2] = (v >> 14) & 0x7F;
 }
 
-static inline void cmidi2_ci_put_7bit_int28_at(uint8_t* buf, uint32_t v) {
+static inline void cmidi2_ci_7bit_int28_at(uint8_t* buf, uint32_t v) {
     buf[0] = v & 0x7F;
     buf[1] = (v >> 7) & 0x7F;
     buf[2] = (v >> 14) & 0x7F;
     buf[3] = (v >> 21) & 0x7F;
 }
 
-static inline void cmidi2_ci_put_message_common(uint8_t* buf,
+static inline void cmidi2_ci_message_common(uint8_t* buf,
         uint8_t destination, uint8_t sysexSubId2, uint8_t versionAndFormat, uint32_t sourceMUID, uint32_t destinationMUID) {
     buf[0] = 0x7E;
     buf[1] = destination;
     buf[2] = 0xD;
     buf[3] = sysexSubId2;
     buf[4] = versionAndFormat;
-    cmidi2_ci_put_direct_uint32_at(buf + 5, sourceMUID);
-    cmidi2_ci_put_direct_uint32_at(buf + 9, destinationMUID);
+    cmidi2_ci_direct_uint32_at(buf + 5, sourceMUID);
+    cmidi2_ci_direct_uint32_at(buf + 9, destinationMUID);
 }
 
 // Discovery
 
-static inline void cmidi2_ci_put_discovery_common(uint8_t* buf, uint8_t sysexSubId2,
+static inline void cmidi2_ci_discovery_common(uint8_t* buf, uint8_t sysexSubId2,
     uint8_t versionAndFormat, uint32_t sourceMUID, uint32_t destinationMUID,
     uint32_t deviceManufacturer3Bytes, uint16_t deviceFamily, uint16_t deviceFamilyModelNumber,
     uint32_t softwareRevisionLevel, uint8_t ciCategorySupported, uint32_t receivableMaxSysExSize) {
-    cmidi2_ci_put_message_common(buf, 0x7F, sysexSubId2, versionAndFormat, sourceMUID, destinationMUID);
-    cmidi2_ci_put_direct_uint32_at(buf + 13, deviceManufacturer3Bytes); // the last byte is extraneous, but will be overwritten next.
-    cmidi2_ci_put_direct_uint16_at(buf + 16, deviceFamily);
-    cmidi2_ci_put_direct_uint16_at(buf + 18, deviceFamilyModelNumber);
+    cmidi2_ci_message_common(buf, 0x7F, sysexSubId2, versionAndFormat, sourceMUID, destinationMUID);
+    cmidi2_ci_direct_uint32_at(buf + 13, deviceManufacturer3Bytes); // the last byte is extraneous, but will be overwritten next.
+    cmidi2_ci_direct_uint16_at(buf + 16, deviceFamily);
+    cmidi2_ci_direct_uint16_at(buf + 18, deviceFamilyModelNumber);
     // LAMESPEC: Software Revision Level does not mention in which endianness this field is stored.
-    cmidi2_ci_put_direct_uint32_at(buf + 20, softwareRevisionLevel);
+    cmidi2_ci_direct_uint32_at(buf + 20, softwareRevisionLevel);
     buf[24] = ciCategorySupported;
-    cmidi2_ci_put_direct_uint32_at(buf + 25, receivableMaxSysExSize);
+    cmidi2_ci_direct_uint32_at(buf + 25, receivableMaxSysExSize);
 }
 
-static inline void cmidi2_ci_put_discovery(uint8_t* buf,
+static inline void cmidi2_ci_discovery(uint8_t* buf,
     uint8_t versionAndFormat, uint32_t sourceMUID,
     uint32_t deviceManufacturer, uint16_t deviceFamily, uint16_t deviceFamilyModelNumber,
     uint32_t softwareRevisionLevel, uint8_t ciCategorySupported, uint32_t receivableMaxSysExSize) {
-    cmidi2_ci_put_discovery_common(buf, CMIDI2_CI_SUB_ID_2_DISCOVERY_INQUIRY,
+    cmidi2_ci_discovery_common(buf, CMIDI2_CI_SUB_ID_2_DISCOVERY_INQUIRY,
         versionAndFormat, sourceMUID, 0x7F7F7F7F,
         deviceManufacturer, deviceFamily, deviceFamilyModelNumber,
         softwareRevisionLevel, ciCategorySupported, receivableMaxSysExSize);
 }
 
-static inline void cmidi2_ci_put_discovery_reply(uint8_t* buf,
+static inline void cmidi2_ci_discovery_reply(uint8_t* buf,
     uint8_t versionAndFormat, uint32_t sourceMUID, uint32_t destinationMUID,
     uint32_t deviceManufacturer, uint16_t deviceFamily, uint16_t deviceFamilyModelNumber,
     uint32_t softwareRevisionLevel, uint8_t ciCategorySupported, uint32_t receivableMaxSysExSize) {
-    cmidi2_ci_put_discovery_common(buf, CMIDI2_CI_SUB_ID_2_DISCOVERY_REPLY,
+    cmidi2_ci_discovery_common(buf, CMIDI2_CI_SUB_ID_2_DISCOVERY_REPLY,
         versionAndFormat, sourceMUID, destinationMUID,
         deviceManufacturer, deviceFamily, deviceFamilyModelNumber,
         softwareRevisionLevel, ciCategorySupported, receivableMaxSysExSize);
 }
 
-static inline void cmidi2_ci_put_discovery_invalidate_muid(uint8_t* buf,
+static inline void cmidi2_ci_discovery_invalidate_muid(uint8_t* buf,
     uint8_t versionAndFormat, uint32_t sourceMUID, uint32_t targetMUID) {
-    cmidi2_ci_put_message_common(buf, 0x7F, 0x7E, versionAndFormat, sourceMUID, 0x7F7F7F7F);
-    cmidi2_ci_put_direct_uint32_at(buf + 13, targetMUID);
+    cmidi2_ci_message_common(buf, 0x7F, 0x7E, versionAndFormat, sourceMUID, 0x7F7F7F7F);
+    cmidi2_ci_direct_uint32_at(buf + 13, targetMUID);
 }
 
-static inline void cmidi2_ci_put_discovery_nak(uint8_t* buf, uint8_t deviceId,
+static inline void cmidi2_ci_discovery_nak(uint8_t* buf, uint8_t deviceId,
     uint8_t versionAndFormat, uint32_t sourceMUID, uint32_t destinationMUID) {
-    cmidi2_ci_put_message_common(buf, deviceId, 0x7F, versionAndFormat, sourceMUID, destinationMUID);
+    cmidi2_ci_message_common(buf, deviceId, 0x7F, versionAndFormat, sourceMUID, destinationMUID);
 }
 
 // Protocol Negotiation
 
-static inline void cmidi2_ci_put_protocol_info(uint8_t* buf, cmidi2_ci_protocol_type_info info) {
+static inline void cmidi2_ci_protocol_info(uint8_t* buf, cmidi2_ci_protocol_type_info info) {
     buf[0] = info.type;
     buf[1] = info.version;
     buf[2] = info.extensions;
@@ -876,48 +876,48 @@ static inline void cmidi2_ci_put_protocol_info(uint8_t* buf, cmidi2_ci_protocol_
     buf[4] = info.reserved2;
 }
 
-static inline void cmidi2_ci_put_protocols(uint8_t* buf, uint8_t numSupportedProtocols, cmidi2_ci_protocol_type_info* protocolTypes) {
+static inline void cmidi2_ci_protocols(uint8_t* buf, uint8_t numSupportedProtocols, cmidi2_ci_protocol_type_info* protocolTypes) {
     buf[0] = numSupportedProtocols;
     for (int i = 0; i < numSupportedProtocols; i++)
-        cmidi2_ci_put_protocol_info(buf + 1 + i * 5, protocolTypes[i]);
+        cmidi2_ci_protocol_info(buf + 1 + i * 5, protocolTypes[i]);
 }
 
-static inline void cmidi2_ci_put_protocol_negotiation(uint8_t* buf, bool isReply,
+static inline void cmidi2_ci_protocol_negotiation(uint8_t* buf, bool isReply,
     uint32_t sourceMUID, uint32_t destinationMUID,
     uint8_t authorityLevel,
     uint8_t numSupportedProtocols, cmidi2_ci_protocol_type_info* protocolTypes) {
-    cmidi2_ci_put_message_common(buf, 0x7F,
+    cmidi2_ci_message_common(buf, 0x7F,
         isReply ? CMIDI2_CI_SUB_ID_2_PROTOCOL_NEGOTIATION_REPLY : CMIDI2_CI_SUB_ID_2_PROTOCOL_NEGOTIATION_INQUIRY,
         1, sourceMUID, destinationMUID);
     buf[13] = authorityLevel;
-    cmidi2_ci_put_protocols(buf + 14, numSupportedProtocols, protocolTypes);
+    cmidi2_ci_protocols(buf + 14, numSupportedProtocols, protocolTypes);
 }
 
-static inline void cmidi2_ci_put_protocol_set(uint8_t* buf,
+static inline void cmidi2_ci_protocol_set(uint8_t* buf,
     uint32_t sourceMUID, uint32_t destinationMUID,
     uint8_t authorityLevel, cmidi2_ci_protocol_type_info newProtocolType) {
-    cmidi2_ci_put_message_common(buf, 0x7F,
+    cmidi2_ci_message_common(buf, 0x7F,
         CMIDI2_CI_SUB_ID_2_SET_NEW_PROTOCOL,
         1, sourceMUID, destinationMUID);
     buf[13] = authorityLevel;
-    cmidi2_ci_put_protocol_info(buf + 14, newProtocolType);
+    cmidi2_ci_protocol_info(buf + 14, newProtocolType);
 }
 
-static inline void cmidi2_ci_put_protocol_test(uint8_t* buf,
+static inline void cmidi2_ci_protocol_test(uint8_t* buf,
     bool isInitiatorToResponder,
     uint32_t sourceMUID, uint32_t destinationMUID,
     uint8_t authorityLevel, uint8_t* testData48Bytes) {
-    cmidi2_ci_put_message_common(buf, 0x7F,
+    cmidi2_ci_message_common(buf, 0x7F,
         isInitiatorToResponder ? CMIDI2_CI_SUB_ID_2_TEST_NEW_PROTOCOL_I2R : CMIDI2_CI_SUB_ID_2_TEST_NEW_PROTOCOL_R2I,
         1, sourceMUID, destinationMUID);
     buf[13] = authorityLevel;
     memcpy(buf + 14, testData48Bytes, 48);
 }
 
-static inline void cmidi2_ci_put_protocol_confirm_established(uint8_t* buf,
+static inline void cmidi2_ci_protocol_confirm_established(uint8_t* buf,
     uint32_t sourceMUID, uint32_t destinationMUID,
     uint8_t authorityLevel) {
-    cmidi2_ci_put_message_common(buf, 0x7F,
+    cmidi2_ci_message_common(buf, 0x7F,
         CMIDI2_CI_SUB_ID_2_CONFIRM_NEW_PROTOCOL_ESTABLISHED,
         1, sourceMUID, destinationMUID);
     buf[13] = authorityLevel;
@@ -925,7 +925,7 @@ static inline void cmidi2_ci_put_protocol_confirm_established(uint8_t* buf,
 
 // Profile Configuration
 
-static inline void cmidi2_ci_put_profile(uint8_t* buf, cmidi2_profile_id info) {
+static inline void cmidi2_ci_profile(uint8_t* buf, cmidi2_profile_id info) {
     buf[0] = info.fixed_7e;
     buf[1] = info.bank;
     buf[2] = info.number;
@@ -933,77 +933,77 @@ static inline void cmidi2_ci_put_profile(uint8_t* buf, cmidi2_profile_id info) {
     buf[4] = info.level;
 }
 
-static inline void cmidi2_ci_put_profile_inquiry(uint8_t* buf, uint8_t source,
+static inline void cmidi2_ci_profile_inquiry(uint8_t* buf, uint8_t source,
     uint32_t sourceMUID, uint32_t destinationMUID) {
-    cmidi2_ci_put_message_common(buf, source,
+    cmidi2_ci_message_common(buf, source,
         CMIDI2_CI_SUB_ID_2_PROFILE_INQUIRY,
         1, sourceMUID, destinationMUID);
 }
 
-static inline void cmidi2_ci_put_profile_inquiry_reply(uint8_t* buf, uint8_t source,
+static inline void cmidi2_ci_profile_inquiry_reply(uint8_t* buf, uint8_t source,
     uint32_t sourceMUID, uint32_t destinationMUID,
     uint8_t numEnabledProfiles, cmidi2_profile_id* enabledProfiles,
     uint8_t numDisabledProfiles, cmidi2_profile_id* disabledProfiles) {
-    cmidi2_ci_put_message_common(buf, source,
+    cmidi2_ci_message_common(buf, source,
         CMIDI2_CI_SUB_ID_2_PROFILE_INQUIRY_REPLY,
         1, sourceMUID, destinationMUID);
     buf[13] = numEnabledProfiles;
     for (int i = 0; i < numEnabledProfiles; i++)
-        cmidi2_ci_put_profile(buf + 14 + i * 5, enabledProfiles[i]);
+        cmidi2_ci_profile(buf + 14 + i * 5, enabledProfiles[i]);
     uint32_t pos = 14 + numEnabledProfiles * 5;
     buf[pos++] = numDisabledProfiles;
     for (int i = 0; i < numDisabledProfiles; i++)
-        cmidi2_ci_put_profile(buf + pos + i * 5, disabledProfiles[i]);
+        cmidi2_ci_profile(buf + pos + i * 5, disabledProfiles[i]);
 }
 
-static inline void cmidi2_ci_put_profile_set(uint8_t* buf, uint8_t destination, bool turnOn,
+static inline void cmidi2_ci_profile_set(uint8_t* buf, uint8_t destination, bool turnOn,
     uint32_t sourceMUID, uint32_t destinationMUID, cmidi2_profile_id profile) {
-    cmidi2_ci_put_message_common(buf, destination,
+    cmidi2_ci_message_common(buf, destination,
         turnOn ? CMIDI2_CI_SUB_ID_2_SET_PROFILE_ON : CMIDI2_CI_SUB_ID_2_SET_PROFILE_OFF,
         1, sourceMUID, destinationMUID);
-    cmidi2_ci_put_profile(buf + 13, profile);
+    cmidi2_ci_profile(buf + 13, profile);
 }
 
-static inline void cmidi2_ci_put_profile_report(uint8_t* buf, uint8_t source, bool isEnabledReport,
+static inline void cmidi2_ci_profile_report(uint8_t* buf, uint8_t source, bool isEnabledReport,
     uint32_t sourceMUID, cmidi2_profile_id profile) {
-    cmidi2_ci_put_message_common(buf, source,
+    cmidi2_ci_message_common(buf, source,
         isEnabledReport ? CMIDI2_CI_SUB_ID_2_PROFILE_ENABLED_REPORT : CMIDI2_CI_SUB_ID_2_PROFILE_DISABLED_REPORT,
         1, sourceMUID, 0x7F7F7F7F);
-    cmidi2_ci_put_profile(buf + 13, profile);
+    cmidi2_ci_profile(buf + 13, profile);
 }
 
-static inline void cmidi2_ci_put_profile_specific_data(uint8_t* buf, uint8_t source,
+static inline void cmidi2_ci_profile_specific_data(uint8_t* buf, uint8_t source,
     uint32_t sourceMUID, uint32_t destinationMUID, cmidi2_profile_id profile, uint32_t dataSize, void* data) {
-    cmidi2_ci_put_message_common(buf, source,
+    cmidi2_ci_message_common(buf, source,
         CMIDI2_CI_SUB_ID_2_PROFILE_SPECIFIC_DATA,
         1, sourceMUID, destinationMUID);
-    cmidi2_ci_put_profile(buf + 13, profile);
-    cmidi2_ci_put_direct_uint32_at(buf + 18, dataSize);
+    cmidi2_ci_profile(buf + 13, profile);
+    cmidi2_ci_direct_uint32_at(buf + 18, dataSize);
     memcpy(buf + 22, data, dataSize);
 }
 
 // Property Exchange
 
-static inline void cmidi2_ci_put_property_get_capabilities(uint8_t* buf, uint8_t destination, bool isReply,
+static inline void cmidi2_ci_property_get_capabilities(uint8_t* buf, uint8_t destination, bool isReply,
     uint32_t sourceMUID, uint32_t destinationMUID, uint8_t maxSupportedRequests) {
-    cmidi2_ci_put_message_common(buf, destination,
+    cmidi2_ci_message_common(buf, destination,
         isReply ? CMIDI2_CI_SUB_ID_2_PROPERTY_CAPABILITIES_REPLY : CMIDI2_CI_SUB_ID_2_PROPERTY_CAPABILITIES_INQUIRY,
         1, sourceMUID, destinationMUID);
     buf[13] = maxSupportedRequests;
 }
 
 // common to all of: has data & reply, get data & reply, set data & reply, subscribe & reply, notify
-static inline void cmidi2_ci_put_property_common(uint8_t* buf, uint8_t destination, uint8_t messageTypeSubId2,
+static inline void cmidi2_ci_property_common(uint8_t* buf, uint8_t destination, uint8_t messageTypeSubId2,
     uint32_t sourceMUID, uint32_t destinationMUID,
     uint8_t requestId, uint16_t headerSize, void* header,
     uint16_t numChunks, uint16_t chunkIndex, uint16_t dataSize, void* data) {
-    cmidi2_ci_put_message_common(buf, destination, messageTypeSubId2, 1, sourceMUID, destinationMUID);
+    cmidi2_ci_message_common(buf, destination, messageTypeSubId2, 1, sourceMUID, destinationMUID);
     buf[13] = requestId;
-    cmidi2_ci_put_direct_uint16_at(buf + 14, headerSize);
+    cmidi2_ci_direct_uint16_at(buf + 14, headerSize);
     memcpy(buf + 16, header, headerSize);
-    cmidi2_ci_put_direct_uint16_at(buf + 16 + headerSize, numChunks);
-    cmidi2_ci_put_direct_uint16_at(buf + 18 + headerSize, chunkIndex);
-    cmidi2_ci_put_direct_uint16_at(buf + 20 + headerSize, dataSize);
+    cmidi2_ci_direct_uint16_at(buf + 16 + headerSize, numChunks);
+    cmidi2_ci_direct_uint16_at(buf + 18 + headerSize, chunkIndex);
+    cmidi2_ci_direct_uint16_at(buf + 20 + headerSize, dataSize);
     memcpy(buf + 22 + headerSize, data, dataSize);
 }
 
