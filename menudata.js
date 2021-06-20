@@ -34,12 +34,15 @@ var menudata={children:[
 {text:"File Members",url:"globals.html",children:[
 {text:"All",url:"globals.html",children:[
 {text:"c",url:"globals.html#index_c"},
-{text:"j",url:"globals.html#index_j"},
-{text:"m",url:"globals.html#index_m"}]},
+{text:"j",url:"globals_j.html#index_j"},
+{text:"m",url:"globals_m.html#index_m"}]},
 {text:"Functions",url:"globals_func.html",children:[
 {text:"c",url:"globals_func.html#index_c"}]},
 {text:"Typedefs",url:"globals_type.html"},
 {text:"Enumerations",url:"globals_enum.html"},
 {text:"Enumerator",url:"globals_eval.html",children:[
 {text:"c",url:"globals_eval.html#index_c"}]},
-{text:"Macros",url:"globals_defs.html"}]}]}]}
+{text:"Macros",url:"globals_defs.html",children:[
+{text:"c",url:"globals_defs.html#index_c"},
+{text:"j",url:"globals_defs.html#index_j"},
+{text:"m",url:"globals_defs.html#index_m"}]}]}]}]}

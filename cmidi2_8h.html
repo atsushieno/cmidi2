@@ -88,6 +88,10 @@ Include dependency graph for cmidi2.h:</div>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcmidi2__ci__protocol__tag.html">cmidi2_ci_protocol_tag</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcmidi2__ci__protocol__type__info.html">cmidi2_ci_protocol_type_info</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcmidi2__profile__id.html">cmidi2_profile_id</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
@@ -97,6 +101,64 @@ Macros</h2></td></tr>
 <tr class="separator:afca68f9f0963d746a7155e56b62e9ce8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a191e7ccb92bae9e9da139378745cb7b5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a191e7ccb92bae9e9da139378745cb7b5">CMIDI2_UMP_SEQUENCE_FOREACH</a>(ptr,  numBytes,  iter)</td></tr>
 <tr class="separator:a191e7ccb92bae9e9da139378745cb7b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6eadbd6354b21dc885f68ae2cdad3b1d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a6eadbd6354b21dc885f68ae2cdad3b1d">CMIDI2_CI_SUB_ID</a>&#160;&#160;&#160;0xD</td></tr>
+<tr class="separator:a6eadbd6354b21dc885f68ae2cdad3b1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46e9cf880bccc615d7d7fd001232e6c4"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a46e9cf880bccc615d7d7fd001232e6c4">CMIDI2_CI_SUB_ID_2_DISCOVERY_INQUIRY</a>&#160;&#160;&#160;0x70</td></tr>
+<tr class="separator:a46e9cf880bccc615d7d7fd001232e6c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa833a792c4e4d1b1adac5347c6deef6b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#aa833a792c4e4d1b1adac5347c6deef6b">CMIDI2_CI_SUB_ID_2_DISCOVERY_REPLY</a>&#160;&#160;&#160;0x71</td></tr>
+<tr class="separator:aa833a792c4e4d1b1adac5347c6deef6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adbfd6d715d9571d6584a11ae9322f13d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#adbfd6d715d9571d6584a11ae9322f13d">CMIDI2_CI_SUB_ID_2_INVALIDATE_MUID</a>&#160;&#160;&#160;0x7E</td></tr>
+<tr class="separator:adbfd6d715d9571d6584a11ae9322f13d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab849fb6283e28ec5b2ffc749cdbf7e8f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#ab849fb6283e28ec5b2ffc749cdbf7e8f">CMIDI2_CI_SUB_ID_2_NAK</a>&#160;&#160;&#160;0x7F</td></tr>
+<tr class="separator:ab849fb6283e28ec5b2ffc749cdbf7e8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c2736d35f852beaf90af6de909d0e0b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a6c2736d35f852beaf90af6de909d0e0b">CMIDI2_CI_SUB_ID_2_PROTOCOL_NEGOTIATION_INQUIRY</a>&#160;&#160;&#160;0x10</td></tr>
+<tr class="separator:a6c2736d35f852beaf90af6de909d0e0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8e39498916992c7371349ffd16b1b9f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#ab8e39498916992c7371349ffd16b1b9f">CMIDI2_CI_SUB_ID_2_PROTOCOL_NEGOTIATION_REPLY</a>&#160;&#160;&#160;0x11</td></tr>
+<tr class="separator:ab8e39498916992c7371349ffd16b1b9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23020bc8884d68c64b0eac98c06851be"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a23020bc8884d68c64b0eac98c06851be">CMIDI2_CI_SUB_ID_2_SET_NEW_PROTOCOL</a>&#160;&#160;&#160;0x12</td></tr>
+<tr class="separator:a23020bc8884d68c64b0eac98c06851be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a340dbed9137c405fe7eb1c85235697"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a1a340dbed9137c405fe7eb1c85235697">CMIDI2_CI_SUB_ID_2_TEST_NEW_PROTOCOL_I2R</a>&#160;&#160;&#160;0x13</td></tr>
+<tr class="separator:a1a340dbed9137c405fe7eb1c85235697"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afbbc41aa178684c9be75b10d7a6867ed"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#afbbc41aa178684c9be75b10d7a6867ed">CMIDI2_CI_SUB_ID_2_TEST_NEW_PROTOCOL_R2I</a>&#160;&#160;&#160;0x14</td></tr>
+<tr class="separator:afbbc41aa178684c9be75b10d7a6867ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a90d9d3832f0e61b9cdea93ea13b1de5f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a90d9d3832f0e61b9cdea93ea13b1de5f">CMIDI2_CI_SUB_ID_2_CONFIRM_NEW_PROTOCOL_ESTABLISHED</a>&#160;&#160;&#160;0x15</td></tr>
+<tr class="separator:a90d9d3832f0e61b9cdea93ea13b1de5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a828aa7406da20a3057f1b919be249e77"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a828aa7406da20a3057f1b919be249e77">CMIDI2_CI_SUB_ID_2_PROFILE_INQUIRY</a>&#160;&#160;&#160;0x20</td></tr>
+<tr class="separator:a828aa7406da20a3057f1b919be249e77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ed70a66fbbbd8b52e4b5bef1f2faeb3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a3ed70a66fbbbd8b52e4b5bef1f2faeb3">CMIDI2_CI_SUB_ID_2_PROFILE_INQUIRY_REPLY</a>&#160;&#160;&#160;0x21</td></tr>
+<tr class="separator:a3ed70a66fbbbd8b52e4b5bef1f2faeb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aade85988ef237112c7d5219fc4fc7594"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#aade85988ef237112c7d5219fc4fc7594">CMIDI2_CI_SUB_ID_2_SET_PROFILE_ON</a>&#160;&#160;&#160;0x22</td></tr>
+<tr class="separator:aade85988ef237112c7d5219fc4fc7594"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c7af88f42b3992f7be1739abb7b122d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a2c7af88f42b3992f7be1739abb7b122d">CMIDI2_CI_SUB_ID_2_SET_PROFILE_OFF</a>&#160;&#160;&#160;0x23</td></tr>
+<tr class="separator:a2c7af88f42b3992f7be1739abb7b122d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6914464a8caafe85b04d7352ecaebf79"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a6914464a8caafe85b04d7352ecaebf79">CMIDI2_CI_SUB_ID_2_PROFILE_ENABLED_REPORT</a>&#160;&#160;&#160;0x24</td></tr>
+<tr class="separator:a6914464a8caafe85b04d7352ecaebf79"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f42839520e0470f84f924dad91c9e7c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a4f42839520e0470f84f924dad91c9e7c">CMIDI2_CI_SUB_ID_2_PROFILE_DISABLED_REPORT</a>&#160;&#160;&#160;0x25</td></tr>
+<tr class="separator:a4f42839520e0470f84f924dad91c9e7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2278afce227f9fae6612d749fa1cba40"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a2278afce227f9fae6612d749fa1cba40">CMIDI2_CI_SUB_ID_2_PROFILE_SPECIFIC_DATA</a>&#160;&#160;&#160;0x2F</td></tr>
+<tr class="separator:a2278afce227f9fae6612d749fa1cba40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1fc5908c80e84db9a27766a5d487b77"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#ae1fc5908c80e84db9a27766a5d487b77">CMIDI2_CI_SUB_ID_2_PROPERTY_CAPABILITIES_INQUIRY</a>&#160;&#160;&#160;0x30</td></tr>
+<tr class="separator:ae1fc5908c80e84db9a27766a5d487b77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae64959ad144f4d6a3a02a546646b6953"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#ae64959ad144f4d6a3a02a546646b6953">CMIDI2_CI_SUB_ID_2_PROPERTY_CAPABILITIES_REPLY</a>&#160;&#160;&#160;0x31</td></tr>
+<tr class="separator:ae64959ad144f4d6a3a02a546646b6953"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc82778b8aba4050b5e00f9c19c59e08"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#acc82778b8aba4050b5e00f9c19c59e08">CMIDI2_CI_SUB_ID_2_PROPERTY_HAS_DATA_INQUIRY</a>&#160;&#160;&#160;0x32</td></tr>
+<tr class="separator:acc82778b8aba4050b5e00f9c19c59e08"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a737a44c0369c672116a2b9d04fb38707"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a737a44c0369c672116a2b9d04fb38707">CMIDI2_CI_SUB_ID_2_PROPERTY_HAS_DATA_REPLY</a>&#160;&#160;&#160;0x33</td></tr>
+<tr class="separator:a737a44c0369c672116a2b9d04fb38707"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa797e033fd52e003f99abdefd1627cdd"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#aa797e033fd52e003f99abdefd1627cdd">CMIDI2_CI_SUB_ID_2_PROPERTY_GET_DATA_INQUIRY</a>&#160;&#160;&#160;0x34</td></tr>
+<tr class="separator:aa797e033fd52e003f99abdefd1627cdd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a358e1ad501667781e9623230ffd145"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a6a358e1ad501667781e9623230ffd145">CMIDI2_CI_SUB_ID_2_PROPERTY_GET_DATA_REPLY</a>&#160;&#160;&#160;0x35</td></tr>
+<tr class="separator:a6a358e1ad501667781e9623230ffd145"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f78a7282a57d4c2d6e71e3a714baae5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a0f78a7282a57d4c2d6e71e3a714baae5">CMIDI2_CI_SUB_ID_2_PROPERTY_SET_DATA_INQUIRY</a>&#160;&#160;&#160;0x36</td></tr>
+<tr class="separator:a0f78a7282a57d4c2d6e71e3a714baae5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab20d3f1271b214271c9f9903e25f275b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#ab20d3f1271b214271c9f9903e25f275b">CMIDI2_CI_SUB_ID_2_PROPERTY_SET_DATA_REPLY</a>&#160;&#160;&#160;0x37</td></tr>
+<tr class="separator:ab20d3f1271b214271c9f9903e25f275b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa46f1c49970b163be509090242863e29"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#aa46f1c49970b163be509090242863e29">CMIDI2_CI_SUB_ID_2_PROPERTY_SUBSCRIBE</a>&#160;&#160;&#160;0x38</td></tr>
+<tr class="separator:aa46f1c49970b163be509090242863e29"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad9bd7d24dbafd0a1e9110af9daabdc3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#aad9bd7d24dbafd0a1e9110af9daabdc3">CMIDI2_CI_SUB_ID_2_PROPERTY_SUBSCRIBE_REPLY</a>&#160;&#160;&#160;0x39</td></tr>
+<tr class="separator:aad9bd7d24dbafd0a1e9110af9daabdc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1eb393fbf2532fcd11481cd06aee7383"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a1eb393fbf2532fcd11481cd06aee7383">CMIDI2_CI_SUB_ID_2_PROPERTY_NOTIFY</a>&#160;&#160;&#160;0x3F</td></tr>
+<tr class="separator:a1eb393fbf2532fcd11481cd06aee7383"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
@@ -442,8 +504,464 @@ Functions</h2></td></tr>
 <tr class="separator:a31dcec7c2fab3df7a9b23b07e8a5f3c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb46fe060a1462d4c85cf522f54f4918"><td class="memItemLeft" align="right" valign="top">static void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#abb46fe060a1462d4c85cf522f54f4918">cmidi2_ump_sequence_next</a> (void *ptr)</td></tr>
 <tr class="separator:abb46fe060a1462d4c85cf522f54f4918"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c606991a581b64e4fef9d37780415ad"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a3c606991a581b64e4fef9d37780415ad">cmidi2_ci_put_direct_uint16_at</a> (uint8_t *buf, uint16_t v)</td></tr>
+<tr class="separator:a3c606991a581b64e4fef9d37780415ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb5c335a080124f914e780257874c5b2"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#afb5c335a080124f914e780257874c5b2">cmidi2_ci_put_direct_uint32_at</a> (uint8_t *buf, uint32_t v)</td></tr>
+<tr class="separator:afb5c335a080124f914e780257874c5b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace3c6d3e6d2e29269e399f202db5f10f"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#ace3c6d3e6d2e29269e399f202db5f10f">cmidi2_ci_put_7bit_int14_at</a> (uint8_t *buf, uint16_t v)</td></tr>
+<tr class="separator:ace3c6d3e6d2e29269e399f202db5f10f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae965db71247b0778fee0a8969f976b28"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#ae965db71247b0778fee0a8969f976b28">cmidi2_ci_put_7bit_int21_at</a> (uint8_t *buf, uint32_t v)</td></tr>
+<tr class="separator:ae965db71247b0778fee0a8969f976b28"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a803eac54bf89199f88f974476c841f17"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a803eac54bf89199f88f974476c841f17">cmidi2_ci_put_7bit_int28_at</a> (uint8_t *buf, uint32_t v)</td></tr>
+<tr class="separator:a803eac54bf89199f88f974476c841f17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b0905a0ee519630aebc1b42a1213ac7"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a7b0905a0ee519630aebc1b42a1213ac7">cmidi2_ci_put_message_common</a> (uint8_t *buf, uint8_t destination, uint8_t sysexSubId2, uint8_t versionAndFormat, uint32_t sourceMUID, uint32_t destinationMUID)</td></tr>
+<tr class="separator:a7b0905a0ee519630aebc1b42a1213ac7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec08c38dd49b0c4d64222a62005c6745"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#aec08c38dd49b0c4d64222a62005c6745">cmidi2_ci_put_discovery_common</a> (uint8_t *buf, uint8_t sysexSubId2, uint8_t versionAndFormat, uint32_t sourceMUID, uint32_t destinationMUID, uint32_t deviceManufacturer3Bytes, uint16_t deviceFamily, uint16_t deviceFamilyModelNumber, uint32_t softwareRevisionLevel, uint8_t ciCategorySupported, uint32_t receivableMaxSysExSize)</td></tr>
+<tr class="separator:aec08c38dd49b0c4d64222a62005c6745"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b4a7b825ea03b7ff521701dc247711a"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a8b4a7b825ea03b7ff521701dc247711a">cmidi2_ci_put_discovery</a> (uint8_t *buf, uint8_t versionAndFormat, uint32_t sourceMUID, uint32_t deviceManufacturer, uint16_t deviceFamily, uint16_t deviceFamilyModelNumber, uint32_t softwareRevisionLevel, uint8_t ciCategorySupported, uint32_t receivableMaxSysExSize)</td></tr>
+<tr class="separator:a8b4a7b825ea03b7ff521701dc247711a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53c6b064b568b31f5550b9aa2c0cba19"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a53c6b064b568b31f5550b9aa2c0cba19">cmidi2_ci_put_discovery_reply</a> (uint8_t *buf, uint8_t versionAndFormat, uint32_t sourceMUID, uint32_t destinationMUID, uint32_t deviceManufacturer, uint16_t deviceFamily, uint16_t deviceFamilyModelNumber, uint32_t softwareRevisionLevel, uint8_t ciCategorySupported, uint32_t receivableMaxSysExSize)</td></tr>
+<tr class="separator:a53c6b064b568b31f5550b9aa2c0cba19"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd243244379d1de378e1c20af4e7ef59"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#abd243244379d1de378e1c20af4e7ef59">cmidi2_ci_put_discovery_invalidate_muid</a> (uint8_t *buf, uint8_t versionAndFormat, uint32_t sourceMUID, uint32_t targetMUID)</td></tr>
+<tr class="separator:abd243244379d1de378e1c20af4e7ef59"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4dc08a0815df8114bcb8bf4206831247"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a4dc08a0815df8114bcb8bf4206831247">cmidi2_ci_put_discovery_nak</a> (uint8_t *buf, uint8_t deviceId, uint8_t versionAndFormat, uint32_t sourceMUID, uint32_t destinationMUID)</td></tr>
+<tr class="separator:a4dc08a0815df8114bcb8bf4206831247"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a167f16adb718c32cb4e5f0903e0c0131"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a167f16adb718c32cb4e5f0903e0c0131">cmidi2_ci_put_protocol_info</a> (uint8_t *buf, <a class="el" href="structcmidi2__ci__protocol__type__info.html">cmidi2_ci_protocol_type_info</a> info)</td></tr>
+<tr class="separator:a167f16adb718c32cb4e5f0903e0c0131"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a632277752942a11265945ab2ec3f7fe5"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a632277752942a11265945ab2ec3f7fe5">cmidi2_ci_put_protocols</a> (uint8_t *buf, uint8_t numSupportedProtocols, <a class="el" href="structcmidi2__ci__protocol__type__info.html">cmidi2_ci_protocol_type_info</a> *protocolTypes)</td></tr>
+<tr class="separator:a632277752942a11265945ab2ec3f7fe5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d67868c84cdc80fc96f204053ad3909"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a5d67868c84cdc80fc96f204053ad3909">cmidi2_ci_put_protocol_negotiation</a> (uint8_t *buf, bool isReply, uint32_t sourceMUID, uint32_t destinationMUID, uint8_t authorityLevel, uint8_t numSupportedProtocols, <a class="el" href="structcmidi2__ci__protocol__type__info.html">cmidi2_ci_protocol_type_info</a> *protocolTypes)</td></tr>
+<tr class="separator:a5d67868c84cdc80fc96f204053ad3909"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6140905433b9342c9f526625bb2282aa"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a6140905433b9342c9f526625bb2282aa">cmidi2_ci_put_protocol_set</a> (uint8_t *buf, uint32_t sourceMUID, uint32_t destinationMUID, uint8_t authorityLevel, <a class="el" href="structcmidi2__ci__protocol__type__info.html">cmidi2_ci_protocol_type_info</a> newProtocolType)</td></tr>
+<tr class="separator:a6140905433b9342c9f526625bb2282aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa1fea13f59c5c84f117d8fd89f2a61b2"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#aa1fea13f59c5c84f117d8fd89f2a61b2">cmidi2_ci_put_protocol_test</a> (uint8_t *buf, bool isInitiatorToResponder, uint32_t sourceMUID, uint32_t destinationMUID, uint8_t authorityLevel, uint8_t *testData48Bytes)</td></tr>
+<tr class="separator:aa1fea13f59c5c84f117d8fd89f2a61b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa9cf02ca336a6936cce86fb4f9390ce"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#afa9cf02ca336a6936cce86fb4f9390ce">cmidi2_ci_put_protocol_confirm_established</a> (uint8_t *buf, uint32_t sourceMUID, uint32_t destinationMUID, uint8_t authorityLevel)</td></tr>
+<tr class="separator:afa9cf02ca336a6936cce86fb4f9390ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0b71a9691c07c98c4f0d3835a9c2d20"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#ad0b71a9691c07c98c4f0d3835a9c2d20">cmidi2_ci_put_profile</a> (uint8_t *buf, <a class="el" href="structcmidi2__profile__id.html">cmidi2_profile_id</a> info)</td></tr>
+<tr class="separator:ad0b71a9691c07c98c4f0d3835a9c2d20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af73133fe3ffaa03b82e78a838dee29c3"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#af73133fe3ffaa03b82e78a838dee29c3">cmidi2_ci_put_profile_inquiry</a> (uint8_t *buf, uint8_t source, uint32_t sourceMUID, uint32_t destinationMUID)</td></tr>
+<tr class="separator:af73133fe3ffaa03b82e78a838dee29c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ef6999a2815dc21b9cf79816e25518e"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a0ef6999a2815dc21b9cf79816e25518e">cmidi2_ci_put_profile_inquiry_reply</a> (uint8_t *buf, uint8_t source, uint32_t sourceMUID, uint32_t destinationMUID, uint8_t numEnabledProfiles, <a class="el" href="structcmidi2__profile__id.html">cmidi2_profile_id</a> *enabledProfiles, uint8_t numDisabledProfiles, <a class="el" href="structcmidi2__profile__id.html">cmidi2_profile_id</a> *disabledProfiles)</td></tr>
+<tr class="separator:a0ef6999a2815dc21b9cf79816e25518e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f5244d2335f5b1e2f410c8cff3536e4"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a9f5244d2335f5b1e2f410c8cff3536e4">cmidi2_ci_put_profile_set</a> (uint8_t *buf, uint8_t destination, bool turnOn, uint32_t sourceMUID, uint32_t destinationMUID, <a class="el" href="structcmidi2__profile__id.html">cmidi2_profile_id</a> profile)</td></tr>
+<tr class="separator:a9f5244d2335f5b1e2f410c8cff3536e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aadc31a9420be937527dff18efbcde8ad"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#aadc31a9420be937527dff18efbcde8ad">cmidi2_ci_put_profile_report</a> (uint8_t *buf, uint8_t source, bool isEnabledReport, uint32_t sourceMUID, <a class="el" href="structcmidi2__profile__id.html">cmidi2_profile_id</a> profile)</td></tr>
+<tr class="separator:aadc31a9420be937527dff18efbcde8ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f87796d5f60f25394116008f1ec6c35"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a9f87796d5f60f25394116008f1ec6c35">cmidi2_ci_put_profile_specific_data</a> (uint8_t *buf, uint8_t source, uint32_t sourceMUID, uint32_t destinationMUID, <a class="el" href="structcmidi2__profile__id.html">cmidi2_profile_id</a> profile, uint32_t dataSize, void *data)</td></tr>
+<tr class="separator:a9f87796d5f60f25394116008f1ec6c35"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42c62a1fb171e7965b5fc8abcfc6dcd4"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a42c62a1fb171e7965b5fc8abcfc6dcd4">cmidi2_ci_put_property_get_capabilities</a> (uint8_t *buf, uint8_t destination, bool isReply, uint32_t sourceMUID, uint32_t destinationMUID, uint8_t maxSupportedRequests)</td></tr>
+<tr class="separator:a42c62a1fb171e7965b5fc8abcfc6dcd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57ebf638fbaa4cce34d6f1dc2b79061e"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a57ebf638fbaa4cce34d6f1dc2b79061e">cmidi2_ci_put_property_common</a> (uint8_t *buf, uint8_t destination, uint8_t messageTypeSubId2, uint32_t sourceMUID, uint32_t destinationMUID, uint8_t requestId, uint16_t headerSize, void *header, uint16_t numChunks, uint16_t chunkIndex, uint16_t dataSize, void *data)</td></tr>
+<tr class="separator:a57ebf638fbaa4cce34d6f1dc2b79061e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="a6eadbd6354b21dc885f68ae2cdad3b1d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6eadbd6354b21dc885f68ae2cdad3b1d">&#9670;&nbsp;</a></span>CMIDI2_CI_SUB_ID</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CMIDI2_CI_SUB_ID&#160;&#160;&#160;0xD</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a90d9d3832f0e61b9cdea93ea13b1de5f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a90d9d3832f0e61b9cdea93ea13b1de5f">&#9670;&nbsp;</a></span>CMIDI2_CI_SUB_ID_2_CONFIRM_NEW_PROTOCOL_ESTABLISHED</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CMIDI2_CI_SUB_ID_2_CONFIRM_NEW_PROTOCOL_ESTABLISHED&#160;&#160;&#160;0x15</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a46e9cf880bccc615d7d7fd001232e6c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a46e9cf880bccc615d7d7fd001232e6c4">&#9670;&nbsp;</a></span>CMIDI2_CI_SUB_ID_2_DISCOVERY_INQUIRY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CMIDI2_CI_SUB_ID_2_DISCOVERY_INQUIRY&#160;&#160;&#160;0x70</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa833a792c4e4d1b1adac5347c6deef6b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa833a792c4e4d1b1adac5347c6deef6b">&#9670;&nbsp;</a></span>CMIDI2_CI_SUB_ID_2_DISCOVERY_REPLY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CMIDI2_CI_SUB_ID_2_DISCOVERY_REPLY&#160;&#160;&#160;0x71</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="adbfd6d715d9571d6584a11ae9322f13d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adbfd6d715d9571d6584a11ae9322f13d">&#9670;&nbsp;</a></span>CMIDI2_CI_SUB_ID_2_INVALIDATE_MUID</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CMIDI2_CI_SUB_ID_2_INVALIDATE_MUID&#160;&#160;&#160;0x7E</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab849fb6283e28ec5b2ffc749cdbf7e8f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab849fb6283e28ec5b2ffc749cdbf7e8f">&#9670;&nbsp;</a></span>CMIDI2_CI_SUB_ID_2_NAK</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CMIDI2_CI_SUB_ID_2_NAK&#160;&#160;&#160;0x7F</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4f42839520e0470f84f924dad91c9e7c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f42839520e0470f84f924dad91c9e7c">&#9670;&nbsp;</a></span>CMIDI2_CI_SUB_ID_2_PROFILE_DISABLED_REPORT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CMIDI2_CI_SUB_ID_2_PROFILE_DISABLED_REPORT&#160;&#160;&#160;0x25</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6914464a8caafe85b04d7352ecaebf79"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6914464a8caafe85b04d7352ecaebf79">&#9670;&nbsp;</a></span>CMIDI2_CI_SUB_ID_2_PROFILE_ENABLED_REPORT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CMIDI2_CI_SUB_ID_2_PROFILE_ENABLED_REPORT&#160;&#160;&#160;0x24</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a828aa7406da20a3057f1b919be249e77"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a828aa7406da20a3057f1b919be249e77">&#9670;&nbsp;</a></span>CMIDI2_CI_SUB_ID_2_PROFILE_INQUIRY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CMIDI2_CI_SUB_ID_2_PROFILE_INQUIRY&#160;&#160;&#160;0x20</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3ed70a66fbbbd8b52e4b5bef1f2faeb3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ed70a66fbbbd8b52e4b5bef1f2faeb3">&#9670;&nbsp;</a></span>CMIDI2_CI_SUB_ID_2_PROFILE_INQUIRY_REPLY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CMIDI2_CI_SUB_ID_2_PROFILE_INQUIRY_REPLY&#160;&#160;&#160;0x21</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2278afce227f9fae6612d749fa1cba40"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2278afce227f9fae6612d749fa1cba40">&#9670;&nbsp;</a></span>CMIDI2_CI_SUB_ID_2_PROFILE_SPECIFIC_DATA</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CMIDI2_CI_SUB_ID_2_PROFILE_SPECIFIC_DATA&#160;&#160;&#160;0x2F</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae1fc5908c80e84db9a27766a5d487b77"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1fc5908c80e84db9a27766a5d487b77">&#9670;&nbsp;</a></span>CMIDI2_CI_SUB_ID_2_PROPERTY_CAPABILITIES_INQUIRY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CMIDI2_CI_SUB_ID_2_PROPERTY_CAPABILITIES_INQUIRY&#160;&#160;&#160;0x30</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae64959ad144f4d6a3a02a546646b6953"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae64959ad144f4d6a3a02a546646b6953">&#9670;&nbsp;</a></span>CMIDI2_CI_SUB_ID_2_PROPERTY_CAPABILITIES_REPLY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CMIDI2_CI_SUB_ID_2_PROPERTY_CAPABILITIES_REPLY&#160;&#160;&#160;0x31</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa797e033fd52e003f99abdefd1627cdd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa797e033fd52e003f99abdefd1627cdd">&#9670;&nbsp;</a></span>CMIDI2_CI_SUB_ID_2_PROPERTY_GET_DATA_INQUIRY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CMIDI2_CI_SUB_ID_2_PROPERTY_GET_DATA_INQUIRY&#160;&#160;&#160;0x34</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6a358e1ad501667781e9623230ffd145"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a358e1ad501667781e9623230ffd145">&#9670;&nbsp;</a></span>CMIDI2_CI_SUB_ID_2_PROPERTY_GET_DATA_REPLY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CMIDI2_CI_SUB_ID_2_PROPERTY_GET_DATA_REPLY&#160;&#160;&#160;0x35</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acc82778b8aba4050b5e00f9c19c59e08"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc82778b8aba4050b5e00f9c19c59e08">&#9670;&nbsp;</a></span>CMIDI2_CI_SUB_ID_2_PROPERTY_HAS_DATA_INQUIRY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CMIDI2_CI_SUB_ID_2_PROPERTY_HAS_DATA_INQUIRY&#160;&#160;&#160;0x32</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a737a44c0369c672116a2b9d04fb38707"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a737a44c0369c672116a2b9d04fb38707">&#9670;&nbsp;</a></span>CMIDI2_CI_SUB_ID_2_PROPERTY_HAS_DATA_REPLY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CMIDI2_CI_SUB_ID_2_PROPERTY_HAS_DATA_REPLY&#160;&#160;&#160;0x33</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1eb393fbf2532fcd11481cd06aee7383"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1eb393fbf2532fcd11481cd06aee7383">&#9670;&nbsp;</a></span>CMIDI2_CI_SUB_ID_2_PROPERTY_NOTIFY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CMIDI2_CI_SUB_ID_2_PROPERTY_NOTIFY&#160;&#160;&#160;0x3F</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0f78a7282a57d4c2d6e71e3a714baae5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f78a7282a57d4c2d6e71e3a714baae5">&#9670;&nbsp;</a></span>CMIDI2_CI_SUB_ID_2_PROPERTY_SET_DATA_INQUIRY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CMIDI2_CI_SUB_ID_2_PROPERTY_SET_DATA_INQUIRY&#160;&#160;&#160;0x36</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab20d3f1271b214271c9f9903e25f275b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab20d3f1271b214271c9f9903e25f275b">&#9670;&nbsp;</a></span>CMIDI2_CI_SUB_ID_2_PROPERTY_SET_DATA_REPLY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CMIDI2_CI_SUB_ID_2_PROPERTY_SET_DATA_REPLY&#160;&#160;&#160;0x37</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa46f1c49970b163be509090242863e29"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa46f1c49970b163be509090242863e29">&#9670;&nbsp;</a></span>CMIDI2_CI_SUB_ID_2_PROPERTY_SUBSCRIBE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CMIDI2_CI_SUB_ID_2_PROPERTY_SUBSCRIBE&#160;&#160;&#160;0x38</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aad9bd7d24dbafd0a1e9110af9daabdc3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad9bd7d24dbafd0a1e9110af9daabdc3">&#9670;&nbsp;</a></span>CMIDI2_CI_SUB_ID_2_PROPERTY_SUBSCRIBE_REPLY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CMIDI2_CI_SUB_ID_2_PROPERTY_SUBSCRIBE_REPLY&#160;&#160;&#160;0x39</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6c2736d35f852beaf90af6de909d0e0b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c2736d35f852beaf90af6de909d0e0b">&#9670;&nbsp;</a></span>CMIDI2_CI_SUB_ID_2_PROTOCOL_NEGOTIATION_INQUIRY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CMIDI2_CI_SUB_ID_2_PROTOCOL_NEGOTIATION_INQUIRY&#160;&#160;&#160;0x10</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab8e39498916992c7371349ffd16b1b9f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab8e39498916992c7371349ffd16b1b9f">&#9670;&nbsp;</a></span>CMIDI2_CI_SUB_ID_2_PROTOCOL_NEGOTIATION_REPLY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CMIDI2_CI_SUB_ID_2_PROTOCOL_NEGOTIATION_REPLY&#160;&#160;&#160;0x11</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a23020bc8884d68c64b0eac98c06851be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a23020bc8884d68c64b0eac98c06851be">&#9670;&nbsp;</a></span>CMIDI2_CI_SUB_ID_2_SET_NEW_PROTOCOL</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CMIDI2_CI_SUB_ID_2_SET_NEW_PROTOCOL&#160;&#160;&#160;0x12</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2c7af88f42b3992f7be1739abb7b122d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c7af88f42b3992f7be1739abb7b122d">&#9670;&nbsp;</a></span>CMIDI2_CI_SUB_ID_2_SET_PROFILE_OFF</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CMIDI2_CI_SUB_ID_2_SET_PROFILE_OFF&#160;&#160;&#160;0x23</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aade85988ef237112c7d5219fc4fc7594"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aade85988ef237112c7d5219fc4fc7594">&#9670;&nbsp;</a></span>CMIDI2_CI_SUB_ID_2_SET_PROFILE_ON</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CMIDI2_CI_SUB_ID_2_SET_PROFILE_ON&#160;&#160;&#160;0x22</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1a340dbed9137c405fe7eb1c85235697"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a340dbed9137c405fe7eb1c85235697">&#9670;&nbsp;</a></span>CMIDI2_CI_SUB_ID_2_TEST_NEW_PROTOCOL_I2R</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CMIDI2_CI_SUB_ID_2_TEST_NEW_PROTOCOL_I2R&#160;&#160;&#160;0x13</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afbbc41aa178684c9be75b10d7a6867ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afbbc41aa178684c9be75b10d7a6867ed">&#9670;&nbsp;</a></span>CMIDI2_CI_SUB_ID_2_TEST_NEW_PROTOCOL_R2I</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CMIDI2_CI_SUB_ID_2_TEST_NEW_PROTOCOL_R2I&#160;&#160;&#160;0x14</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a191e7ccb92bae9e9da139378745cb7b5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a191e7ccb92bae9e9da139378745cb7b5">&#9670;&nbsp;</a></span>CMIDI2_UMP_SEQUENCE_FOREACH</h2>
 
@@ -812,6 +1330,1398 @@ Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="ace3c6d3e6d2e29269e399f202db5f10f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace3c6d3e6d2e29269e399f202db5f10f">&#9670;&nbsp;</a></span>cmidi2_ci_put_7bit_int14_at()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void cmidi2_ci_put_7bit_int14_at </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>v</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae965db71247b0778fee0a8969f976b28"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae965db71247b0778fee0a8969f976b28">&#9670;&nbsp;</a></span>cmidi2_ci_put_7bit_int21_at()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void cmidi2_ci_put_7bit_int21_at </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>v</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a803eac54bf89199f88f974476c841f17"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a803eac54bf89199f88f974476c841f17">&#9670;&nbsp;</a></span>cmidi2_ci_put_7bit_int28_at()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void cmidi2_ci_put_7bit_int28_at </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>v</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3c606991a581b64e4fef9d37780415ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c606991a581b64e4fef9d37780415ad">&#9670;&nbsp;</a></span>cmidi2_ci_put_direct_uint16_at()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void cmidi2_ci_put_direct_uint16_at </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>v</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afb5c335a080124f914e780257874c5b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb5c335a080124f914e780257874c5b2">&#9670;&nbsp;</a></span>cmidi2_ci_put_direct_uint32_at()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void cmidi2_ci_put_direct_uint32_at </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>v</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8b4a7b825ea03b7ff521701dc247711a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b4a7b825ea03b7ff521701dc247711a">&#9670;&nbsp;</a></span>cmidi2_ci_put_discovery()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void cmidi2_ci_put_discovery </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>versionAndFormat</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>sourceMUID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>deviceManufacturer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>deviceFamily</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>deviceFamilyModelNumber</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>softwareRevisionLevel</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>ciCategorySupported</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>receivableMaxSysExSize</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aec08c38dd49b0c4d64222a62005c6745"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aec08c38dd49b0c4d64222a62005c6745">&#9670;&nbsp;</a></span>cmidi2_ci_put_discovery_common()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void cmidi2_ci_put_discovery_common </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>sysexSubId2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>versionAndFormat</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>sourceMUID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>destinationMUID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>deviceManufacturer3Bytes</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>deviceFamily</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>deviceFamilyModelNumber</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>softwareRevisionLevel</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>ciCategorySupported</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>receivableMaxSysExSize</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abd243244379d1de378e1c20af4e7ef59"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd243244379d1de378e1c20af4e7ef59">&#9670;&nbsp;</a></span>cmidi2_ci_put_discovery_invalidate_muid()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void cmidi2_ci_put_discovery_invalidate_muid </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>versionAndFormat</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>sourceMUID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>targetMUID</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4dc08a0815df8114bcb8bf4206831247"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4dc08a0815df8114bcb8bf4206831247">&#9670;&nbsp;</a></span>cmidi2_ci_put_discovery_nak()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void cmidi2_ci_put_discovery_nak </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>deviceId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>versionAndFormat</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>sourceMUID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>destinationMUID</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a53c6b064b568b31f5550b9aa2c0cba19"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a53c6b064b568b31f5550b9aa2c0cba19">&#9670;&nbsp;</a></span>cmidi2_ci_put_discovery_reply()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void cmidi2_ci_put_discovery_reply </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>versionAndFormat</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>sourceMUID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>destinationMUID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>deviceManufacturer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>deviceFamily</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>deviceFamilyModelNumber</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>softwareRevisionLevel</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>ciCategorySupported</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>receivableMaxSysExSize</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7b0905a0ee519630aebc1b42a1213ac7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b0905a0ee519630aebc1b42a1213ac7">&#9670;&nbsp;</a></span>cmidi2_ci_put_message_common()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void cmidi2_ci_put_message_common </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>destination</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>sysexSubId2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>versionAndFormat</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>sourceMUID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>destinationMUID</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad0b71a9691c07c98c4f0d3835a9c2d20"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0b71a9691c07c98c4f0d3835a9c2d20">&#9670;&nbsp;</a></span>cmidi2_ci_put_profile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void cmidi2_ci_put_profile </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structcmidi2__profile__id.html">cmidi2_profile_id</a>&#160;</td>
+          <td class="paramname"><em>info</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af73133fe3ffaa03b82e78a838dee29c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af73133fe3ffaa03b82e78a838dee29c3">&#9670;&nbsp;</a></span>cmidi2_ci_put_profile_inquiry()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void cmidi2_ci_put_profile_inquiry </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>source</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>sourceMUID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>destinationMUID</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0ef6999a2815dc21b9cf79816e25518e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ef6999a2815dc21b9cf79816e25518e">&#9670;&nbsp;</a></span>cmidi2_ci_put_profile_inquiry_reply()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void cmidi2_ci_put_profile_inquiry_reply </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>source</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>sourceMUID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>destinationMUID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>numEnabledProfiles</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structcmidi2__profile__id.html">cmidi2_profile_id</a> *&#160;</td>
+          <td class="paramname"><em>enabledProfiles</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>numDisabledProfiles</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structcmidi2__profile__id.html">cmidi2_profile_id</a> *&#160;</td>
+          <td class="paramname"><em>disabledProfiles</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aadc31a9420be937527dff18efbcde8ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aadc31a9420be937527dff18efbcde8ad">&#9670;&nbsp;</a></span>cmidi2_ci_put_profile_report()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void cmidi2_ci_put_profile_report </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>source</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>isEnabledReport</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>sourceMUID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structcmidi2__profile__id.html">cmidi2_profile_id</a>&#160;</td>
+          <td class="paramname"><em>profile</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9f5244d2335f5b1e2f410c8cff3536e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f5244d2335f5b1e2f410c8cff3536e4">&#9670;&nbsp;</a></span>cmidi2_ci_put_profile_set()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void cmidi2_ci_put_profile_set </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>destination</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>turnOn</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>sourceMUID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>destinationMUID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structcmidi2__profile__id.html">cmidi2_profile_id</a>&#160;</td>
+          <td class="paramname"><em>profile</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9f87796d5f60f25394116008f1ec6c35"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f87796d5f60f25394116008f1ec6c35">&#9670;&nbsp;</a></span>cmidi2_ci_put_profile_specific_data()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void cmidi2_ci_put_profile_specific_data </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>source</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>sourceMUID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>destinationMUID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structcmidi2__profile__id.html">cmidi2_profile_id</a>&#160;</td>
+          <td class="paramname"><em>profile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>dataSize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>data</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a57ebf638fbaa4cce34d6f1dc2b79061e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a57ebf638fbaa4cce34d6f1dc2b79061e">&#9670;&nbsp;</a></span>cmidi2_ci_put_property_common()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void cmidi2_ci_put_property_common </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>destination</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>messageTypeSubId2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>sourceMUID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>destinationMUID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>requestId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>headerSize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>header</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>numChunks</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>chunkIndex</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>dataSize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>data</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a42c62a1fb171e7965b5fc8abcfc6dcd4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a42c62a1fb171e7965b5fc8abcfc6dcd4">&#9670;&nbsp;</a></span>cmidi2_ci_put_property_get_capabilities()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void cmidi2_ci_put_property_get_capabilities </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>destination</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>isReply</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>sourceMUID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>destinationMUID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>maxSupportedRequests</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afa9cf02ca336a6936cce86fb4f9390ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa9cf02ca336a6936cce86fb4f9390ce">&#9670;&nbsp;</a></span>cmidi2_ci_put_protocol_confirm_established()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void cmidi2_ci_put_protocol_confirm_established </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>sourceMUID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>destinationMUID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>authorityLevel</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a167f16adb718c32cb4e5f0903e0c0131"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a167f16adb718c32cb4e5f0903e0c0131">&#9670;&nbsp;</a></span>cmidi2_ci_put_protocol_info()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void cmidi2_ci_put_protocol_info </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structcmidi2__ci__protocol__type__info.html">cmidi2_ci_protocol_type_info</a>&#160;</td>
+          <td class="paramname"><em>info</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5d67868c84cdc80fc96f204053ad3909"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d67868c84cdc80fc96f204053ad3909">&#9670;&nbsp;</a></span>cmidi2_ci_put_protocol_negotiation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void cmidi2_ci_put_protocol_negotiation </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>isReply</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>sourceMUID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>destinationMUID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>authorityLevel</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>numSupportedProtocols</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structcmidi2__ci__protocol__type__info.html">cmidi2_ci_protocol_type_info</a> *&#160;</td>
+          <td class="paramname"><em>protocolTypes</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6140905433b9342c9f526625bb2282aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6140905433b9342c9f526625bb2282aa">&#9670;&nbsp;</a></span>cmidi2_ci_put_protocol_set()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void cmidi2_ci_put_protocol_set </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>sourceMUID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>destinationMUID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>authorityLevel</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structcmidi2__ci__protocol__type__info.html">cmidi2_ci_protocol_type_info</a>&#160;</td>
+          <td class="paramname"><em>newProtocolType</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa1fea13f59c5c84f117d8fd89f2a61b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa1fea13f59c5c84f117d8fd89f2a61b2">&#9670;&nbsp;</a></span>cmidi2_ci_put_protocol_test()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void cmidi2_ci_put_protocol_test </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>isInitiatorToResponder</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>sourceMUID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>destinationMUID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>authorityLevel</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>testData48Bytes</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a632277752942a11265945ab2ec3f7fe5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a632277752942a11265945ab2ec3f7fe5">&#9670;&nbsp;</a></span>cmidi2_ci_put_protocols()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void cmidi2_ci_put_protocols </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>numSupportedProtocols</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structcmidi2__ci__protocol__type__info.html">cmidi2_ci_protocol_type_info</a> *&#160;</td>
+          <td class="paramname"><em>protocolTypes</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="aaf385900c36b55457b4e727e3a56711f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aaf385900c36b55457b4e727e3a56711f">&#9670;&nbsp;</a></span>cmidi2_ump_get_32_to_64()</h2>
 
@@ -5083,7 +6993,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 </div><!-- contents -->
-<div class="ttc" id="acmidi2_8h_html_abb46fe060a1462d4c85cf522f54f4918"><div class="ttname"><a href="cmidi2_8h.html#abb46fe060a1462d4c85cf522f54f4918">cmidi2_ump_sequence_next</a></div><div class="ttdeci">static void * cmidi2_ump_sequence_next(void *ptr)</div><div class="ttdef"><b>Definition:</b> cmidi2.h:715</div></div>
+<div class="ttc" id="acmidi2_8h_html_abb46fe060a1462d4c85cf522f54f4918"><div class="ttname"><a href="cmidi2_8h.html#abb46fe060a1462d4c85cf522f54f4918">cmidi2_ump_sequence_next</a></div><div class="ttdeci">static void * cmidi2_ump_sequence_next(void *ptr)</div><div class="ttdef"><b>Definition:</b> cmidi2.h:716</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

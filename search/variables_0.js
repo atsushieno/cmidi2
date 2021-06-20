@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['extensions_323',['extensions',['../structcmidi2__ci__protocol__tag.html#ae0b7b3931540ff989c657b8ec1153d2c',1,'cmidi2_ci_protocol_tag']]]
+  ['bank_411',['bank',['../structcmidi2__profile__id.html#a1260cf052fd19505c4dcf73f1c496124',1,'cmidi2_profile_id']]]
 ];
