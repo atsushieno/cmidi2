@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <inttypes.h>
 #include <assert.h>
+#include <string.h>
 #include "cmidi2.h"
 
 
@@ -295,7 +296,7 @@ void testForEach()
     }
 }
 
-int main ()
+int testUMP ()
 {
     testType0Messages();
     testType1Messages();
@@ -306,5 +307,309 @@ int main ()
     testForEach();
     uint8_t bytes [] = {0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3};
     printf("%d\n", cmidi2_ump_get_channel((cmidi2_ump*) bytes));
+    return 0;
+}
+
+// MIDI CI
+
+#define CMIDI2_CI_PROTOCOL_NEGOTIATION_SUPPORTED 2
+#define CMIDI2_CI_PROFILE_CONFIGURATION_SUPPORTED 4
+#define CMIDI2_CI_PROPERTY_EXCHANGE_SUPPORTED 8
+
+void testDiscoveryMessages()
+{
+    // Service Discovery (Inquiry)
+    uint8_t expected1[] = {0x7E, 0x7F, 0x0D, 0x70, 1,
+        0x10, 0x10, 0x10, 0x10, 0x7F, 0x7F, 0x7F, 0x7F,
+        0x56, 0x34, 0x12, 0x57, 0x13, 0x68, 0x24,
+        // LAMESPEC: Software Revision Level does not mention in which endianness this field is stored.
+        0x7F, 0x5F, 0x3F, 0x1F,
+        0b00001110,
+        0x00, 0x02, 0, 0
+        };
+    uint8_t actual1[29];
+    cmidi2_ci_put_discovery(actual1, 1, 0x10101010,
+        0x123456, 0x1357, 0x2468, 0x1F3F5F7F,
+        CMIDI2_CI_PROTOCOL_NEGOTIATION_SUPPORTED | CMIDI2_CI_PROFILE_CONFIGURATION_SUPPORTED | CMIDI2_CI_PROPERTY_EXCHANGE_SUPPORTED,
+        512);
+    //for (int i = 0; i < 29; i++) printf("%x ", actual1[i]); puts("");
+    assert(memcmp(expected1, actual1, 29) == 0);
+
+    // Service Discovery Reply
+    uint8_t actual2[29];
+    cmidi2_ci_put_discovery_reply(actual2, 1, 0x10101010, 0x20202020,
+        0x123456, 0x1357, 0x2468, 0x1F3F5F7F,
+        CMIDI2_CI_PROTOCOL_NEGOTIATION_SUPPORTED | CMIDI2_CI_PROFILE_CONFIGURATION_SUPPORTED | CMIDI2_CI_PROPERTY_EXCHANGE_SUPPORTED,
+        512);
+    assert(actual2[3] == 0x71);
+    for (int i = 9; i < 13; i++) assert(actual2[i] == 0x20); // destination ID is not 7F7F7F7F.
+
+    // Invalidate MUID
+    uint8_t expected3[] = {0x7E, 0x7F, 0x0D, 0x7E, 1,
+        0x10, 0x10, 0x10, 0x10, 0x7F, 0x7F, 0x7F, 0x7F, 0x20, 0x20, 0x20, 0x20};
+    uint8_t actual3[17];
+    cmidi2_ci_put_discovery_invalidate_muid(actual3, 1, 0x10101010, 0x20202020);
+    //for (int i = 0; i < 17; i++) printf("%x ", actual3[i]); puts("");
+    assert(memcmp(expected3, actual3, 17) == 0);
+
+    // NAK
+    uint8_t expected4[] = {0x7E, 5, 0x0D, 0x7F, 1,
+        0x10, 0x10, 0x10, 0x10, 0x20, 0x20, 0x20, 0x20};
+    uint8_t actual4[13];
+    cmidi2_ci_put_discovery_nak(actual4, 5, 1, 0x10101010, 0x20202020);
+    //for (int i = 0; i < 13; i++) printf("%x ", actual4[i]); puts("");
+    assert(memcmp(expected4, actual4, 13) == 0);
+}
+
+void testProtocolNegotiationMessages()
+{
+    cmidi2_ci_protocol_type_info infos[] = {
+        {1, 0, 0x10, 0, 0},
+        {2, 0, 0x20, 0, 0}
+    };
+
+    // Service Discovery (Inquiry)
+    uint8_t expected1[] = {0x7E, 0x7F, 0x0D, 0x10, 1,
+        0x10, 0x10, 0x10, 0x10, 0x20, 0x20, 0x20, 0x20,
+        1, 2,
+        1, 0, 0x10, 0, 0,
+        2, 0, 0x20, 0, 0};
+    uint8_t actual1[25];
+    cmidi2_ci_put_protocol_negotiation(actual1, false, 0x10101010, 0x20202020,
+        1, 2, infos);
+    //for (int i = 0; i < 25; i++) printf("%x ", actual1[i]); puts("");
+    assert(memcmp(expected1, actual1, 25) == 0);
+
+    // Service Discovery Reply
+    uint8_t actual2[25];
+    cmidi2_ci_put_protocol_negotiation(actual2, true, 0x10101010, 0x20202020,
+        1, 2, infos);
+    //for (int i = 0; i < 25; i++) printf("%x ", actual1[i]); puts("");
+    assert(actual2[3] == 0x11);
+
+    // Set New Protocol
+    uint8_t expected3[] = {0x7E, 0x7F, 0x0D, 0x12, 1,
+        0x10, 0x10, 0x10, 0x10, 0x20, 0x20, 0x20, 0x20,
+        1, 2, 0, 0x20, 0, 0};
+    uint8_t actual3[19];
+    cmidi2_ci_put_protocol_set(actual3, 0x10101010, 0x20202020,
+        1, infos[1]);
+    //for (int i = 0; i < 19; i++) printf("%x ", actual3[i]); puts("");
+    assert(memcmp(expected3, actual3, 19) == 0);
+
+    // Test New Protocol - Initiator to Recipient
+    uint8_t testData[] = {
+        0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+        0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+        0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+        0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+        0, 1, 2, 3, 4, 5, 6, 7};
+    uint8_t expected4[] = {0x7E, 0x7F, 0x0D, 0x13, 1,
+        0x10, 0x10, 0x10, 0x10, 0x20, 0x20, 0x20, 0x20,
+        1};
+    uint8_t actual4[14 + 48];
+    cmidi2_ci_put_protocol_test(actual4, true, 0x10101010, 0x20202020,
+        1, testData);
+    //for (int i = 0; i < 14; i++) printf("%x ", actual4[i]); puts("");
+    assert(memcmp(expected4, actual4, 14) == 0);
+    assert(memcmp(testData, actual4 + 14, 48) == 0);
+
+    // Test New Protocol - Responder to Initiator
+    uint8_t actual5[14 + 48];
+    cmidi2_ci_put_protocol_test(actual5, false, 0x10101010, 0x20202020,
+        1, testData);
+    assert(actual5[3] == 0x14);
+
+    // Confirmation New Protocol Established
+    uint8_t expected6[] = {0x7E, 0x7F, 0x0D, 0x15, 1,
+        0x10, 0x10, 0x10, 0x10, 0x20, 0x20, 0x20, 0x20,
+        1};
+    uint8_t actual6[14];
+    cmidi2_ci_put_protocol_confirm_established(actual6, 0x10101010, 0x20202020, 1);
+    //for (int i = 0; i < 19; i++) printf("%x ", actual6[i]); puts("");
+    assert(memcmp(expected6, actual6, 14) == 0);
+}
+
+void testProfileConfigurationMessages()
+{
+    // Profile Inquiry
+    uint8_t expected1[] = {0x7E, 5, 0x0D, 0x20, 1,
+        0x10, 0x10, 0x10, 0x10, 0x20, 0x20, 0x20, 0x20};
+    uint8_t actual1[13];
+    cmidi2_ci_put_profile_inquiry(actual1, 5, 0x10101010, 0x20202020);
+    //for (int i = 0; i < 13; i++) printf("%x ", actual1[i]); puts("");
+    assert(memcmp(expected1, actual1, 13) == 0);
+
+    // Profile Inquiry Reply
+    cmidi2_profile_id profiles1[] = { {1,2,3,4,5}, {6,7,8,9,10} };
+    cmidi2_profile_id profiles2[] = { {11,12,13,14,15}, {16,17,18,19,20} };
+    uint8_t expected2[] = {0x7E, 5, 0x0D, 0x21, 1,
+        0x10, 0x10, 0x10, 0x10, 0x20, 0x20, 0x20, 0x20,
+        2,
+        1, 2, 3, 4, 5,
+        6, 7, 8, 9, 10,
+        2,
+        11, 12, 13, 14, 15,
+        16, 17, 18, 19, 20};
+    uint8_t actual2[35];
+    cmidi2_ci_put_profile_inquiry_reply(actual2, 5, 0x10101010, 0x20202020,
+        2, profiles1, 2, profiles2);
+    //for (int i = 0; i < 35; i++) printf("%x ", actual2[i]); puts("");
+    assert(memcmp(expected2, actual2, 35) == 0);
+
+    // Set Profile On
+    uint8_t expected3[] = {0x7E, 5, 0x0D, 0x22, 1,
+        0x10, 0x10, 0x10, 0x10, 0x20, 0x20, 0x20, 0x20,
+        1, 2, 3, 4, 5};
+    uint8_t actual3[18];
+    cmidi2_ci_put_profile_set(actual3, 5, true, 0x10101010, 0x20202020,
+        profiles1[0]);
+    //for (int i = 0; i < 18; i++) printf("%x ", actual1[i]); puts("");
+    assert(memcmp(expected3, actual3, 18) == 0);
+
+    // Set Profile Off
+    uint8_t actual4[18];
+    cmidi2_ci_put_profile_set(actual4, 5, false, 0x10101010, 0x20202020,
+        profiles1[0]);
+    assert(actual4[3] == 0x23);
+
+    // Profile Enabled Report
+    uint8_t expected5[] = {0x7E, 5, 0x0D, 0x24, 1,
+        0x10, 0x10, 0x10, 0x10, 0x7F, 0x7F, 0x7F, 0x7F,
+        1, 2, 3, 4, 5};
+    uint8_t actual5[18];
+    cmidi2_ci_put_profile_report(actual5, 5, true, 0x10101010,
+        profiles1[0]);
+    //for (int i = 0; i < 18; i++) printf("%x ", actual5[i]); puts("");
+    assert(memcmp(expected5, actual5, 18) == 0);
+
+    // Profile Disabled Report
+    uint8_t actual6[18];
+    cmidi2_ci_put_profile_report(actual6, 5, false, 0x10101010,
+        profiles1[0]);
+    assert(actual6[3] == 0x25);
+
+    // Profile Specific Data
+    uint8_t expected7[] = {0x7E, 5, 0x0D, 0x2F, 1,
+        0x10, 0x10, 0x10, 0x10, 0x20, 0x20, 0x20, 0x20,
+        1, 2, 3, 4, 5,
+        8, 0, 0, 0,
+        8,7,6,5,4,3,2,1};
+    uint8_t actual7[30];
+    uint8_t data[] = {8,7,6,5,4,3,2,1};
+    cmidi2_ci_put_profile_specific_data(actual7, 5, 0x10101010, 0x20202020,
+        profiles1[0], 8, data);
+    //for (int i = 0; i < 30; i++) printf("%x ", actual7[i]); puts("");
+    assert(memcmp(expected7, actual7, 30) == 0);
+}
+
+void testPropertyExchangeMessages()
+{
+    uint8_t header[] = {11,22,33,44};
+    uint8_t data[] = {55,66,77,88,99};
+
+    // Property Inquiry
+    uint8_t expected1[] = {0x7E, 5, 0x0D, 0x30, 1,
+        0x10, 0x10, 0x10, 0x10, 0x20, 0x20, 0x20, 0x20,
+        16};
+    uint8_t actual1[14];
+    cmidi2_ci_put_property_get_capabilities(actual1, 5, false, 0x10101010, 0x20202020, 16);
+    //for (int i = 0; i < 14; i++) printf("%x ", actual1[i]); puts("");
+    assert(memcmp(expected1, actual1, 14) == 0);
+
+    // Property Inquiry Reply
+    uint8_t actual2[14];
+    cmidi2_ci_put_property_get_capabilities(actual2, 5, true, 0x10101010, 0x20202020, 16);
+    assert(actual2[3] == 0x31);
+
+    // Has Property Data
+    uint8_t expected3[] = {0x7E, 5, 0x0D, 0x32, 1,
+        0x10, 0x10, 0x10, 0x10, 0x20, 0x20, 0x20, 0x20,
+        2,
+        4, 0,
+        11,22,33,44,
+        3, 0,
+        1, 0,
+        5, 0,
+        55,66,77,88,99};
+    uint8_t actual3[31];
+    cmidi2_ci_put_property_common(actual3, 5, CMIDI2_CI_SUB_ID_2_PROPERTY_HAS_DATA_INQUIRY,
+        0x10101010, 0x20202020,
+        2, 4, header, 3, 1, 5, data);
+    //for (int i = 0; i < 31; i++) printf("%x ", actual3[i]); puts("");
+    assert(memcmp(expected3, actual3, 31) == 0);
+
+    // Reply to Has Property Data
+    uint8_t actual4[31];
+    cmidi2_ci_put_property_common(actual4, 5, CMIDI2_CI_SUB_ID_2_PROPERTY_HAS_DATA_REPLY,
+        0x10101010, 0x20202020,
+        2, 4, header, 3, 1, 5, data);
+    assert(actual4[3] == 0x33);
+
+    // Get Property Data
+    uint8_t actual5[31];
+    cmidi2_ci_put_property_common(actual5, 5, CMIDI2_CI_SUB_ID_2_PROPERTY_GET_DATA_INQUIRY,
+        0x10101010, 0x20202020,
+        2, 4, header, 3, 1, 5, data);
+    assert(actual5[3] == 0x34);
+
+    // Reply to Get Property Data
+    uint8_t actual6[31];
+    cmidi2_ci_put_property_common(actual6, 5, CMIDI2_CI_SUB_ID_2_PROPERTY_GET_DATA_REPLY,
+        0x10101010, 0x20202020,
+        2, 4, header, 3, 1, 5, data);
+    assert(actual6[3] == 0x35);
+
+    // Set Property Data
+    uint8_t actual7[31];
+    cmidi2_ci_put_property_common(actual7, 5, CMIDI2_CI_SUB_ID_2_PROPERTY_SET_DATA_INQUIRY,
+        0x10101010, 0x20202020,
+        2, 4, header, 3, 1, 5, data);
+    assert(actual7[3] == 0x36);
+
+    // Reply to Set Property Data
+    uint8_t actual8[31];
+    cmidi2_ci_put_property_common(actual8, 5, CMIDI2_CI_SUB_ID_2_PROPERTY_SET_DATA_REPLY,
+        0x10101010, 0x20202020,
+        2, 4, header, 3, 1, 5, data);
+    assert(actual8[3] == 0x37);
+
+    // Subscription
+    uint8_t actual9[31];
+    cmidi2_ci_put_property_common(actual9, 5, CMIDI2_CI_SUB_ID_2_PROPERTY_SUBSCRIBE,
+        0x10101010, 0x20202020,
+        2, 4, header, 3, 1, 5, data);
+    assert(actual9[3] == 0x38);
+
+    // Reply to Subscription
+    uint8_t actual10[31];
+    cmidi2_ci_put_property_common(actual10, 5, CMIDI2_CI_SUB_ID_2_PROPERTY_SUBSCRIBE_REPLY,
+        0x10101010, 0x20202020,
+        2, 4, header, 3, 1, 5, data);
+    assert(actual10[3] == 0x39);
+
+    // Notify
+    uint8_t actual11[31];
+    cmidi2_ci_put_property_common(actual11, 5, CMIDI2_CI_SUB_ID_2_PROPERTY_NOTIFY,
+        0x10101010, 0x20202020,
+        2, 4, header, 3, 1, 5, data);
+    assert(actual11[3] == 0x3F);
+}
+
+int testMidiCI ()
+{
+    testDiscoveryMessages();
+    testProtocolNegotiationMessages();
+    testProfileConfigurationMessages();
+    testPropertyExchangeMessages();
+    return 0;
+}
+
+// main
+
+int main ()
+{
+    testUMP();
+    testMidiCI();
     return 0;
 }
