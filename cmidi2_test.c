@@ -429,8 +429,8 @@ void testProtocolNegotiationMessages()
     //for (int i = 0; i < 19; i++) printf("%x ", actual6[i]); puts("");
     assert(memcmp(expected6, actual6, 14) == 0);
 
-    assert(cmidi2_try_parse_new_protocol(expected3, sizeof(expected3)) == 2);
-    assert(cmidi2_try_parse_new_protocol(expected4, sizeof(expected4)) == 0);
+    assert(cmidi2_ci_try_parse_new_protocol(expected3, sizeof(expected3)) == 2);
+    assert(cmidi2_ci_try_parse_new_protocol(expected4, sizeof(expected4)) == 0);
 }
 
 void testProfileConfigurationMessages()
