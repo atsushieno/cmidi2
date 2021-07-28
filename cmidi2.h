@@ -868,6 +868,10 @@ static inline void* cmidi2_ump_sequence_next(void* ptr) {
 #define CMIDI2_CI_SUB_ID_2_PROPERTY_SUBSCRIBE_REPLY 0x39
 #define CMIDI2_CI_SUB_ID_2_PROPERTY_NOTIFY 0x3F
 
+#define CMIDI2_CI_PROTOCOL_NEGOTIATION_SUPPORTED 2
+#define CMIDI2_CI_PROFILE_CONFIGURATION_SUPPORTED 4
+#define CMIDI2_CI_PROPERTY_EXCHANGE_SUPPORTED 8
+
 typedef struct {
     uint8_t type;
     uint8_t version;
@@ -1120,3 +1124,62 @@ static inline int32_t cmidi2_ci_try_parse_new_protocol(uint8_t* buf, int32_t len
             buf[3] != CMIDI2_CI_SUB_ID_2_SET_NEW_PROTOCOL || buf[4] != 1) ? 0 : buf[14];
 }
 
+
+// MIDI 1.0 Utilities
+
+static inline uint8_t cmidi2_midi1_get_7bit_encoded_int_length(uint32_t value) {
+    for (uint8_t ret = 1; ; ret++) {
+        if (value >= 0x80)
+            value /= 0x80;
+        else
+            return ret;
+    }
+    return 0;
+}
+
+static inline uint32_t cmidi2_midi1_get_7bit_encoded_int(uint8_t* bytes, uint32_t length)
+{
+    uint8_t* start = bytes;
+    uint32_t value = 0;
+    for (int digits = 0;; digits++) {
+        if (bytes >= start + length)
+            break;
+        value += (0x7F & (*bytes)) << (digits * 7);
+        if (*bytes < 0x80)
+            break;
+        bytes++;
+    }
+    bytes++;
+    return value;
+}
+
+static inline uint32_t cmidi2_midi1_get_message_size(uint8_t* bytes, uint32_t length) {
+    uint32_t metaLength;
+    uint8_t* start = bytes;
+    uint8_t* end = bytes + length;
+    switch (bytes[0]) {
+        case 0xF0:
+            for (bytes++; bytes < end; bytes++)
+                if (*bytes == 0xF7)
+                    break;
+            bytes++;
+            break;
+        case 0xFF:
+            bytes++;
+            metaLength = cmidi2_midi1_get_7bit_encoded_int(bytes, end - bytes);
+            bytes += metaLength + cmidi2_midi1_get_7bit_encoded_int_length(metaLength);
+            break;
+        default:
+            switch (bytes[0] & 0xF0) {
+                case 0xC0:
+                case 0xD0:
+                    bytes += 2;
+                    break;
+                default:
+                    bytes += 3;
+                    break;
+            }
+            break;
+    }
+    return bytes - start;
+}

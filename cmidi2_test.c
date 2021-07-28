@@ -312,10 +312,6 @@ int testUMP ()
 
 // MIDI CI
 
-#define CMIDI2_CI_PROTOCOL_NEGOTIATION_SUPPORTED 2
-#define CMIDI2_CI_PROFILE_CONFIGURATION_SUPPORTED 4
-#define CMIDI2_CI_PROPERTY_EXCHANGE_SUPPORTED 8
-
 void testDiscoveryMessages()
 {
     // Service Discovery (Inquiry)
@@ -608,11 +604,70 @@ int testMidiCI ()
     return 0;
 }
 
+void testMidi1_7BitEncodings ()
+{
+    // lengths
+    assert(cmidi2_midi1_get_7bit_encoded_int_length(0) == 1);
+    assert(cmidi2_midi1_get_7bit_encoded_int_length(0x7F) == 1);
+    assert(cmidi2_midi1_get_7bit_encoded_int_length(0x80) == 2);
+    assert(cmidi2_midi1_get_7bit_encoded_int_length(0x100) == 2);
+    assert(cmidi2_midi1_get_7bit_encoded_int_length(0x3FFF) == 2);
+    assert(cmidi2_midi1_get_7bit_encoded_int_length(0x4000) == 3);
+
+    // values
+    uint8_t a1[] = {0};
+    assert(cmidi2_midi1_get_7bit_encoded_int(a1, 1) == 0);
+    uint8_t a1_2[] = {0, 1};
+    assert(cmidi2_midi1_get_7bit_encoded_int(a1_2, 2) == 0); // array length does not matter
+    uint8_t a2[] = {0x7F};
+    assert(cmidi2_midi1_get_7bit_encoded_int(a2, 1) == 0x7F);
+    uint8_t a3[] = {0x80, 1};
+    assert(cmidi2_midi1_get_7bit_encoded_int(a3, 2) == 0x80);
+    uint8_t a4[] = {0xFF, 1};
+    assert(cmidi2_midi1_get_7bit_encoded_int(a4, 2) == 0xFF);
+    uint8_t a5[] = {0x80, 2};
+    assert(cmidi2_midi1_get_7bit_encoded_int(a5, 2) == 0x100);
+    uint8_t a6[] = {0xFF, 0x7F};
+    assert(cmidi2_midi1_get_7bit_encoded_int(a6, 2) == 0x3FFF);
+    uint8_t a7[] = {0x80, 0x80, 1};
+    assert(cmidi2_midi1_get_7bit_encoded_int(a7, 3) == 0x4000);
+} 
+
+void testMidi1MessageSizes ()
+{
+    uint8_t a1[] = {0x90, 50, 100};
+    assert(cmidi2_midi1_get_message_size(a1, 3) == 3);
+    // length actually does not matter for non-Fx messages
+    assert(cmidi2_midi1_get_message_size(a1, 1) == 3);
+    uint8_t a2[] = {0xA0, 50, 100};
+    assert(cmidi2_midi1_get_message_size(a2, 3) == 3);  // PAf, not to be confused with CAf
+    uint8_t a3[] = {0xB0, 0, 0};
+    assert(cmidi2_midi1_get_message_size(a3, 3) == 3);  // CC
+    uint8_t a4[] = {0xC0, 0, 0};
+    assert(cmidi2_midi1_get_message_size(a4, 3) == 2);  // Program Change / length does not matter
+    uint8_t a5[] = {0xD0, 0, 0};
+    assert(cmidi2_midi1_get_message_size(a5, 3) == 2);  // CAf, not to be confused with PAf
+    uint8_t a6[] = {0xE0, 0, 0};
+    assert(cmidi2_midi1_get_message_size(a6, 3) == 3);  // PitchBend
+    uint8_t a7[] = {0xF0, 0x7E, 0x7F, 1, 2, 3, 4, 5, 6, 7, 0xF7};
+    assert(cmidi2_midi1_get_message_size(a7, 11) == 11);  // Sysex
+    uint8_t a8[] = {0xFF, 2, 0, 1};
+    assert(cmidi2_midi1_get_message_size(a8, 4) == 4);  // Meta
+} 
+
+int testMidi1Utilities ()
+{
+    testMidi1_7BitEncodings();
+    testMidi1MessageSizes();
+    return 0;
+}
+
 // main
 
 int main ()
 {
     testUMP();
     testMidiCI();
+    testMidi1Utilities();
     return 0;
 }
