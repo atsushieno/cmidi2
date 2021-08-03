@@ -305,8 +305,6 @@ int testUMP ()
     testType4Messages();
     testType5Messages();
     testForEach();
-    uint8_t bytes [] = {0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3};
-    printf("%d\n", cmidi2_ump_get_channel((cmidi2_ump*) bytes));
     return 0;
 }
 
@@ -653,12 +651,112 @@ void testMidi1MessageSizes ()
     assert(cmidi2_midi1_get_message_size(a7, 11) == 11);  // Sysex
     uint8_t a8[] = {0xFF, 2, 0, 1};
     assert(cmidi2_midi1_get_message_size(a8, 4) == 4);  // Meta
-} 
+}
 
-int testMidi1Utilities ()
+void cmidi2_ump_write32(cmidi2_ump* dst, uint32_t value) {
+    dst[0] = value;
+}
+
+void cmidi2_ump_write64(cmidi2_ump* dst, uint64_t value) {
+    dst[0] = value >> 32;
+    dst[1] = value & 0xFFFFFFFF;
+}
+
+void cmidi2_ump_write128(cmidi2_ump* dst, uint64_t value1, uint64_t value2) {
+    dst[0] = value1 >> 32;
+    dst[1] = value1 & 0xFFFFFFFF;
+    dst[2] = value2 >> 32;
+    dst[3] = value2 & 0xFFFFFFFF;
+}
+
+int testConvertSingleUmpToMidi1 ()
+{
+    cmidi2_ump src[4];
+    uint8_t dst[16];
+    size_t retSize;
+
+    // MIDI1 Channel Voice Messages
+
+    cmidi2_ump_write32(src, cmidi2_ump_midi1_note_off(0, 1, 40, 0x70));
+    assert(cmidi2_convert_single_ump_to_midi1(dst, 16, src) == 3);
+    assert(dst[0] == 0x81);
+    assert(dst[1] == 40);
+    assert(dst[2] == 0x70);
+    
+    cmidi2_ump_write32(src, cmidi2_ump_midi1_program(0, 1, 40));
+    assert(cmidi2_convert_single_ump_to_midi1(dst, 16, src) == 2);
+    assert(dst[0] == 0xC1);
+    assert(dst[1] == 40);
+
+    // MIDI2 Channel Voice Messages
+
+    // note off
+    cmidi2_ump_write64(src, cmidi2_ump_midi2_note_off(0, 1, 40, 0, 0xE800, 0));
+    assert(cmidi2_convert_single_ump_to_midi1(dst, 16, src) == 3);
+    assert(dst[0] == 0x81);
+    assert(dst[1] == 40);
+    assert(dst[2] == 0x74);
+
+    // note on
+    cmidi2_ump_write64(src, cmidi2_ump_midi2_note_on(0, 1, 40, 0, 0xE800, 0));
+    assert(cmidi2_convert_single_ump_to_midi1(dst, 16, src) == 3);
+    assert(dst[0] == 0x91);
+    assert(dst[1] == 40);
+    assert(dst[2] == 0x74);
+
+    // PAf
+    cmidi2_ump_write64(src, cmidi2_ump_midi2_paf(0, 1, 40, 0xE8000000));
+    assert(cmidi2_convert_single_ump_to_midi1(dst, 16, src) == 3);
+    assert(dst[0] == 0xA1);
+    assert(dst[1] == 40);
+    assert(dst[2] == 0x74);
+
+    // CC
+    cmidi2_ump_write64(src, cmidi2_ump_midi2_cc(0, 1, 10, 0xE8000000));
+    assert(cmidi2_convert_single_ump_to_midi1(dst, 16, src) == 3);
+    assert(dst[0] == 0xB1);
+    assert(dst[1] == 10);
+    assert(dst[2] == 0x74);
+
+    // program change, without bank options
+    cmidi2_ump_write64(src, cmidi2_ump_midi2_program(0, 1, 0, 8, 16, 24));
+    assert(cmidi2_convert_single_ump_to_midi1(dst, 16, src) == 2);
+    assert(dst[0] == 0xC1);
+    assert(dst[1] == 8);
+
+    // program change, with bank options
+    cmidi2_ump_write64(src, cmidi2_ump_midi2_program(0, 1, 1, 8, 16, 24));
+    assert(cmidi2_convert_single_ump_to_midi1(dst, 16, src) == 8);
+    assert(dst[0] == 0xB1);
+    assert(dst[1] == 0);
+    assert(dst[2] == 16);
+    assert(dst[3] == 0xB1);
+    assert(dst[4] == 32);
+    assert(dst[5] == 24);
+    assert(dst[6] == 0xC1);
+    assert(dst[7] == 8);
+
+    // CAf
+    cmidi2_ump_write64(src, cmidi2_ump_midi2_caf(0, 1, 0xE8000000));
+    assert(cmidi2_convert_single_ump_to_midi1(dst, 16, src) == 2);
+    assert(dst[0] == 0xD1);
+    assert(dst[1] == 0x74);
+
+    // PitchBend
+    cmidi2_ump_write64(src, cmidi2_ump_midi2_pitch_bend_direct(0, 1, 0xE8040000));
+    assert(cmidi2_convert_single_ump_to_midi1(dst, 16, src) == 3);
+    assert(dst[0] == 0xE1);
+    assert(dst[1] == 1);
+    assert(dst[2] == 0x74);
+
+    return 0;
+}
+
+int testMiscellaneousUtilities ()
 {
     testMidi1_7BitEncodings();
     testMidi1MessageSizes();
+    testConvertSingleUmpToMidi1();
     return 0;
 }
 
@@ -668,6 +766,6 @@ int main ()
 {
     testUMP();
     testMidiCI();
-    testMidi1Utilities();
+    testMiscellaneousUtilities();
     return 0;
 }
