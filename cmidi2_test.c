@@ -653,20 +653,25 @@ void testMidi1MessageSizes ()
     assert(cmidi2_midi1_get_message_size(a8, 4) == 4);  // Meta
 }
 
-void cmidi2_ump_write32(cmidi2_ump* dst, uint32_t value) {
-    dst[0] = value;
-}
-
-void cmidi2_ump_write64(cmidi2_ump* dst, uint64_t value) {
-    dst[0] = value >> 32;
-    dst[1] = value & 0xFFFFFFFF;
-}
-
-void cmidi2_ump_write128(cmidi2_ump* dst, uint64_t value1, uint64_t value2) {
-    dst[0] = value1 >> 32;
-    dst[1] = value1 & 0xFFFFFFFF;
-    dst[2] = value2 >> 32;
-    dst[3] = value2 & 0xFFFFFFFF;
+void testMidi1Write7BitEncodedInt ()
+{
+    uint8_t dst[16];
+    assert(cmidi2_midi1_write_7bit_encoded_int(dst, 0) == 1);
+    assert(dst[0] == 0);
+    assert(cmidi2_midi1_write_7bit_encoded_int(dst, 1) == 1);
+    assert(dst[0] == 1);
+    assert(cmidi2_midi1_write_7bit_encoded_int(dst, 0x7F) == 1);
+    assert(dst[0] == 0x7F);
+    assert(cmidi2_midi1_write_7bit_encoded_int(dst, 0x80) == 2);
+    assert(dst[0] == 0x80);
+    assert(dst[1] == 1);
+    assert(cmidi2_midi1_write_7bit_encoded_int(dst, 0x3FFF) == 2);
+    assert(dst[0] == 0xFF);
+    assert(dst[1] == 0x7F);
+    assert(cmidi2_midi1_write_7bit_encoded_int(dst, 0x4000) == 3);
+    assert(dst[0] == 0x80);
+    assert(dst[1] == 0x80);
+    assert(dst[2] == 1);
 }
 
 int testConvertSingleUmpToMidi1 ()
@@ -756,6 +761,7 @@ int testMiscellaneousUtilities ()
 {
     testMidi1_7BitEncodings();
     testMidi1MessageSizes();
+    testMidi1Write7BitEncodedInt();
     testConvertSingleUmpToMidi1();
     return 0;
 }

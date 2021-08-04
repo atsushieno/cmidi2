@@ -607,6 +607,22 @@ static inline void cmidi2_ump_mds_process(uint8_t group, uint8_t mdsId, void* da
 
 typedef uint32_t cmidi2_ump;
 
+void cmidi2_ump_write32(cmidi2_ump* dst, uint32_t value) {
+    dst[0] = value;
+}
+
+void cmidi2_ump_write64(cmidi2_ump* dst, uint64_t value) {
+    dst[0] = value >> 32;
+    dst[1] = value & 0xFFFFFFFF;
+}
+
+void cmidi2_ump_write128(cmidi2_ump* dst, uint64_t value1, uint64_t value2) {
+    dst[0] = value1 >> 32;
+    dst[1] = value1 & 0xFFFFFFFF;
+    dst[2] = value2 >> 32;
+    dst[3] = value2 & 0xFFFFFFFF;
+}
+
 static inline uint8_t cmidi2_ump_get_byte_at(cmidi2_ump *ump, uint8_t at) {
     ump += at / 4;
     switch (at % 4) {
@@ -1119,13 +1135,26 @@ static inline void cmidi2_ci_property_common(uint8_t* buf, uint8_t destination, 
     memcpy(buf + 22 + headerSize, data, dataSize);
 }
 
-static inline int32_t cmidi2_ci_try_parse_new_protocol(uint8_t* buf, int32_t length) {
+static inline int32_t cmidi2_ci_try_parse_new_protocol(uint8_t* buf, size_t length) {
     return (length != 19 || buf[0] != 0x7E || buf[1] != 0x7F || buf[2] != CMIDI2_CI_SUB_ID ||
             buf[3] != CMIDI2_CI_SUB_ID_2_SET_NEW_PROTOCOL || buf[4] != 1) ? 0 : buf[14];
 }
 
 
 // Miscellaneous MIDI Utilities
+
+static inline uint8_t cmidi2_midi1_write_7bit_encoded_int(uint8_t* bytes, uint32_t value)
+{
+    uint8_t pos = 0;
+    for (;; pos++) {
+        bytes[pos] = value % 0x80;
+        if (value >= 0x80) {
+            value /= 0x80;
+            bytes[pos] |= 0x80;
+        } else
+            return pos + 1;
+    }
+}
 
 static inline uint8_t cmidi2_midi1_get_7bit_encoded_int_length(uint32_t value) {
     for (uint8_t ret = 1; ; ret++) {
