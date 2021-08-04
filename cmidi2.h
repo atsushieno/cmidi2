@@ -607,16 +607,16 @@ static inline void cmidi2_ump_mds_process(uint8_t group, uint8_t mdsId, void* da
 
 typedef uint32_t cmidi2_ump;
 
-void cmidi2_ump_write32(cmidi2_ump* dst, uint32_t value) {
+static inline void cmidi2_ump_write32(cmidi2_ump* dst, uint32_t value) {
     dst[0] = value;
 }
 
-void cmidi2_ump_write64(cmidi2_ump* dst, uint64_t value) {
+static inline void cmidi2_ump_write64(cmidi2_ump* dst, uint64_t value) {
     dst[0] = value >> 32;
     dst[1] = value & 0xFFFFFFFF;
 }
 
-void cmidi2_ump_write128(cmidi2_ump* dst, uint64_t value1, uint64_t value2) {
+static inline void cmidi2_ump_write128(cmidi2_ump* dst, uint64_t value1, uint64_t value2) {
     dst[0] = value1 >> 32;
     dst[1] = value1 & 0xFFFFFFFF;
     dst[2] = value2 >> 32;
