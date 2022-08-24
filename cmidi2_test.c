@@ -789,12 +789,415 @@ int testConvertSingleUmpToMidi1 ()
     return 0;
 }
 
+int testConvertMidi1ToUmpNoteOn()
+{
+    uint32_t dst[32];
+    cmidi2_ump* ump = (cmidi2_ump*) dst;
+    cmidi2_midi_conversion_context context;
+
+    // note on
+    cmidi2_midi_conversion_context_initialize(&context);
+    memset(dst, 0, context.ump_num_bytes);
+    uint8_t midi1Bytes1[] = {0x91, 0x40, 0x78};
+    context.midi1 = midi1Bytes1;
+    context.midi1_num_bytes = 3;
+    context.ump = dst;
+    context.ump_num_bytes = 32 * sizeof(uint32_t);
+    context.group = 7;
+
+    assert(cmidi2_convert_midi1_to_ump(&context) == CMIDI2_CONVERSION_RESULT_OK);
+    assert(context.midi1_proceeded_bytes == 3);
+    assert(context.ump_proceeded_bytes == 8);
+    assert(((uint32_t*) dst)[0] == 0x47914000);
+    assert(((uint32_t*) dst)[1] == 0xF0000000);
+
+    return 0;
+}
+
+int testConvertMidi1ToUmpPAf()
+{
+    uint32_t dst[32];
+    cmidi2_ump* ump = (cmidi2_ump*) dst;
+    cmidi2_midi_conversion_context context;
+
+    // PAf
+    cmidi2_midi_conversion_context_initialize(&context);
+    memset(dst, 0, context.ump_num_bytes);
+    uint8_t midi1Bytes1[] = {0xA1, 0x40, 0x60};
+    context.midi1 = midi1Bytes1;
+    context.midi1_num_bytes = 3;
+    context.ump = dst;
+    context.ump_num_bytes = 32 * sizeof(uint32_t);
+    context.group = 7;
+
+    assert(cmidi2_convert_midi1_to_ump(&context) == CMIDI2_CONVERSION_RESULT_OK);
+    assert(context.midi1_proceeded_bytes == 3);
+    assert(context.ump_proceeded_bytes == 8);
+    assert(((uint32_t*) dst)[0] == 0x47A14000);
+    assert(((uint32_t*) dst)[1] == 0xC0000000);
+
+    return 0;
+}
+
+int testConvertMidi1ToUmpSimpleCC()
+{
+    uint32_t dst[32];
+    cmidi2_ump* ump = (cmidi2_ump*) dst;
+    cmidi2_midi_conversion_context context;
+
+    // CC Volume
+    cmidi2_midi_conversion_context_initialize(&context);
+    memset(dst, 0, context.ump_num_bytes);
+    uint8_t midi1Bytes1[] = {0xB1, 0x07, 0x70};
+    context.midi1 = midi1Bytes1;
+    context.midi1_num_bytes = 3;
+    context.ump = dst;
+    context.ump_num_bytes = 32 * sizeof(uint32_t);
+    context.group = 7;
+
+    assert(cmidi2_convert_midi1_to_ump(&context) == CMIDI2_CONVERSION_RESULT_OK);
+    assert(context.midi1_proceeded_bytes == 3);
+    assert(context.ump_proceeded_bytes == 8);
+    assert(((uint32_t*) dst)[0] == 0x47B10700);
+    assert(((uint32_t*) dst)[1] == 0xE0000000);
+
+    return 0;
+}
+
+int testConvertMidi1ToUmpValidRPN()
+{
+    uint32_t dst[32];
+    cmidi2_ump* ump = (cmidi2_ump*) dst;
+    cmidi2_midi_conversion_context context;
+
+    // RPN
+    cmidi2_midi_conversion_context_initialize(&context);
+    memset(dst, 0, context.ump_num_bytes);
+    uint8_t midi1Bytes1[] = {0xB1, 101, 1, 0xB1, 100, 2, 0xB1, 6, 0x10, 0xB1, 38, 0x20};
+    context.midi1 = midi1Bytes1;
+    context.midi1_num_bytes = 12;
+    context.ump = dst;
+    context.ump_num_bytes = 32 * sizeof(uint32_t);
+    context.group = 7;
+
+    assert(cmidi2_convert_midi1_to_ump(&context) == CMIDI2_CONVERSION_RESULT_OK);
+    assert(context.midi1_proceeded_bytes == 12);
+    assert(context.ump_proceeded_bytes == 8);
+    assert(((uint32_t*) dst)[0] == 0x47210102);
+    assert(((uint32_t*) dst)[1] == 0x20800000);
+
+    return 0;
+}
+
+int testConvertMidi1ToUmpValidNRPN()
+{
+    uint32_t dst[32];
+    cmidi2_ump* ump = (cmidi2_ump*) dst;
+    cmidi2_midi_conversion_context context;
+
+    // NRPN
+    cmidi2_midi_conversion_context_initialize(&context);
+    memset(dst, 0, context.ump_num_bytes);
+    uint8_t midi1Bytes1[] = {0xB1, 99, 1, 0xB1, 98, 2, 0xB1, 6, 0x10, 0xB1, 38, 0x20};
+    context.midi1 = midi1Bytes1;
+    context.midi1_num_bytes = 12;
+    context.ump = dst;
+    context.ump_num_bytes = 32 * sizeof(uint32_t);
+    context.group = 7;
+
+    assert(cmidi2_convert_midi1_to_ump(&context) == CMIDI2_CONVERSION_RESULT_OK);
+    assert(context.midi1_proceeded_bytes == 12);
+    assert(context.ump_proceeded_bytes == 8);
+    printf("%x\n", ((uint32_t*) dst)[0]);
+    assert(((uint32_t*) dst)[0] == 0x47310102);
+    assert(((uint32_t*) dst)[1] == 0x20800000);
+
+    return 0;
+}
+
+int testConvertMidi1ToUmpInvalidRPN()
+{
+    uint32_t dst[32];
+    cmidi2_ump* ump = (cmidi2_ump*) dst;
+    cmidi2_midi_conversion_context context;
+
+    // only RPN MSB -> error
+    cmidi2_midi_conversion_context_initialize(&context);
+    memset(dst, 0, context.ump_num_bytes);
+    uint8_t midi1Bytes1[] = {0xB1, 101, 1};
+    context.midi1 = midi1Bytes1;
+    context.midi1_num_bytes = 3;
+    context.ump = dst;
+    context.ump_num_bytes = 32 * sizeof(uint32_t);
+    context.group = 7;
+
+    assert(cmidi2_convert_midi1_to_ump(&context) == CMIDI2_CONVERSION_RESULT_INVALID_DTE_SEQUENCE);
+    assert(context.midi1_proceeded_bytes == 3);
+    assert(context.ump_proceeded_bytes == 0);
+
+    // only RPN MSB and LSB -> error
+    cmidi2_midi_conversion_context_initialize(&context);
+    memset(dst, 0, context.ump_num_bytes);
+    uint8_t midi1Bytes2[] = {0xB1, 101, 1, 0xB1, 100, 2};
+    context.midi1 = midi1Bytes2;
+    context.midi1_num_bytes = 6;
+    context.ump = dst;
+    context.ump_num_bytes = 32 * sizeof(uint32_t);
+    context.group = 7;
+
+    assert(cmidi2_convert_midi1_to_ump(&context) == CMIDI2_CONVERSION_RESULT_INVALID_DTE_SEQUENCE);
+    assert(context.midi1_proceeded_bytes == 6);
+    assert(context.ump_proceeded_bytes == 0);
+
+    // only RPN MSB and LSB, and DTE MSB -> error
+    cmidi2_midi_conversion_context_initialize(&context);
+    memset(dst, 0, context.ump_num_bytes);
+    uint8_t midi1Bytes3[] = {0xB1, 101, 1, 0xB1, 100, 2, 0xB1, 6, 3};
+    context.midi1 = midi1Bytes3;
+    context.midi1_num_bytes = 9;
+    context.ump = dst;
+    context.ump_num_bytes = 32 * sizeof(uint32_t);
+    context.group = 7;
+
+    assert(cmidi2_convert_midi1_to_ump(&context) == CMIDI2_CONVERSION_RESULT_INVALID_DTE_SEQUENCE);
+    assert(context.midi1_proceeded_bytes == 9);
+    assert(context.ump_proceeded_bytes == 0);
+
+    return 0;
+}
+
+int testConvertMidi1ToUmpInvalidNRPN()
+{
+    uint32_t dst[32];
+    cmidi2_ump* ump = (cmidi2_ump*) dst;
+    cmidi2_midi_conversion_context context;
+
+    // only RPN MSB -> error
+    cmidi2_midi_conversion_context_initialize(&context);
+    memset(dst, 0, context.ump_num_bytes);
+    uint8_t midi1Bytes1[] = {0xB1, 99, 1};
+    context.midi1 = midi1Bytes1;
+    context.midi1_num_bytes = 3;
+    context.ump = dst;
+    context.ump_num_bytes = 32 * sizeof(uint32_t);
+    context.group = 7;
+
+    assert(cmidi2_convert_midi1_to_ump(&context) == CMIDI2_CONVERSION_RESULT_INVALID_DTE_SEQUENCE);
+    assert(context.midi1_proceeded_bytes == 3);
+    assert(context.ump_proceeded_bytes == 0);
+
+    // only RPN MSB and LSB -> error
+    cmidi2_midi_conversion_context_initialize(&context);
+    memset(dst, 0, context.ump_num_bytes);
+    uint8_t midi1Bytes2[] = {0xB1, 99, 1, 0xB1, 98, 2};
+    context.midi1 = midi1Bytes2;
+    context.midi1_num_bytes = 6;
+    context.ump = dst;
+    context.ump_num_bytes = 32 * sizeof(uint32_t);
+    context.group = 7;
+
+    assert(cmidi2_convert_midi1_to_ump(&context) == CMIDI2_CONVERSION_RESULT_INVALID_DTE_SEQUENCE);
+    assert(context.midi1_proceeded_bytes == 6);
+    assert(context.ump_proceeded_bytes == 0);
+
+    // only RPN MSB and LSB, and DTE MSB -> error
+    cmidi2_midi_conversion_context_initialize(&context);
+    memset(dst, 0, context.ump_num_bytes);
+    uint8_t midi1Bytes3[] = {0xB1, 99, 1, 0xB1, 98, 2, 0xB1, 6, 3};
+    context.midi1 = midi1Bytes3;
+    context.midi1_num_bytes = 9;
+    context.ump = dst;
+    context.ump_num_bytes = 32 * sizeof(uint32_t);
+    context.group = 7;
+
+    assert(cmidi2_convert_midi1_to_ump(&context) == CMIDI2_CONVERSION_RESULT_INVALID_DTE_SEQUENCE);
+    assert(context.midi1_proceeded_bytes == 9);
+    assert(context.ump_proceeded_bytes == 0);
+
+    return 0;
+}
+
+int testConvertMidi1ToUmpSimpleProgramChange()
+{
+    uint32_t dst[32];
+    cmidi2_ump* ump = (cmidi2_ump*) dst;
+    cmidi2_midi_conversion_context context;
+
+    // simple program change
+    cmidi2_midi_conversion_context_initialize(&context);
+    memset(dst, 0, context.ump_num_bytes);
+    uint8_t midi1Bytes2[] = {0xC1, 0x30};
+    context.midi1 = midi1Bytes2;
+    context.midi1_num_bytes = 2;
+    context.ump = dst;
+    context.ump_num_bytes = 32 * sizeof(uint32_t);
+    context.group = 7;
+
+    assert(cmidi2_convert_midi1_to_ump(&context) == CMIDI2_CONVERSION_RESULT_OK);
+    assert(context.midi1_proceeded_bytes == 2);
+    assert(context.ump_proceeded_bytes == 8);
+    assert(((uint32_t*) dst)[0] == 0x47C10000);
+    assert(((uint32_t*) dst)[1] == 0x30000000);
+
+    return 0;
+}
+
+int testConvertMidi1ToUmpBankMsbLsbAndProgramChange()
+{
+    uint32_t dst[32];
+    cmidi2_ump* ump = (cmidi2_ump*) dst;
+    cmidi2_midi_conversion_context context;
+
+    // bank select MSB, bank select LSB, program change
+    cmidi2_midi_conversion_context_initialize(&context);
+    memset(dst, 0, context.ump_num_bytes);
+    uint8_t midi1Bytes2[] = {0xB1, 0x00, 0x12, 0xB1, 0x20, 0x22, 0xC1, 0x30};
+    context.midi1 = midi1Bytes2;
+    context.midi1_num_bytes = 8;
+    context.ump = dst;
+    context.ump_num_bytes = 32 * sizeof(uint32_t);
+    context.group = 7;
+
+    assert(cmidi2_convert_midi1_to_ump(&context) == CMIDI2_CONVERSION_RESULT_OK);
+    assert(context.midi1_proceeded_bytes == 8);
+    assert(context.ump_proceeded_bytes == 8);
+    assert(((uint32_t*) dst)[0] == 0x47C10001);
+    assert(((uint32_t*) dst)[1] == 0x30001222);
+
+    return 0;
+}
+
+// Not sure if this should be actually accepted or rejected; we accept it for now.
+int testConvertMidi1ToUmpBankMsbAndProgramChange()
+{
+    uint32_t dst[32];
+    cmidi2_ump* ump = (cmidi2_ump*) dst;
+    cmidi2_midi_conversion_context context;
+
+    // bank select MSB, then program change (LSB skipped)
+    cmidi2_midi_conversion_context_initialize(&context);
+    memset(dst, 0, context.ump_num_bytes);
+    uint8_t midi1Bytes2[] = {0xB1, 0x00, 0x12, 0xC1, 0x30};
+    context.midi1 = midi1Bytes2;
+    context.midi1_num_bytes = 5;
+    context.ump = dst;
+    context.ump_num_bytes = 32 * sizeof(uint32_t);
+    context.group = 7;
+
+    assert(cmidi2_convert_midi1_to_ump(&context) == CMIDI2_CONVERSION_RESULT_OK);
+    assert(context.midi1_proceeded_bytes == 5);
+    assert(context.ump_proceeded_bytes == 8);
+    assert(((uint32_t*) dst)[0] == 0x47C10001);
+    assert(((uint32_t*) dst)[1] == 0x30001200);
+
+    return 0;
+}
+
+// Not sure if this should be actually accepted or rejected; we accept it for now.
+int testConvertMidi1ToUmpBankLsbAndProgramChange()
+{
+    uint32_t dst[32];
+    cmidi2_ump* ump = (cmidi2_ump*) dst;
+    cmidi2_midi_conversion_context context;
+
+    // bank select LSB, then program change (MSB skipped)
+    cmidi2_midi_conversion_context_initialize(&context);
+    memset(dst, 0, context.ump_num_bytes);
+    uint8_t midi1Bytes2[] = {0xB1, 0x20, 0x12, 0xC1, 0x30};
+    context.midi1 = midi1Bytes2;
+    context.midi1_num_bytes = 5;
+    context.ump = dst;
+    context.ump_num_bytes = 32 * sizeof(uint32_t);
+    context.group = 7;
+
+    assert(cmidi2_convert_midi1_to_ump(&context) == CMIDI2_CONVERSION_RESULT_OK);
+    assert(context.midi1_proceeded_bytes == 5);
+    assert(context.ump_proceeded_bytes == 8);
+    assert(((uint32_t*) dst)[0] == 0x47C10001);
+    assert(((uint32_t*) dst)[1] == 0x30000012);
+
+    return 0;
+}
+
+int testConvertMidi1ToUmpCAf()
+{
+    uint32_t dst[32];
+    cmidi2_ump* ump = (cmidi2_ump*) dst;
+    cmidi2_midi_conversion_context context;
+
+    // PAf
+    cmidi2_midi_conversion_context_initialize(&context);
+    memset(dst, 0, context.ump_num_bytes);
+    uint8_t midi1Bytes1[] = {0xD1, 0x60};
+    context.midi1 = midi1Bytes1;
+    context.midi1_num_bytes = 2;
+    context.ump = dst;
+    context.ump_num_bytes = 32 * sizeof(uint32_t);
+    context.group = 7;
+
+    assert(cmidi2_convert_midi1_to_ump(&context) == CMIDI2_CONVERSION_RESULT_OK);
+    assert(context.midi1_proceeded_bytes == 2);
+    assert(context.ump_proceeded_bytes == 8);
+    assert(((uint32_t*) dst)[0] == 0x47D10000);
+    assert(((uint32_t*) dst)[1] == 0xC0000000);
+
+    return 0;
+}
+
+int testConvertMidi1ToUmpPitchBend()
+{
+    uint32_t dst[32];
+    cmidi2_ump* ump = (cmidi2_ump*) dst;
+    cmidi2_midi_conversion_context context;
+
+    // PAf
+    cmidi2_midi_conversion_context_initialize(&context);
+    memset(dst, 0, context.ump_num_bytes);
+    uint8_t midi1Bytes1[] = {0xE1, 0x20, 0x30};
+    context.midi1 = midi1Bytes1;
+    context.midi1_num_bytes = 3;
+    context.ump = dst;
+    context.ump_num_bytes = 32 * sizeof(uint32_t);
+    context.group = 7;
+
+    assert(cmidi2_convert_midi1_to_ump(&context) == CMIDI2_CONVERSION_RESULT_OK);
+    assert(context.midi1_proceeded_bytes == 3);
+    assert(context.ump_proceeded_bytes == 8);
+    assert(((uint32_t*) dst)[0] == 0x47E10000);
+    assert(((uint32_t*) dst)[1] == 0x60800000); // note that source MIDI1 pitch bend is in littele endian.
+
+    return 0;
+}
+
+int testConvertMidi1ToUmp()
+{
+    testConvertMidi1ToUmpNoteOn();
+    testConvertMidi1ToUmpPAf();
+    testConvertMidi1ToUmpSimpleCC();
+    testConvertMidi1ToUmpValidRPN();
+    testConvertMidi1ToUmpValidNRPN();
+    testConvertMidi1ToUmpInvalidRPN();
+    testConvertMidi1ToUmpInvalidNRPN();
+    testConvertMidi1ToUmpSimpleProgramChange();
+    testConvertMidi1ToUmpBankMsbLsbAndProgramChange();
+    testConvertMidi1ToUmpBankMsbAndProgramChange();
+    testConvertMidi1ToUmpCAf();
+    testConvertMidi1ToUmpPitchBend();
+    return 0;
+}
+
+int testConversions ()
+{
+    testConvertSingleUmpToMidi1();
+    testConvertMidi1ToUmp();
+    return 0;
+}
+
 int testMiscellaneousUtilities ()
 {
     testMidi1_7BitEncodings();
     testMidi1MessageSizes();
     testMidi1Write7BitEncodedInt();
-    testConvertSingleUmpToMidi1();
     return 0;
 }
 
@@ -804,6 +1207,7 @@ int main ()
 {
     testUMP();
     testMidiCI();
+    testConversions();
     testMiscellaneousUtilities();
     puts("OK");
     return 0;

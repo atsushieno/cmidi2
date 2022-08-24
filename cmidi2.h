@@ -494,16 +494,22 @@ static inline uint64_t cmidi2_ump_sysex7_get_packet_of(uint8_t group, uint8_t nu
 }
 
 /* process() - more complicated function */
-typedef void(*cmidi2_ump_handler_u64)(uint64_t data, void* context);
 
-static inline void cmidi2_ump_sysex7_process(uint8_t group, void* sysex, cmidi2_ump_handler_u64 sendUMP, void* context)
+// This returns NULL for success, or anything else for failure.
+typedef void*(*cmidi2_ump_handler_u64)(uint64_t data, void* context);
+
+// This returns NULL for success, or anything else that `sendUMP` returns for failure.
+static inline void* cmidi2_ump_sysex7_process(uint8_t group, void* sysex, cmidi2_ump_handler_u64 sendUMP, void* context)
 {
     int32_t length = cmidi2_ump_sysex7_get_sysex_length(sysex);
     int32_t numPackets = cmidi2_ump_sysex7_get_num_packets(length);
     for (int p = 0; p < numPackets; p++) {
         int64_t ump = cmidi2_ump_sysex7_get_packet_of(group, length, sysex, p);
-        sendUMP(ump, context);
+        void *retCode = sendUMP(ump, context);
+        if (retCode != 0)
+            return retCode;
     }
+    return NULL;
 }
 
 // 4.5 System Exclusive 8-Bit Messages
@@ -517,16 +523,22 @@ static inline void cmidi2_ump_sysex8_get_packet_of(uint8_t group, uint8_t stream
 }
 
 /* process() - more complicated function */
-typedef void(*cmidi2_ump_handler_u128)(uint64_t data1, uint64_t data2, size_t index, void* context);
 
-static inline void cmidi2_ump_sysex8_process(uint8_t group, void* sysex, uint32_t length, uint8_t streamId, cmidi2_ump_handler_u128 sendUMP, void* context)
+// This returns NULL for success, or anything else for failure.
+typedef void*(*cmidi2_ump_handler_u128)(uint64_t data1, uint64_t data2, size_t index, void* context);
+
+// This returns NULL for success, or anything else that `sendUMP` returns for failure.
+static inline void* cmidi2_ump_sysex8_process(uint8_t group, void* sysex, uint32_t length, uint8_t streamId, cmidi2_ump_handler_u128 sendUMP, void* context)
 {
     int32_t numPackets = cmidi2_ump_sysex8_get_num_packets(length);
     for (size_t p = 0; p < numPackets; p++) {
         uint64_t result1, result2;
         cmidi2_ump_sysex8_get_packet_of(group, streamId, length, sysex, p, &result1, &result2);
-        sendUMP(result1, result2, p, context);
+        void* retCode = sendUMP(result1, result2, p, context);
+        if (retCode != 0)
+            return retCode;
     }
+    return NULL;
 }
 
 // 4.6 Mixed Data Set Message ... should we come up with complicated chunk splitter function?
@@ -1360,4 +1372,275 @@ static inline size_t cmidi2_convert_single_ump_to_midi1(uint8_t* dst, size_t max
         break;
     }
     return midiEventSize;
+}
+
+// Conversion from MIDI1 message bytes or SMF event list to MIDI2 UMP stream
+
+enum cmidi2_dte_conversion_target {
+    CMIDI2_DTE_CONVERSION_TARGET_NONE,
+    CMIDI2_DTE_CONVERSION_TARGET_RPN,
+    CMIDI2_DTE_CONVERSION_TARGET_NRPN,
+};
+
+// Conversion from MIDI1 to MIDI2 requires some preserved context e.g. RPN/NRPN/DTE
+//  MSB/LSB, so we take this struct.
+typedef struct cmidi2_midi_conversion_context {
+    // When it is true, it means the input MIDI1 stream contains delta time.
+    // TODO: implement support for it
+    bool is_midi1_smf;
+    // Context tempo as in SMF specification defines.
+    // If the MIDI1 stream is SMF and non-SMPTE delta time is used, then we have to calculate
+    // the actual delta time length in SMPTE (then to JR timestamp).
+    // TODO: implement support for it
+    int32_t tempo;
+    // input MIDI1 messages or SMF events.
+    uint8_t *midi1;
+    // size of the input stream to process in bytes
+    size_t midi1_num_bytes;
+    // it is updated as per cmidi2_convert_midi1_messages_to_ump() proceeds the MIDI1 stream.
+    size_t midi1_proceeded_bytes;
+    // output UMP stream.
+    cmidi2_ump* ump;
+    // size (capacity) of the output stream in bytes
+    size_t ump_num_bytes;
+    // it is updated as per cmidi2_convert_midi1_messages_to_ump() proceeds the UMP stream.
+    size_t ump_proceeded_bytes;
+    // DTE conversion target.
+    // cmidi2_convert_midi1_messages_to_ump() will return *_INVALID_RPN or *_INVALID_NRPN
+    // for such invalid sequences, and to report that correctly we need to preserve CC status.
+    // They are initialized to 0x8080 that implies both bank (MSB) and index (LSB) are invalid (> 0x7F).
+    // When they are assigned valid values, then (context_[n]rpn & 0x8080) will become 0.
+    // When cmidi2_convert_midi1_messages_to_ump() encountered DTE LSB, they are consumed
+    // and reset to the initial value (0x8080).
+    int32_t context_rpn;
+    int32_t context_nrpn;
+    int32_t context_dte;
+    // MIDI 2.0 Defalult Translation (UMP specification Appendix D.3) accepts only DTE LSB
+    // as the conversion terminator, but cmidi2 allows DTE LSB to come first,
+    // if this flag is enabled.
+    bool allow_reordered_dte;
+    // Bank Select CC is preserved for the next program change.
+    // The initial value is 0x8080, same as RPN/NRPN/DTE.
+    // After program change is set, it is reset to the initial value.
+    uint32_t context_bank;
+    // Group can be specified.
+    uint8_t group;
+    // Destination protocol: can be MIDI1 UMP or MIDI2 UMP.
+    enum cmidi2_ci_protocol_values midi_protocol;
+    // Sysex conversion can be done to sysex8
+    bool use_sysex8;
+} cmidi2_midi_conversion_context;
+
+enum cmidi2_midi_conversion_result {
+    CMIDI2_CONVERSION_RESULT_OK = 0,
+    CMIDI2_CONVERSION_RESULT_OUT_OF_SPACE = 1,
+    CMIDI2_CONVERSION_RESULT_INVALID_SYSEX = 0x10,
+    CMIDI2_CONVERSION_RESULT_INVALID_DTE_SEQUENCE = 0x11,
+    CMIDI2_CONVERSION_RESULT_INVALID_STATUS = 0x13
+};
+
+static inline void cmidi2_midi_conversion_context_initialize(cmidi2_midi_conversion_context* context) {
+    context->is_midi1_smf = false;
+    context->tempo = 500000;
+    context->midi1 = NULL;
+    context->midi1_num_bytes = 0;
+    context->midi1_proceeded_bytes = 0;
+    context->ump = NULL;
+    context->ump_num_bytes = 0;
+    context->ump_proceeded_bytes = 0;
+    context->context_rpn = 0x8080;
+    context->context_nrpn = 0x8080;
+    context->context_dte = 0x8080;
+    context->context_bank = 0x8080;
+    context->allow_reordered_dte = false;
+    context->group = 0;
+    context->midi_protocol = CMIDI2_PROTOCOL_TYPE_MIDI2;
+    context->use_sysex8 = false;
+}
+
+typedef struct cmidi2_convert_sysex_context {
+    cmidi2_midi_conversion_context* conversion_context;
+    size_t dst_offset;
+} cmidi2_convert_sysex_context;
+
+static inline void* cmidi2_convert_add_midi1_sysex7_ump_to_list(uint64_t data, void* context) {
+    cmidi2_convert_sysex_context* s7ctx = (cmidi2_convert_sysex_context*) context;
+    s7ctx->conversion_context->ump[s7ctx->dst_offset] = data >> 32;
+    s7ctx->conversion_context->ump[s7ctx->dst_offset + 1] = data & 0xFFFFFFFF;
+    s7ctx->conversion_context->ump_proceeded_bytes += 2;
+    return NULL;
+}
+
+static inline void* cmidi2_convert_add_midi1_sysex8_ump_to_list(uint64_t data1, uint64_t data2, size_t index, void* context) {
+    cmidi2_convert_sysex_context* s8ctx = (cmidi2_convert_sysex_context*) context;
+    s8ctx->conversion_context->ump[s8ctx->dst_offset] = data1 >> 32;
+    s8ctx->conversion_context->ump[s8ctx->dst_offset + 1] = data1 & 0xFFFFFFFF;
+    s8ctx->conversion_context->ump[s8ctx->dst_offset + 2] = data2 >> 32;
+    s8ctx->conversion_context->ump[s8ctx->dst_offset + 3] = data2 & 0xFFFFFFFF;
+    s8ctx->conversion_context->ump_proceeded_bytes += 4;
+    return NULL;
+}
+
+static inline uint64_t cmidi2_internal_convert_midi1_dte_to_ump(cmidi2_midi_conversion_context* context, uint8_t channel) {
+    bool isRpn = (context->context_rpn & 0x8080) == 0;
+    uint8_t msb = (isRpn ? context->context_rpn : context->context_nrpn) >> 8;
+    uint8_t lsb = (isRpn ? context->context_rpn : context->context_nrpn) & 0xFF;
+    int32_t data = (context->context_dte >> 8 << 25) + ((context->context_dte & 0x7F) << 18);
+    // reset RPN/NRPN/DTE status to the initial values.
+    context->context_rpn = 0x8080;
+    context->context_nrpn = 0x8080;
+    context->context_dte = 0x8080;
+    return isRpn ?
+        cmidi2_ump_midi2_rpn(context->group, channel, msb, lsb, data) :
+        cmidi2_ump_midi2_nrpn(context->group, channel, msb, lsb, data);
+}
+
+static enum cmidi2_midi_conversion_result cmidi2_convert_midi1_to_ump(cmidi2_midi_conversion_context* context) {
+    uint8_t* dst = (uint8_t*) context->ump;
+    size_t sLen = context->midi1_num_bytes;
+    size_t dLen = context->ump_num_bytes;
+    uint8_t *sIdx = (uint8_t*) &context->midi1_proceeded_bytes;
+    uint8_t *dIdx = (uint8_t*) &context->ump_proceeded_bytes;
+
+    while (*sIdx < sLen) {
+        // FIXME: implement deltaTime to JR Timestamp conversion.
+
+        if (context->midi1[*sIdx] == 0xF0) {
+            // sysex
+            uint8_t *f7 = (uint8_t*) memchr(context->midi1 + *sIdx, 0xF7, context->midi1_num_bytes - *sIdx);
+            if (f7 == NULL) {
+                return CMIDI2_CONVERSION_RESULT_INVALID_SYSEX; // error
+            }
+            size_t sysexSize = f7 - context->midi1 - *sIdx - 1; // excluding 0xF7
+            size_t numPackets = context->use_sysex8 ?
+                cmidi2_ump_sysex8_get_num_packets(sysexSize) :
+                cmidi2_ump_sysex7_get_num_packets(sysexSize);
+            if (dLen - *dIdx < numPackets)
+                return CMIDI2_CONVERSION_RESULT_OUT_OF_SPACE;
+            cmidi2_convert_sysex_context sysExCtx;
+            sysExCtx.conversion_context = context;
+            sysExCtx.dst_offset = *dIdx;
+            if (context->use_sysex8) {
+                // ignoring the return code as it never returns non-NULL... (size is already verified)
+                cmidi2_ump_sysex8_process(context->group, context->midi1 + *sIdx, sysexSize, 0,
+                    cmidi2_convert_add_midi1_sysex8_ump_to_list, &sysExCtx);
+            } else {
+                // ignoring the return code as it never returns non-NULL... (size is already verified)
+                cmidi2_ump_sysex7_process(context->group, context->midi1 + *sIdx,
+                    cmidi2_convert_add_midi1_sysex7_ump_to_list, &sysExCtx);
+            }
+            *sIdx += sysexSize + 1; // +1 for 0xF7
+        } else {
+            // fixed sized message
+            size_t len = cmidi2_midi1_get_message_size(context->midi1 + *sIdx, sLen - *sIdx);
+            uint8_t byte2 = context->midi1[*sIdx + 1];
+            uint8_t byte3 = len > 2 ? context->midi1[*sIdx + 2] : 0;
+            uint8_t channel = context->midi1[*sIdx] & 0xF;
+            if (context->midi_protocol == CMIDI2_PROTOCOL_TYPE_MIDI1) {
+                // generate MIDI1 UMPs
+                dst[*dIdx] = cmidi2_ump_midi1_message(context->group, context->midi1[*sIdx] & 0xF0, channel, byte2, byte3);
+                *sIdx += len;
+                *dIdx += 4;
+            } else {
+                // generate MIDI2 UMPs
+                uint64_t m2;
+                const int8_t NO_ATTRIBUTE_TYPE = 0;
+                const int16_t NO_ATTRIBUTE_DATA = 0;
+                bool bankValid, bankMsbValid, bankLsbValid;
+                bool skipEmitUmp = false;
+                switch (context->midi1[*sIdx] & 0xF0) {
+                    case CMIDI2_STATUS_NOTE_OFF:
+                        m2 = cmidi2_ump_midi2_note_off(context->group, channel, byte2, NO_ATTRIBUTE_TYPE, byte3 << 9, NO_ATTRIBUTE_DATA);
+                        break;
+                    case CMIDI2_STATUS_NOTE_ON:
+                        m2 = cmidi2_ump_midi2_note_on(context->group, channel, byte2, NO_ATTRIBUTE_TYPE, byte3 << 9, NO_ATTRIBUTE_DATA);
+                        break;
+                    case CMIDI2_STATUS_PAF:
+                        m2 = cmidi2_ump_midi2_paf(context->group, channel, byte2, byte3 << 25);
+                        break;
+                    case CMIDI2_STATUS_CC:
+                        switch (byte2) {
+                        case CMIDI2_CC_RPN_MSB:
+                            context->context_rpn = context->context_rpn & 0xFF | byte3 << 8;
+                            skipEmitUmp = true;
+                            break;
+                        case CMIDI2_CC_RPN_LSB:
+                            context->context_rpn = context->context_rpn & 0xFF00 | byte3;
+                            skipEmitUmp = true;
+                            break;
+                        case CMIDI2_CC_NRPN_MSB:
+                            context->context_nrpn = context->context_nrpn & 0xFF | byte3 << 8;
+                            skipEmitUmp = true;
+                            break;
+                        case CMIDI2_CC_NRPN_LSB:
+                            context->context_nrpn = context->context_nrpn & 0xFF00 | byte3;
+                            skipEmitUmp = true;
+                            break;
+                        case CMIDI2_CC_DTE_MSB:
+                            context->context_dte = context->context_dte & 0xFF | byte3 << 8;
+
+                            if (context->allow_reordered_dte && (context->context_dte & 0x8080) == 0)
+                                m2 = cmidi2_internal_convert_midi1_dte_to_ump(context, channel);
+                            else
+                                skipEmitUmp = true;
+
+                            break;
+                        case CMIDI2_CC_DTE_LSB:
+                            context->context_dte = context->context_dte & 0xFF00 | byte3;
+
+                            if ((context->context_dte & 0x8000) && !context->allow_reordered_dte)
+                                return CMIDI2_CONVERSION_RESULT_INVALID_DTE_SEQUENCE;
+                            if ((context->context_rpn & 0x8080) && (context->context_nrpn & 0x8080))
+                                return CMIDI2_CONVERSION_RESULT_INVALID_DTE_SEQUENCE;
+                            m2 = cmidi2_internal_convert_midi1_dte_to_ump(context, channel);
+
+                            break;
+                        case CMIDI2_CC_BANK_SELECT:
+                            context->context_bank = (context->context_bank & 0xFF) | (byte3 << 8);
+                            skipEmitUmp = true;
+                            break;
+                        case CMIDI2_CC_BANK_SELECT_LSB:
+                            context->context_bank = (context->context_bank & 0xFF00) | byte3;
+                            skipEmitUmp = true;
+                            break;
+                        default:
+                            m2 = cmidi2_ump_midi2_cc(context->group, channel, byte2, byte3 << 25);
+                            break;
+                        }
+                        break;
+                    case CMIDI2_STATUS_PROGRAM:
+                        bankMsbValid = (context->context_bank & 0x8000) == 0;
+                        bankLsbValid = ((context->context_bank >> 8) & 0x80) == 0;
+                        bankValid = bankMsbValid || bankLsbValid;
+                        m2 = cmidi2_ump_midi2_program(context->group, channel,
+                            bankValid ? CMIDI2_PROGRAM_CHANGE_OPTION_BANK_VALID : CMIDI2_PROGRAM_CHANGE_OPTION_NONE,
+                            byte2, bankMsbValid ? context->context_bank >> 8 : 0, bankLsbValid ? context->context_bank & 0x7F : 0);
+                        context->context_bank = 0x8080;
+                        break;
+                    case CMIDI2_STATUS_CAF:
+                        m2 = cmidi2_ump_midi2_caf(context->group, channel, byte2 << 25);
+                        break;
+                    case CMIDI2_STATUS_PITCH_BEND:
+                        // Note: Pitch Bend values in the MIDI 1.0 Protocol are presented as Little Endian.
+                        m2 = cmidi2_ump_midi2_pitch_bend_direct(context->group, channel, ((byte3 << 7) + byte2) << 18);
+                        break;
+                    default:
+                        return CMIDI2_CONVERSION_RESULT_INVALID_STATUS;
+                }
+                if (!skipEmitUmp) {
+                    *(uint32_t*) (dst + *dIdx) = m2 >> 32;
+                    *dIdx += 4;
+                    *(uint32_t*) (dst + *dIdx) = m2 & 0xFFFFFFFF;
+                    *dIdx += 4;
+                }
+                *sIdx += len;
+            }
+        }
+    }
+    // incomplete UMP sequence will be reported as CMIDI2_CONVERSION_RESULT_OUT_OF_SPACE,
+    // so it is safe to judge that incomplete RPN/NRPN/DTE state at this state means invalid.
+    if (context->context_rpn != 0x8080 || context->context_nrpn != 0x8080 || context->context_dte != 0x8080)
+        return CMIDI2_CONVERSION_RESULT_INVALID_DTE_SEQUENCE;
+    
+    return CMIDI2_CONVERSION_RESULT_OK;
 }
