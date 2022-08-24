@@ -695,6 +695,38 @@ int testConvertSingleUmpToMidi1 ()
 
     // MIDI2 Channel Voice Messages
 
+    // rpn
+    cmidi2_ump_write64(src, cmidi2_ump_midi2_rpn(0, 1, 2, 3, 517 * 0x40000)); // MIDI1 DTE 517, expanded to 32bit
+    assert(cmidi2_convert_single_ump_to_midi1(dst, 16, src) == 12);
+    assert(dst[0] == 0xB1);
+    assert(dst[1] == 101);
+    assert(dst[2] == 0x2);
+    assert(dst[3] == 0xB1);
+    assert(dst[4] == 100);
+    assert(dst[5] == 0x3);
+    assert(dst[6] == 0xB1);
+    assert(dst[7] == 6);
+    assert(dst[8] == 4); // 517 / 0x80
+    assert(dst[9] == 0xB1);
+    assert(dst[10] == 38);
+    assert(dst[11] == 5); // 517 % 0x80
+
+    // nrpn
+    cmidi2_ump_write64(src, cmidi2_ump_midi2_nrpn(0, 1, 2, 3, 0xFF000000));
+    assert(cmidi2_convert_single_ump_to_midi1(dst, 16, src) == 12);
+    assert(dst[0] == 0xB1);
+    assert(dst[1] == 99);
+    assert(dst[2] == 0x2);
+    assert(dst[3] == 0xB1);
+    assert(dst[4] == 98);
+    assert(dst[5] == 0x3);
+    assert(dst[6] == 0xB1);
+    assert(dst[7] == 6);
+    assert(dst[8] == 0x7F);
+    assert(dst[9] == 0xB1);
+    assert(dst[10] == 38);
+    assert(dst[11] == 0x40);
+
     // note off
     cmidi2_ump_write64(src, cmidi2_ump_midi2_note_off(0, 1, 40, 0, 0xE800, 0));
     assert(cmidi2_convert_single_ump_to_midi1(dst, 16, src) == 3);
@@ -773,5 +805,6 @@ int main ()
     testUMP();
     testMidiCI();
     testMiscellaneousUtilities();
+    puts("OK");
     return 0;
 }

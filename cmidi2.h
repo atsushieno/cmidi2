@@ -183,6 +183,11 @@ enum cmidi2_note_attribute_type {
     CMIDI2_ATTRIBUTE_TYPE_PITCH7_9 = 3,
 };
 
+enum cmidi2_program_change_option_flags {
+    CMIDI2_PROGRAM_CHANGE_OPTION_NONE = 0,
+    CMIDI2_PROGRAM_CHANGE_OPTION_BANK_VALID = 1,
+};
+
 enum cmidi2_sysex_status {
     CMIDI2_SYSEX_IN_ONE_UMP = 0,
     CMIDI2_SYSEX_START = 0x10,
@@ -1252,6 +1257,36 @@ static inline size_t cmidi2_convert_single_ump_to_midi1(uint8_t* dst, size_t max
     case CMIDI2_MESSAGE_TYPE_MIDI_2_CHANNEL:
         // FIXME: convert MIDI2 to MIDI1 as long as possible
         switch (statusCode) {
+        case CMIDI2_STATUS_RPN:
+            midiEventSize = 12;
+            dst[0] = cmidi2_ump_get_channel(ump) + CMIDI2_STATUS_CC;
+            dst[1] = CMIDI2_CC_RPN_MSB;
+            dst[2] = cmidi2_ump_get_midi2_rpn_msb(ump);
+            dst[3] = dst[0]; // CC + channel
+            dst[4] = CMIDI2_CC_RPN_LSB;
+            dst[5] = cmidi2_ump_get_midi2_rpn_lsb(ump);
+            dst[6] = dst[0]; // CC + channel
+            dst[7] = CMIDI2_CC_DTE_MSB;
+            dst[8] = (cmidi2_ump_get_midi2_rpn_data(ump) >> 25) & 0x7F;
+            dst[9] = dst[0]; // CC + channel
+            dst[10] = CMIDI2_CC_DTE_LSB;
+            dst[11] = (cmidi2_ump_get_midi2_rpn_data(ump) >> 18) & 0x7F;
+            break;
+        case CMIDI2_STATUS_NRPN:
+            midiEventSize = 12;
+            dst[0] = cmidi2_ump_get_channel(ump) + CMIDI2_STATUS_CC;
+            dst[1] = CMIDI2_CC_NRPN_MSB;
+            dst[2] = cmidi2_ump_get_midi2_nrpn_msb(ump);
+            dst[3] = dst[0]; // CC + channel
+            dst[4] = CMIDI2_CC_NRPN_LSB;
+            dst[5] = cmidi2_ump_get_midi2_nrpn_lsb(ump);
+            dst[6] = dst[0]; // CC + channel
+            dst[7] = CMIDI2_CC_DTE_MSB;
+            dst[8] = (cmidi2_ump_get_midi2_nrpn_data(ump) >> 25) & 0x7F;
+            dst[9] = dst[0]; // CC + channel
+            dst[10] = CMIDI2_CC_DTE_LSB;
+            dst[11] = (cmidi2_ump_get_midi2_nrpn_data(ump) >> 18) & 0x7F;
+            break;
         case CMIDI2_STATUS_NOTE_OFF:
         case CMIDI2_STATUS_NOTE_ON:
             midiEventSize = 3;
@@ -1269,7 +1304,7 @@ static inline size_t cmidi2_convert_single_ump_to_midi1(uint8_t* dst, size_t max
             dst[2] = cmidi2_ump_get_midi2_cc_data(ump) / 0x2000000;
             break;
         case CMIDI2_STATUS_PROGRAM:
-            if (cmidi2_ump_get_midi2_program_options(ump) == 1) {
+            if (cmidi2_ump_get_midi2_program_options(ump) & CMIDI2_PROGRAM_CHANGE_OPTION_BANK_VALID) {
                 midiEventSize = 8;
                 dst[6] = dst[0]; // copy
                 dst[7] = cmidi2_ump_get_midi2_program_program(ump);
