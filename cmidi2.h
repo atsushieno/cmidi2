@@ -1375,14 +1375,8 @@ static inline size_t cmidi2_convert_single_ump_to_midi1(uint8_t* dst, size_t max
 }
 
 // Conversion from MIDI1 message bytes or SMF event list to MIDI2 UMP stream
-
-enum cmidi2_dte_conversion_target {
-    CMIDI2_DTE_CONVERSION_TARGET_NONE,
-    CMIDI2_DTE_CONVERSION_TARGET_RPN,
-    CMIDI2_DTE_CONVERSION_TARGET_NRPN,
-};
-
-// Conversion from MIDI1 to MIDI2 requires some preserved context e.g. RPN/NRPN/DTE
+//
+// The conversion requires some preserved context e.g. RPN/NRPN/DTE
 //  MSB/LSB, so we take this struct.
 typedef struct cmidi2_midi_conversion_context {
     // When it is true, it means the input MIDI1 stream contains delta time.
@@ -1463,7 +1457,7 @@ typedef struct cmidi2_convert_sysex_context {
     size_t dst_offset;
 } cmidi2_convert_sysex_context;
 
-static inline void* cmidi2_convert_add_midi1_sysex7_ump_to_list(uint64_t data, void* context) {
+static inline void* cmidi2_internal_convert_add_midi1_sysex7_ump_to_list(uint64_t data, void* context) {
     cmidi2_convert_sysex_context* s7ctx = (cmidi2_convert_sysex_context*) context;
     s7ctx->conversion_context->ump[s7ctx->dst_offset] = data >> 32;
     s7ctx->conversion_context->ump[s7ctx->dst_offset + 1] = data & 0xFFFFFFFF;
@@ -1471,7 +1465,7 @@ static inline void* cmidi2_convert_add_midi1_sysex7_ump_to_list(uint64_t data, v
     return NULL;
 }
 
-static inline void* cmidi2_convert_add_midi1_sysex8_ump_to_list(uint64_t data1, uint64_t data2, size_t index, void* context) {
+static inline void* cmidi2_internal_convert_add_midi1_sysex8_ump_to_list(uint64_t data1, uint64_t data2, size_t index, void* context) {
     cmidi2_convert_sysex_context* s8ctx = (cmidi2_convert_sysex_context*) context;
     s8ctx->conversion_context->ump[s8ctx->dst_offset] = data1 >> 32;
     s8ctx->conversion_context->ump[s8ctx->dst_offset + 1] = data1 & 0xFFFFFFFF;
@@ -1523,11 +1517,11 @@ static enum cmidi2_midi_conversion_result cmidi2_convert_midi1_to_ump(cmidi2_mid
             if (context->use_sysex8) {
                 // ignoring the return code as it never returns non-NULL... (size is already verified)
                 cmidi2_ump_sysex8_process(context->group, context->midi1 + *sIdx, sysexSize, 0,
-                    cmidi2_convert_add_midi1_sysex8_ump_to_list, &sysExCtx);
+                    cmidi2_internal_convert_add_midi1_sysex8_ump_to_list, &sysExCtx);
             } else {
                 // ignoring the return code as it never returns non-NULL... (size is already verified)
                 cmidi2_ump_sysex7_process(context->group, context->midi1 + *sIdx,
-                    cmidi2_convert_add_midi1_sysex7_ump_to_list, &sysExCtx);
+                    cmidi2_internal_convert_add_midi1_sysex7_ump_to_list, &sysExCtx);
             }
             *sIdx += sysexSize + 1; // +1 for 0xF7
         } else {

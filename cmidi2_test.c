@@ -808,8 +808,8 @@ int testConvertMidi1ToUmpNoteOn()
     assert(cmidi2_convert_midi1_to_ump(&context) == CMIDI2_CONVERSION_RESULT_OK);
     assert(context.midi1_proceeded_bytes == 3);
     assert(context.ump_proceeded_bytes == 8);
-    assert(((uint32_t*) dst)[0] == 0x47914000);
-    assert(((uint32_t*) dst)[1] == 0xF0000000);
+    assert(dst[0] == 0x47914000);
+    assert(dst[1] == 0xF0000000);
 
     return 0;
 }
@@ -833,8 +833,8 @@ int testConvertMidi1ToUmpPAf()
     assert(cmidi2_convert_midi1_to_ump(&context) == CMIDI2_CONVERSION_RESULT_OK);
     assert(context.midi1_proceeded_bytes == 3);
     assert(context.ump_proceeded_bytes == 8);
-    assert(((uint32_t*) dst)[0] == 0x47A14000);
-    assert(((uint32_t*) dst)[1] == 0xC0000000);
+    assert(dst[0] == 0x47A14000);
+    assert(dst[1] == 0xC0000000);
 
     return 0;
 }
@@ -858,8 +858,8 @@ int testConvertMidi1ToUmpSimpleCC()
     assert(cmidi2_convert_midi1_to_ump(&context) == CMIDI2_CONVERSION_RESULT_OK);
     assert(context.midi1_proceeded_bytes == 3);
     assert(context.ump_proceeded_bytes == 8);
-    assert(((uint32_t*) dst)[0] == 0x47B10700);
-    assert(((uint32_t*) dst)[1] == 0xE0000000);
+    assert(dst[0] == 0x47B10700);
+    assert(dst[1] == 0xE0000000);
 
     return 0;
 }
@@ -883,8 +883,8 @@ int testConvertMidi1ToUmpValidRPN()
     assert(cmidi2_convert_midi1_to_ump(&context) == CMIDI2_CONVERSION_RESULT_OK);
     assert(context.midi1_proceeded_bytes == 12);
     assert(context.ump_proceeded_bytes == 8);
-    assert(((uint32_t*) dst)[0] == 0x47210102);
-    assert(((uint32_t*) dst)[1] == 0x20800000);
+    assert(dst[0] == 0x47210102);
+    assert(dst[1] == 0x20800000);
 
     return 0;
 }
@@ -908,9 +908,8 @@ int testConvertMidi1ToUmpValidNRPN()
     assert(cmidi2_convert_midi1_to_ump(&context) == CMIDI2_CONVERSION_RESULT_OK);
     assert(context.midi1_proceeded_bytes == 12);
     assert(context.ump_proceeded_bytes == 8);
-    printf("%x\n", ((uint32_t*) dst)[0]);
-    assert(((uint32_t*) dst)[0] == 0x47310102);
-    assert(((uint32_t*) dst)[1] == 0x20800000);
+    assert(dst[0] == 0x47310102);
+    assert(dst[1] == 0x20800000);
 
     return 0;
 }
@@ -1036,8 +1035,8 @@ int testConvertMidi1ToUmpSimpleProgramChange()
     assert(cmidi2_convert_midi1_to_ump(&context) == CMIDI2_CONVERSION_RESULT_OK);
     assert(context.midi1_proceeded_bytes == 2);
     assert(context.ump_proceeded_bytes == 8);
-    assert(((uint32_t*) dst)[0] == 0x47C10000);
-    assert(((uint32_t*) dst)[1] == 0x30000000);
+    assert(dst[0] == 0x47C10000);
+    assert(dst[1] == 0x30000000);
 
     return 0;
 }
@@ -1061,8 +1060,8 @@ int testConvertMidi1ToUmpBankMsbLsbAndProgramChange()
     assert(cmidi2_convert_midi1_to_ump(&context) == CMIDI2_CONVERSION_RESULT_OK);
     assert(context.midi1_proceeded_bytes == 8);
     assert(context.ump_proceeded_bytes == 8);
-    assert(((uint32_t*) dst)[0] == 0x47C10001);
-    assert(((uint32_t*) dst)[1] == 0x30001222);
+    assert(dst[0] == 0x47C10001);
+    assert(dst[1] == 0x30001222);
 
     return 0;
 }
@@ -1087,8 +1086,8 @@ int testConvertMidi1ToUmpBankMsbAndProgramChange()
     assert(cmidi2_convert_midi1_to_ump(&context) == CMIDI2_CONVERSION_RESULT_OK);
     assert(context.midi1_proceeded_bytes == 5);
     assert(context.ump_proceeded_bytes == 8);
-    assert(((uint32_t*) dst)[0] == 0x47C10001);
-    assert(((uint32_t*) dst)[1] == 0x30001200);
+    assert(dst[0] == 0x47C10001);
+    assert(dst[1] == 0x30001200);
 
     return 0;
 }
@@ -1113,8 +1112,8 @@ int testConvertMidi1ToUmpBankLsbAndProgramChange()
     assert(cmidi2_convert_midi1_to_ump(&context) == CMIDI2_CONVERSION_RESULT_OK);
     assert(context.midi1_proceeded_bytes == 5);
     assert(context.ump_proceeded_bytes == 8);
-    assert(((uint32_t*) dst)[0] == 0x47C10001);
-    assert(((uint32_t*) dst)[1] == 0x30000012);
+    assert(dst[0] == 0x47C10001);
+    assert(dst[1] == 0x30000012);
 
     return 0;
 }
@@ -1138,8 +1137,8 @@ int testConvertMidi1ToUmpCAf()
     assert(cmidi2_convert_midi1_to_ump(&context) == CMIDI2_CONVERSION_RESULT_OK);
     assert(context.midi1_proceeded_bytes == 2);
     assert(context.ump_proceeded_bytes == 8);
-    assert(((uint32_t*) dst)[0] == 0x47D10000);
-    assert(((uint32_t*) dst)[1] == 0xC0000000);
+    assert(dst[0] == 0x47D10000);
+    assert(dst[1] == 0xC0000000);
 
     return 0;
 }
@@ -1163,8 +1162,8 @@ int testConvertMidi1ToUmpPitchBend()
     assert(cmidi2_convert_midi1_to_ump(&context) == CMIDI2_CONVERSION_RESULT_OK);
     assert(context.midi1_proceeded_bytes == 3);
     assert(context.ump_proceeded_bytes == 8);
-    assert(((uint32_t*) dst)[0] == 0x47E10000);
-    assert(((uint32_t*) dst)[1] == 0x60800000); // note that source MIDI1 pitch bend is in littele endian.
+    assert(dst[0] == 0x47E10000);
+    assert(dst[1] == 0x60800000); // note that source MIDI1 pitch bend is in littele endian.
 
     return 0;
 }
