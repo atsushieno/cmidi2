@@ -249,7 +249,7 @@ void testType5Messages()
 
 void testForEach()
 {
-    uint64_t ump[] = {
+    int64_t ump[] = {
 	cmidi2_ump_jr_clock(1, 0.0) * 0x100000000 + cmidi2_ump_jr_timestamp(1, 0),
 	cmidi2_ump_midi2_note_on(1, 1, 60, 0, 120 * 0x100, 0),
 	cmidi2_ump_jr_clock(1, 0.0) * 0x100000000 + cmidi2_ump_jr_timestamp(1, 1),
@@ -280,12 +280,12 @@ void testForEach()
         switch (cmidi2_ump_get_num_bytes(cmidi2_ump_read_uint32_bytes(iter))) {
         case 4:
             ret = cmidi2_ump_read_uint32_bytes(iter);
-            printf("32bit DATA: %08"PRIX32" \n", (uint32_t) ret);
+            printf("32bit DATA: %08" PRIX32 " \n", (uint32_t) ret);
             assert(ret == expected[current++]);
             break;
         case 8:
             ret = cmidi2_ump_read_uint64_bytes(iter);
-            printf("64bit DATA: %016"PRIX64" \n", ret);
+            printf("64bit DATA: %016" PRIX64 " \n", ret);
             assert(ret == expected[current++]);
             break;
         default:
