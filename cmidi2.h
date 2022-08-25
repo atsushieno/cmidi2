@@ -1374,6 +1374,28 @@ static inline size_t cmidi2_convert_single_ump_to_midi1(uint8_t* dst, size_t max
     return midiEventSize;
 }
 
+/* Should we define some structs like this to support conversion from MIDI1 UMP to MIDI2 UMP and complicate the API?
+   I'm not sure if there are enough need, and it's better to avoid another cmidi2_convert_midi1_to_ump() (200-ish LoC).
+
+typedef struct cmidi2_midi1_sequence_midi1_bytes {
+    // input MIDI1 messages or SMF events.
+    uint8_t *midi1;
+    // size of the input stream to process in bytes
+    size_t midi1_num_bytes;
+    // it is updated as per cmidi2_convert_midi1_messages_to_ump() proceeds the MIDI1 stream.
+    size_t midi1_proceeded_bytes;
+} cmidi2_midi1_sequence_midi1_bytes;
+
+typedef struct cmidi2_midi1_sequence_umps {
+    // MIDI1 UMP stream.
+    cmidi2_ump* ump;
+    // size (capacity) of the output stream in bytes
+    size_t ump_num_bytes;
+    // it is updated as per cmidi2_convert_midi1_messages_to_ump() proceeds the UMP stream.
+    size_t ump_proceeded_bytes;
+} cmidi2_midi1_sequence_ump;
+*/
+
 // Conversion from MIDI1 message bytes or SMF event list to MIDI2 UMP stream
 //
 // The conversion requires some preserved context e.g. RPN/NRPN/DTE
