@@ -1626,7 +1626,7 @@ static enum cmidi2_midi_conversion_result cmidi2_convert_midi1_to_ump(cmidi2_mid
                         break;
                     case CMIDI2_STATUS_PROGRAM:
                         bankMsbValid = (context->context_bank & 0x8000) == 0;
-                        bankLsbValid = ((context->context_bank >> 8) & 0x80) == 0;
+                        bankLsbValid = (context->context_bank & 0x80) == 0;
                         bankValid = bankMsbValid || bankLsbValid;
                         m2 = cmidi2_ump_midi2_program(context->group, channel,
                             bankValid ? CMIDI2_PROGRAM_CHANGE_OPTION_BANK_VALID : CMIDI2_PROGRAM_CHANGE_OPTION_NONE,

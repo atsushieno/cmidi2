@@ -1124,7 +1124,7 @@ int testConvertMidi1ToUmpCAf()
     cmidi2_ump* ump = (cmidi2_ump*) dst;
     cmidi2_midi_conversion_context context;
 
-    // PAf
+    // CAf
     cmidi2_midi_conversion_context_initialize(&context);
     memset(dst, 0, context.ump_num_bytes);
     uint8_t midi1Bytes1[] = {0xD1, 0x60};
@@ -1149,7 +1149,7 @@ int testConvertMidi1ToUmpPitchBend()
     cmidi2_ump* ump = (cmidi2_ump*) dst;
     cmidi2_midi_conversion_context context;
 
-    // PAf
+    // Pitchbend
     cmidi2_midi_conversion_context_initialize(&context);
     memset(dst, 0, context.ump_num_bytes);
     uint8_t midi1Bytes1[] = {0xE1, 0x20, 0x30};
