@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['bank_525',['bank',['../structcmidi2__profile__id.html#a1260cf052fd19505c4dcf73f1c496124',1,'cmidi2_profile_id']]]
+  ['allow_5freordered_5fdte_574',['allow_reordered_dte',['../structcmidi2__midi__conversion__context.html#a4664130d0053613082d3db8774f09272',1,'cmidi2_midi_conversion_context']]]
 ];

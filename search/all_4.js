@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['jr_5ftimestamp_5fticks_5fper_5fsecond_361',['JR_TIMESTAMP_TICKS_PER_SECOND',['../cmidi2_8h.html#afca68f9f0963d746a7155e56b62e9ce8',1,'cmidi2.h']]]
+  ['extensions_386',['extensions',['../structcmidi2__ci__protocol__tag.html#ae0b7b3931540ff989c657b8ec1153d2c',1,'cmidi2_ci_protocol_tag::extensions()'],['../structcmidi2__ci__protocol__type__info.html#a1d680f98d563d7e6bc19807a44685de6',1,'cmidi2_ci_protocol_type_info::extensions()']]]
 ];

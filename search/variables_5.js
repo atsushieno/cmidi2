@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['protocol_5ftype_530',['protocol_type',['../structcmidi2__ci__protocol__tag.html#ae77c8aa0882e3038835629cb783967e3',1,'cmidi2_ci_protocol_tag']]]
+  ['fixed_5f7e_583',['fixed_7e',['../structcmidi2__profile__id.html#a37f54f87a3b03f21b70ea8b623af9d2f',1,'cmidi2_profile_id']]]
 ];

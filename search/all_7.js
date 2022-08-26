@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['number_364',['number',['../structcmidi2__profile__id.html#a89958c993d5a988f55d05ef53be47bd0',1,'cmidi2_profile_id']]]
+  ['is_5fmidi1_5fsmf_389',['is_midi1_smf',['../structcmidi2__midi__conversion__context.html#adacf33a98204cf8d0119b57a61908569',1,'cmidi2_midi_conversion_context']]]
 ];

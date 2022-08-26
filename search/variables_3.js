@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['level_528',['level',['../structcmidi2__profile__id.html#a40c695368281b920e83a3584d6bf20e6',1,'cmidi2_profile_id']]]
+  ['dst_5foffset_581',['dst_offset',['../structcmidi2__convert__sysex__context.html#ac1683d65a3963c1963b0abadd5da9baf',1,'cmidi2_convert_sysex_context']]]
 ];

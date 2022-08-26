@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['midi_5f2_5f0_5freserved_363',['MIDI_2_0_RESERVED',['../cmidi2_8h.html#aef3c287c3f466f2aa3e4124a0c7bd009',1,'cmidi2.h']]]
+  ['group_388',['group',['../structcmidi2__midi__conversion__context.html#ab64b3cdba1cf16672f8b1e175c41f68a',1,'cmidi2_midi_conversion_context']]]
 ];
