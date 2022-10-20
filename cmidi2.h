@@ -411,12 +411,30 @@ static inline uint8_t cmidi2_ump_sysex_get_num_packets(uint8_t numBytes, uint8_t
     return numBytes <= radix ? 1 : numBytes / radix + (numBytes % radix ? 1 : 0);
 }
 
-static inline uint32_t cmidi2_ump_read_uint32_bytes(void *sequence) {
+static inline uint32_t cmidi2_ump_read_uint32_bytes_le(void *sequence) {
+    uint8_t *bytes = (uint8_t*) sequence;
+    uint32_t ret = 0;
+    for (int i = 0; i < 4; i++)
+        ret += ((uint32_t) bytes[i]) << (i * 8);
+    return ret;
+}
+
+static inline uint32_t cmidi2_ump_read_uint32_bytes_be(void *sequence) {
     uint8_t *bytes = (uint8_t*) sequence;
     uint32_t ret = 0;
     for (int i = 0; i < 4; i++)
         ret += ((uint32_t) bytes[i]) << ((7 - i) * 8);
     return ret;
+}
+
+static inline bool cmidi2_util_is_platform_little_endian() {
+    int i = 1;
+    return *(char*) &i;
+}
+static bool isPlatformLE = cmidi2_util_is_platform_little_endian();
+
+static inline uint32_t cmidi2_ump_read_uint32_bytes(void *sequence) {
+    return isPlatformLE ? cmidi2_ump_read_uint32_bytes_le(sequence) : cmidi2_ump_read_uint32_bytes_be(sequence);
 }
 
 static inline uint64_t cmidi2_ump_read_uint64_bytes(void *sequence) {
@@ -863,10 +881,6 @@ static inline void* cmidi2_ump_sequence_next(void* ptr) {
     for (uint8_t* (iter) = (uint8_t*) ptr; \
         (iter) < ((uint8_t*) ptr) + numBytes; \
         (iter) = (uint8_t*) cmidi2_ump_sequence_next(iter))
-
-#ifdef __cplusplus
-}
-#endif
 
 
 // MIDI CI support.
@@ -1577,23 +1591,23 @@ static enum cmidi2_midi_conversion_result cmidi2_convert_midi1_to_ump(cmidi2_mid
                     case CMIDI2_STATUS_CC:
                         switch (byte2) {
                         case CMIDI2_CC_RPN_MSB:
-                            context->context_rpn = context->context_rpn & 0xFF | byte3 << 8;
+                            context->context_rpn = (context->context_rpn & 0xFF) | (byte3 << 8);
                             skipEmitUmp = true;
                             break;
                         case CMIDI2_CC_RPN_LSB:
-                            context->context_rpn = context->context_rpn & 0xFF00 | byte3;
+                            context->context_rpn = (context->context_rpn & 0xFF00) | byte3;
                             skipEmitUmp = true;
                             break;
                         case CMIDI2_CC_NRPN_MSB:
-                            context->context_nrpn = context->context_nrpn & 0xFF | byte3 << 8;
+                            context->context_nrpn = (context->context_nrpn & 0xFF) | byte3 << 8;
                             skipEmitUmp = true;
                             break;
                         case CMIDI2_CC_NRPN_LSB:
-                            context->context_nrpn = context->context_nrpn & 0xFF00 | byte3;
+                            context->context_nrpn = (context->context_nrpn & 0xFF00) | byte3;
                             skipEmitUmp = true;
                             break;
                         case CMIDI2_CC_DTE_MSB:
-                            context->context_dte = context->context_dte & 0xFF | byte3 << 8;
+                            context->context_dte = (context->context_dte & 0xFF) | (byte3 << 8);
 
                             if (context->allow_reordered_dte && (context->context_dte & 0x8080) == 0)
                                 m2 = cmidi2_internal_convert_midi1_dte_to_ump(context, channel);
@@ -1602,7 +1616,7 @@ static enum cmidi2_midi_conversion_result cmidi2_convert_midi1_to_ump(cmidi2_mid
 
                             break;
                         case CMIDI2_CC_DTE_LSB:
-                            context->context_dte = context->context_dte & 0xFF00 | byte3;
+                            context->context_dte = (context->context_dte & 0xFF00) | byte3;
 
                             if ((context->context_dte & 0x8000) && !context->allow_reordered_dte)
                                 return CMIDI2_CONVERSION_RESULT_INVALID_DTE_SEQUENCE;
@@ -1660,3 +1674,7 @@ static enum cmidi2_midi_conversion_result cmidi2_convert_midi1_to_ump(cmidi2_mid
     
     return CMIDI2_CONVERSION_RESULT_OK;
 }
+
+#ifdef __cplusplus
+}
+#endif
