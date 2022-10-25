@@ -1,4 +1,7 @@
 var searchData=
 [
-  ['version_601',['version',['../structcmidi2__ci__protocol__tag.html#adaed219822388e8417551d1ae2b044cb',1,'cmidi2_ci_protocol_tag::version()'],['../structcmidi2__ci__protocol__type__info.html#ad10dc3e4cbdd52b3977e438a755a1628',1,'cmidi2_ci_protocol_type_info::version()'],['../structcmidi2__profile__id.html#a9983f5dba6d20b655ade840eadfb20fc',1,'cmidi2_profile_id::version()']]]
+  ['ump_623',['ump',['../structcmidi2__midi__conversion__context.html#abf4e1d62824df12594088a4bf2586ef8',1,'cmidi2_midi_conversion_context']]],
+  ['ump_5fnum_5fbytes_624',['ump_num_bytes',['../structcmidi2__midi__conversion__context.html#a8582a3a1a506556e388509f4aaf6518b',1,'cmidi2_midi_conversion_context']]],
+  ['ump_5fproceeded_5fbytes_625',['ump_proceeded_bytes',['../structcmidi2__midi__conversion__context.html#a1365eb62244b29c21786c8ec93ae84be',1,'cmidi2_midi_conversion_context']]],
+  ['use_5fsysex8_626',['use_sysex8',['../structcmidi2__midi__conversion__context.html#ac9601893ab7875a4c1ded97987e5aa6f',1,'cmidi2_midi_conversion_context']]]
 ];

@@ -498,6 +498,9 @@ $(function() {
 <li>cmidi2_ci_try_parse_new_protocol()
 : <a class="el" href="cmidi2_8h.html#ac028f17c4e207a5bec13c044feea0436">cmidi2.h</a>
 </li>
+<li>CMIDI2_CONVERSION_RESULT_INCOMPLETE_SYSEX7
+: <a class="el" href="cmidi2_8h.html#abb108e750eff3361aa1531763b52b761a5ebe7a40a561a3fd68fc17d9b4400a18">cmidi2.h</a>
+</li>
 <li>CMIDI2_CONVERSION_RESULT_INVALID_DTE_SEQUENCE
 : <a class="el" href="cmidi2_8h.html#abb108e750eff3361aa1531763b52b761a58c5c0e7e28f68477c79fdbbcccc075b">cmidi2.h</a>
 </li>
@@ -519,14 +522,29 @@ $(function() {
 <li>cmidi2_convert_single_ump_to_midi1()
 : <a class="el" href="cmidi2_8h.html#a1ed1c53db5ac39f279448b3ac5347401">cmidi2.h</a>
 </li>
+<li>cmidi2_convert_single_ump_to_timed_midi1()
+: <a class="el" href="cmidi2_8h.html#ada8731b7f8163821afe6fc4bcfed26b8">cmidi2.h</a>
+</li>
 <li>cmidi2_convert_sysex_context
 : <a class="el" href="cmidi2_8h.html#a6bd58b6a669f4faa4b1e43242917434f">cmidi2.h</a>
+</li>
+<li>cmidi2_convert_ump_to_midi1()
+: <a class="el" href="cmidi2_8h.html#ab33e6f32d6c7ab1fa98073a872e20077">cmidi2.h</a>
+</li>
+<li>CMIDI2_INTERNAL_ADD_DELTA_TIME
+: <a class="el" href="cmidi2_8h.html#ad62f8d89cc9beb0eeb7d0b52f35c07d2">cmidi2.h</a>
+</li>
+<li>cmidi2_internal_add_midi1_delta_time()
+: <a class="el" href="cmidi2_8h.html#ad1b6aec5ee5f3f5da802bac28f6af1e9">cmidi2.h</a>
 </li>
 <li>cmidi2_internal_convert_add_midi1_sysex7_ump_to_list()
 : <a class="el" href="cmidi2_8h.html#aed36aeef0e79dff61b6f456baf219015">cmidi2.h</a>
 </li>
 <li>cmidi2_internal_convert_add_midi1_sysex8_ump_to_list()
 : <a class="el" href="cmidi2_8h.html#a011093286ddbcf53cb0089f88564d5f9">cmidi2.h</a>
+</li>
+<li>cmidi2_internal_convert_jr_timestamp_to_timecode()
+: <a class="el" href="cmidi2_8h.html#ad81203ac78ea3c8a7e0afa4ba4d87a01">cmidi2.h</a>
 </li>
 <li>cmidi2_internal_convert_midi1_dte_to_ump()
 : <a class="el" href="cmidi2_8h.html#a2fed4f9a2721e1d5460b72c5923ed955">cmidi2.h</a>
@@ -820,7 +838,7 @@ $(function() {
 : <a class="el" href="cmidi2_8h.html#a81da023ffb03659f885f8c74832989c6">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_byte_from_uint64()
-: <a class="el" href="cmidi2_8h.html#ab5f346b99fea7abfa0872cabef0dcdf8">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a4e54c6e0217554fd4bcc050845ea4a34">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_channel()
 : <a class="el" href="cmidi2_8h.html#a816cee9d6ddfda417dc12a58dea6a1b5">cmidi2.h</a>
@@ -1134,14 +1152,32 @@ $(function() {
 <li>cmidi2_ump_read_uint32_bytes()
 : <a class="el" href="cmidi2_8h.html#a9f74e0fc69cb3f2fddddfd0a584637a3">cmidi2.h</a>
 </li>
+<li>cmidi2_ump_read_uint32_bytes_be()
+: <a class="el" href="cmidi2_8h.html#a892a0842e0a3a5e054ecf11bd927cdbb">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_read_uint32_bytes_le()
+: <a class="el" href="cmidi2_8h.html#a189dea47df1f74339a99db579ca24966">cmidi2.h</a>
+</li>
 <li>cmidi2_ump_read_uint64_bytes()
 : <a class="el" href="cmidi2_8h.html#a927570b02ad8c0346fb4ea4f3f6f57d0">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_read_uint64_bytes_be()
+: <a class="el" href="cmidi2_8h.html#abbe0e543e8fb5e9cae2f4a419d73b170">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_read_uint64_bytes_le()
+: <a class="el" href="cmidi2_8h.html#a4e86e5f284038a02fb2f3fca76d3ccd7">cmidi2.h</a>
 </li>
 <li>CMIDI2_UMP_SEQUENCE_FOREACH
 : <a class="el" href="cmidi2_8h.html#a191e7ccb92bae9e9da139378745cb7b5">cmidi2.h</a>
 </li>
+<li>CMIDI2_UMP_SEQUENCE_FOREACH_LE
+: <a class="el" href="cmidi2_8h.html#a20d16d897827f0b357bd4128785a4057">cmidi2.h</a>
+</li>
 <li>cmidi2_ump_sequence_next()
 : <a class="el" href="cmidi2_8h.html#abb46fe060a1462d4c85cf522f54f4918">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_sequence_next_le()
+: <a class="el" href="cmidi2_8h.html#a59037ce9ebd63257e537e12dbfd5a39c">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_sysex7_direct()
 : <a class="el" href="cmidi2_8h.html#a3f9b054eb56a428000240b3055026edb">cmidi2.h</a>
@@ -1184,6 +1220,9 @@ $(function() {
 </li>
 <li>cmidi2_ump_write64()
 : <a class="el" href="cmidi2_8h.html#a42b36e556bf0cfc757519857bcd05800">cmidi2.h</a>
+</li>
+<li>cmidi2_util_is_platform_little_endian()
+: <a class="el" href="cmidi2_8h.html#a889d508652a3cfd0dd4501a785d09e52">cmidi2.h</a>
 </li>
 </ul>
 </div><!-- contents -->

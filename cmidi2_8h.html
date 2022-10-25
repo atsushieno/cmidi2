@@ -105,6 +105,8 @@ Macros</h2></td></tr>
 <tr class="separator:afca68f9f0963d746a7155e56b62e9ce8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a191e7ccb92bae9e9da139378745cb7b5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a191e7ccb92bae9e9da139378745cb7b5">CMIDI2_UMP_SEQUENCE_FOREACH</a>(ptr,  numBytes,  iter)</td></tr>
 <tr class="separator:a191e7ccb92bae9e9da139378745cb7b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20d16d897827f0b357bd4128785a4057"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a20d16d897827f0b357bd4128785a4057">CMIDI2_UMP_SEQUENCE_FOREACH_LE</a>(ptr,  numBytes,  iter)</td></tr>
+<tr class="separator:a20d16d897827f0b357bd4128785a4057"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6eadbd6354b21dc885f68ae2cdad3b1d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a6eadbd6354b21dc885f68ae2cdad3b1d">CMIDI2_CI_SUB_ID</a>&#160;&#160;&#160;0xD</td></tr>
 <tr class="separator:a6eadbd6354b21dc885f68ae2cdad3b1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a46e9cf880bccc615d7d7fd001232e6c4"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a46e9cf880bccc615d7d7fd001232e6c4">CMIDI2_CI_SUB_ID_2_DISCOVERY_INQUIRY</a>&#160;&#160;&#160;0x70</td></tr>
@@ -169,6 +171,10 @@ Macros</h2></td></tr>
 <tr class="separator:a1c5ec7ee8b8f981b20d960f7e5f39a65"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a92b88d136ba7abf4ed3c3882db1a9323"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a92b88d136ba7abf4ed3c3882db1a9323">CMIDI2_CI_PROPERTY_EXCHANGE_SUPPORTED</a>&#160;&#160;&#160;8</td></tr>
 <tr class="separator:a92b88d136ba7abf4ed3c3882db1a9323"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad62f8d89cc9beb0eeb7d0b52f35c07d2"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#ad62f8d89cc9beb0eeb7d0b52f35c07d2">CMIDI2_INTERNAL_ADD_DELTA_TIME</a></td></tr>
+<tr class="separator:ad62f8d89cc9beb0eeb7d0b52f35c07d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd839dd810419aa501da7cec062609a7"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#abd839dd810419aa501da7cec062609a7">IS_JR_TIMESTAMP</a>(ump)</td></tr>
+<tr class="separator:abd839dd810419aa501da7cec062609a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
@@ -420,7 +426,8 @@ Enumerations</h2></td></tr>
 <a class="el" href="cmidi2_8h.html#abb108e750eff3361aa1531763b52b761a9f7c8140628669a7803da4b895a5a65d">CMIDI2_CONVERSION_RESULT_INVALID_SYSEX</a> = 0x10, 
 <a class="el" href="cmidi2_8h.html#abb108e750eff3361aa1531763b52b761a58c5c0e7e28f68477c79fdbbcccc075b">CMIDI2_CONVERSION_RESULT_INVALID_DTE_SEQUENCE</a> = 0x11, 
 <br />
-&#160;&#160;<a class="el" href="cmidi2_8h.html#abb108e750eff3361aa1531763b52b761a1d5fc99f1be03d9eff2307c95b7bd06f">CMIDI2_CONVERSION_RESULT_INVALID_STATUS</a> = 0x13
+&#160;&#160;<a class="el" href="cmidi2_8h.html#abb108e750eff3361aa1531763b52b761a1d5fc99f1be03d9eff2307c95b7bd06f">CMIDI2_CONVERSION_RESULT_INVALID_STATUS</a> = 0x13, 
+<a class="el" href="cmidi2_8h.html#abb108e750eff3361aa1531763b52b761a5ebe7a40a561a3fd68fc17d9b4400a18">CMIDI2_CONVERSION_RESULT_INCOMPLETE_SYSEX7</a> = 0x20
 <br />
  }</td></tr>
 <tr class="separator:abb108e750eff3361aa1531763b52b761"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -505,12 +512,22 @@ Functions</h2></td></tr>
 <tr class="separator:a2bae1e11656cc871f0520778628f17e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a81da023ffb03659f885f8c74832989c6"><td class="memItemLeft" align="right" valign="top">static uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a81da023ffb03659f885f8c74832989c6">cmidi2_ump_get_byte_from_uint32</a> (uint32_t src, uint8_t index)</td></tr>
 <tr class="separator:a81da023ffb03659f885f8c74832989c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab5f346b99fea7abfa0872cabef0dcdf8"><td class="memItemLeft" align="right" valign="top">static uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#ab5f346b99fea7abfa0872cabef0dcdf8">cmidi2_ump_get_byte_from_uint64</a> (uint32_t src, uint8_t index)</td></tr>
-<tr class="separator:ab5f346b99fea7abfa0872cabef0dcdf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e54c6e0217554fd4bcc050845ea4a34"><td class="memItemLeft" align="right" valign="top">static uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a4e54c6e0217554fd4bcc050845ea4a34">cmidi2_ump_get_byte_from_uint64</a> (uint64_t src, uint8_t index)</td></tr>
+<tr class="separator:a4e54c6e0217554fd4bcc050845ea4a34"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae304432c0f8a7f4cfb23fc3b280072da"><td class="memItemLeft" align="right" valign="top">static uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#ae304432c0f8a7f4cfb23fc3b280072da">cmidi2_ump_sysex_get_num_packets</a> (uint8_t numBytes, uint8_t radix)</td></tr>
 <tr class="separator:ae304432c0f8a7f4cfb23fc3b280072da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a189dea47df1f74339a99db579ca24966"><td class="memItemLeft" align="right" valign="top">static uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a189dea47df1f74339a99db579ca24966">cmidi2_ump_read_uint32_bytes_le</a> (void *sequence)</td></tr>
+<tr class="separator:a189dea47df1f74339a99db579ca24966"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a892a0842e0a3a5e054ecf11bd927cdbb"><td class="memItemLeft" align="right" valign="top">static uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a892a0842e0a3a5e054ecf11bd927cdbb">cmidi2_ump_read_uint32_bytes_be</a> (void *sequence)</td></tr>
+<tr class="separator:a892a0842e0a3a5e054ecf11bd927cdbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a889d508652a3cfd0dd4501a785d09e52"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a889d508652a3cfd0dd4501a785d09e52">cmidi2_util_is_platform_little_endian</a> ()</td></tr>
+<tr class="separator:a889d508652a3cfd0dd4501a785d09e52"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f74e0fc69cb3f2fddddfd0a584637a3"><td class="memItemLeft" align="right" valign="top">static uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a9f74e0fc69cb3f2fddddfd0a584637a3">cmidi2_ump_read_uint32_bytes</a> (void *sequence)</td></tr>
 <tr class="separator:a9f74e0fc69cb3f2fddddfd0a584637a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e86e5f284038a02fb2f3fca76d3ccd7"><td class="memItemLeft" align="right" valign="top">static uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a4e86e5f284038a02fb2f3fca76d3ccd7">cmidi2_ump_read_uint64_bytes_le</a> (void *sequence)</td></tr>
+<tr class="separator:a4e86e5f284038a02fb2f3fca76d3ccd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abbe0e543e8fb5e9cae2f4a419d73b170"><td class="memItemLeft" align="right" valign="top">static uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#abbe0e543e8fb5e9cae2f4a419d73b170">cmidi2_ump_read_uint64_bytes_be</a> (void *sequence)</td></tr>
+<tr class="separator:abbe0e543e8fb5e9cae2f4a419d73b170"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a927570b02ad8c0346fb4ea4f3f6f57d0"><td class="memItemLeft" align="right" valign="top">static uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a927570b02ad8c0346fb4ea4f3f6f57d0">cmidi2_ump_read_uint64_bytes</a> (void *sequence)</td></tr>
 <tr class="separator:a927570b02ad8c0346fb4ea4f3f6f57d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a439840838d31b1042f2d00daa1683704"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a439840838d31b1042f2d00daa1683704">cmidi2_ump_sysex_get_packet_of</a> (uint64_t *result1, uint64_t *result2, uint8_t group, uint8_t numBytes, void *srcData, int32_t index, enum <a class="el" href="cmidi2_8h.html#adde753403be90167865525f5d280488f">cmidi2_message_type</a> messageType, int radix, bool hasStreamId, uint8_t streamId)</td></tr>
@@ -671,6 +688,8 @@ Functions</h2></td></tr>
 <tr class="separator:a31dcec7c2fab3df7a9b23b07e8a5f3c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb46fe060a1462d4c85cf522f54f4918"><td class="memItemLeft" align="right" valign="top">static void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#abb46fe060a1462d4c85cf522f54f4918">cmidi2_ump_sequence_next</a> (void *ptr)</td></tr>
 <tr class="separator:abb46fe060a1462d4c85cf522f54f4918"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59037ce9ebd63257e537e12dbfd5a39c"><td class="memItemLeft" align="right" valign="top">static void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a59037ce9ebd63257e537e12dbfd5a39c">cmidi2_ump_sequence_next_le</a> (void *ptr)</td></tr>
+<tr class="separator:a59037ce9ebd63257e537e12dbfd5a39c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4be690e7e3c60b185d87492323ef77b5"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a4be690e7e3c60b185d87492323ef77b5">cmidi2_ci_direct_uint16_at</a> (uint8_t *buf, uint16_t v)</td></tr>
 <tr class="separator:a4be690e7e3c60b185d87492323ef77b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ddb3b42f42ff30f6ca159b470a39cb2"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a1ddb3b42f42ff30f6ca159b470a39cb2">cmidi2_ci_direct_uint32_at</a> (uint8_t *buf, uint32_t v)</td></tr>
@@ -731,8 +750,6 @@ Functions</h2></td></tr>
 <tr class="separator:a987dbada739908c483b97784890f9671"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a908831ec7c1cf1c3317fb45562c325d9"><td class="memItemLeft" align="right" valign="top">static uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a908831ec7c1cf1c3317fb45562c325d9">cmidi2_midi1_get_message_size</a> (uint8_t *bytes, uint32_t length)</td></tr>
 <tr class="separator:a908831ec7c1cf1c3317fb45562c325d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1ed1c53db5ac39f279448b3ac5347401"><td class="memItemLeft" align="right" valign="top">static size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a1ed1c53db5ac39f279448b3ac5347401">cmidi2_convert_single_ump_to_midi1</a> (uint8_t *dst, size_t maxBytes, <a class="el" href="cmidi2_8h.html#a4b524ddb9ec1ce3bd7325eba9c3c3539">cmidi2_ump</a> *ump)</td></tr>
-<tr class="separator:a1ed1c53db5ac39f279448b3ac5347401"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4c4aeea0f03c941b3e9ba2d83a75f64d"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a4c4aeea0f03c941b3e9ba2d83a75f64d">cmidi2_midi_conversion_context_initialize</a> (<a class="el" href="structcmidi2__midi__conversion__context.html">cmidi2_midi_conversion_context</a> *context)</td></tr>
 <tr class="separator:a4c4aeea0f03c941b3e9ba2d83a75f64d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aed36aeef0e79dff61b6f456baf219015"><td class="memItemLeft" align="right" valign="top">static void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#aed36aeef0e79dff61b6f456baf219015">cmidi2_internal_convert_add_midi1_sysex7_ump_to_list</a> (uint64_t data, void *context)</td></tr>
@@ -743,6 +760,16 @@ Functions</h2></td></tr>
 <tr class="separator:a2fed4f9a2721e1d5460b72c5923ed955"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae350df616e461d4a9b1f6ae1c9a8cdf8"><td class="memItemLeft" align="right" valign="top">static enum <a class="el" href="cmidi2_8h.html#abb108e750eff3361aa1531763b52b761">cmidi2_midi_conversion_result</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#ae350df616e461d4a9b1f6ae1c9a8cdf8">cmidi2_convert_midi1_to_ump</a> (<a class="el" href="structcmidi2__midi__conversion__context.html">cmidi2_midi_conversion_context</a> *context)</td></tr>
 <tr class="separator:ae350df616e461d4a9b1f6ae1c9a8cdf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad81203ac78ea3c8a7e0afa4ba4d87a01"><td class="memItemLeft" align="right" valign="top">static int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#ad81203ac78ea3c8a7e0afa4ba4d87a01">cmidi2_internal_convert_jr_timestamp_to_timecode</a> (int32_t deltaTime, <a class="el" href="structcmidi2__midi__conversion__context.html">cmidi2_midi_conversion_context</a> *context)</td></tr>
+<tr class="separator:ad81203ac78ea3c8a7e0afa4ba4d87a01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1b6aec5ee5f3f5da802bac28f6af1e9"><td class="memItemLeft" align="right" valign="top">static size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#ad1b6aec5ee5f3f5da802bac28f6af1e9">cmidi2_internal_add_midi1_delta_time</a> (uint8_t *dst, <a class="el" href="structcmidi2__midi__conversion__context.html">cmidi2_midi_conversion_context</a> *context, int32_t deltaTime)</td></tr>
+<tr class="separator:ad1b6aec5ee5f3f5da802bac28f6af1e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada8731b7f8163821afe6fc4bcfed26b8"><td class="memItemLeft" align="right" valign="top">static size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#ada8731b7f8163821afe6fc4bcfed26b8">cmidi2_convert_single_ump_to_timed_midi1</a> (uint8_t *dst, size_t maxBytes, <a class="el" href="cmidi2_8h.html#a4b524ddb9ec1ce3bd7325eba9c3c3539">cmidi2_ump</a> *ump, int32_t deltaTime, <a class="el" href="structcmidi2__midi__conversion__context.html">cmidi2_midi_conversion_context</a> *context, uint8_t *sysex7Buffer, size_t *sysex7BufferIndex)</td></tr>
+<tr class="separator:ada8731b7f8163821afe6fc4bcfed26b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ed1c53db5ac39f279448b3ac5347401"><td class="memItemLeft" align="right" valign="top">static size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a1ed1c53db5ac39f279448b3ac5347401">cmidi2_convert_single_ump_to_midi1</a> (uint8_t *dst, size_t maxBytes, <a class="el" href="cmidi2_8h.html#a4b524ddb9ec1ce3bd7325eba9c3c3539">cmidi2_ump</a> *ump)</td></tr>
+<tr class="separator:a1ed1c53db5ac39f279448b3ac5347401"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab33e6f32d6c7ab1fa98073a872e20077"><td class="memItemLeft" align="right" valign="top">static enum <a class="el" href="cmidi2_8h.html#abb108e750eff3361aa1531763b52b761">cmidi2_midi_conversion_result</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#ab33e6f32d6c7ab1fa98073a872e20077">cmidi2_convert_ump_to_midi1</a> (<a class="el" href="structcmidi2__midi__conversion__context.html">cmidi2_midi_conversion_context</a> *context)</td></tr>
+<tr class="separator:ab33e6f32d6c7ab1fa98073a872e20077"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="a1c5ec7ee8b8f981b20d960f7e5f39a65"></a>
@@ -1193,6 +1220,22 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="ad62f8d89cc9beb0eeb7d0b52f35c07d2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad62f8d89cc9beb0eeb7d0b52f35c07d2">&#9670;&nbsp;</a></span>CMIDI2_INTERNAL_ADD_DELTA_TIME</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CMIDI2_INTERNAL_ADD_DELTA_TIME</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">        dst += <a class="code" href="cmidi2_8h.html#ad1b6aec5ee5f3f5da802bac28f6af1e9">cmidi2_internal_add_midi1_delta_time</a>(dst, context, deltaTime); \</div>
+<div class="line">        dst[0] = statusCode | <a class="code" href="cmidi2_8h.html#a816cee9d6ddfda417dc12a58dea6a1b5">cmidi2_ump_get_channel</a>(ump);</div>
+</div><!-- fragment -->
+</div>
+</div>
 <a id="a191e7ccb92bae9e9da139378745cb7b5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a191e7ccb92bae9e9da139378745cb7b5">&#9670;&nbsp;</a></span>CMIDI2_UMP_SEQUENCE_FOREACH</h2>
 
@@ -1227,6 +1270,63 @@ Functions</h2></td></tr>
 <b>Value:</b><div class="fragment"><div class="line">    <span class="keywordflow">for</span> (uint8_t* (iter) = (uint8_t*) ptr; \</div>
 <div class="line">        (iter) &lt; ((uint8_t*) ptr) + numBytes; \</div>
 <div class="line">        (iter) = (uint8_t*) <a class="code" href="cmidi2_8h.html#abb46fe060a1462d4c85cf522f54f4918">cmidi2_ump_sequence_next</a>(iter))</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a20d16d897827f0b357bd4128785a4057"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a20d16d897827f0b357bd4128785a4057">&#9670;&nbsp;</a></span>CMIDI2_UMP_SEQUENCE_FOREACH_LE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CMIDI2_UMP_SEQUENCE_FOREACH_LE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">ptr, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">numBytes, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">iter&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    <span class="keywordflow">for</span> (uint8_t* (iter) = (uint8_t*) ptr; \</div>
+<div class="line">        (iter) &lt; ((uint8_t*) ptr) + numBytes; \</div>
+<div class="line">        (iter) = (uint8_t*) <a class="code" href="cmidi2_8h.html#a59037ce9ebd63257e537e12dbfd5a39c">cmidi2_ump_sequence_next_le</a>(iter))</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="abd839dd810419aa501da7cec062609a7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd839dd810419aa501da7cec062609a7">&#9670;&nbsp;</a></span>IS_JR_TIMESTAMP</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define IS_JR_TIMESTAMP</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">ump</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    (<a class="code" href="cmidi2_8h.html#a11f21c8b288d1e98e284c6fdf9ad5d9c">cmidi2_ump_get_message_type</a>(ump) == <a class="code" href="cmidi2_8h.html#adde753403be90167865525f5d280488fa46e11747342a8ce6540d84d8b16eb797">CMIDI2_MESSAGE_TYPE_UTILITY</a> &amp;&amp; \</div>
+<div class="line">    cmidi2_ump_get_status_code(ump) == <a class="code" href="cmidi2_8h.html#a60bb167abecf2a02ff721ad16bb0831daf5f5c6437496ccbc489257b3b4357784">CMIDI2_JR_TIMESTAMP</a>)</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -1596,6 +1696,7 @@ Functions</h2></td></tr>
 <tr><td class="fieldname"><a id="abb108e750eff3361aa1531763b52b761a9f7c8140628669a7803da4b895a5a65d"></a>CMIDI2_CONVERSION_RESULT_INVALID_SYSEX&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="abb108e750eff3361aa1531763b52b761a58c5c0e7e28f68477c79fdbbcccc075b"></a>CMIDI2_CONVERSION_RESULT_INVALID_DTE_SEQUENCE&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="abb108e750eff3361aa1531763b52b761a1d5fc99f1be03d9eff2307c95b7bd06f"></a>CMIDI2_CONVERSION_RESULT_INVALID_STATUS&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="abb108e750eff3361aa1531763b52b761a5ebe7a40a561a3fd68fc17d9b4400a18"></a>CMIDI2_CONVERSION_RESULT_INCOMPLETE_SYSEX7&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
 </div>
@@ -3267,7 +3368,141 @@ Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="ada8731b7f8163821afe6fc4bcfed26b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ada8731b7f8163821afe6fc4bcfed26b8">&#9670;&nbsp;</a></span>cmidi2_convert_single_ump_to_timed_midi1()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static size_t cmidi2_convert_single_ump_to_timed_midi1 </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>dst</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>maxBytes</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="cmidi2_8h.html#a4b524ddb9ec1ce3bd7325eba9c3c3539">cmidi2_ump</a> *&#160;</td>
+          <td class="paramname"><em>ump</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>deltaTime</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structcmidi2__midi__conversion__context.html">cmidi2_midi_conversion_context</a> *&#160;</td>
+          <td class="paramname"><em>context</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>sysex7Buffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t *&#160;</td>
+          <td class="paramname"><em>sysex7BufferIndex</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 <p>Convert one single UMP (without JR Timestamp) to MIDI 1.0 Message (without delta time) It is a lengthy function, so it is recommended to wrap it in another non-inline function. </p>
+
+</div>
+</div>
+<a id="ab33e6f32d6c7ab1fa98073a872e20077"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab33e6f32d6c7ab1fa98073a872e20077">&#9670;&nbsp;</a></span>cmidi2_convert_ump_to_midi1()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static enum <a class="el" href="cmidi2_8h.html#abb108e750eff3361aa1531763b52b761">cmidi2_midi_conversion_result</a> cmidi2_convert_ump_to_midi1 </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcmidi2__midi__conversion__context.html">cmidi2_midi_conversion_context</a> *&#160;</td>
+          <td class="paramname"><em>context</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad1b6aec5ee5f3f5da802bac28f6af1e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad1b6aec5ee5f3f5da802bac28f6af1e9">&#9670;&nbsp;</a></span>cmidi2_internal_add_midi1_delta_time()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static size_t cmidi2_internal_add_midi1_delta_time </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>dst</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structcmidi2__midi__conversion__context.html">cmidi2_midi_conversion_context</a> *&#160;</td>
+          <td class="paramname"><em>context</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>deltaTime</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -3355,6 +3590,42 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="ad81203ac78ea3c8a7e0afa4ba4d87a01"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad81203ac78ea3c8a7e0afa4ba4d87a01">&#9670;&nbsp;</a></span>cmidi2_internal_convert_jr_timestamp_to_timecode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int32_t cmidi2_internal_convert_jr_timestamp_to_timecode </td>
+          <td>(</td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>deltaTime</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structcmidi2__midi__conversion__context.html">cmidi2_midi_conversion_context</a> *&#160;</td>
+          <td class="paramname"><em>context</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a2fed4f9a2721e1d5460b72c5923ed955"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2fed4f9a2721e1d5460b72c5923ed955">&#9670;&nbsp;</a></span>cmidi2_internal_convert_midi1_dte_to_ump()</h2>
 
@@ -3424,6 +3695,7 @@ Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Returns the 7-bit encoded value in <code>bytes</code> stream of <code>length</code> bytes. </p>
 
 </div>
 </div>
@@ -3450,6 +3722,7 @@ Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Returns the length of <code>value</code> when it would be encoded into a byte stream. </p>
 
 </div>
 </div>
@@ -3522,6 +3795,7 @@ Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Encodes <code>value</code> into <code>bytes</code> stream. Returns the length of the encoded value in bytes. </p>
 
 </div>
 </div>
@@ -3649,8 +3923,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ab5f346b99fea7abfa0872cabef0dcdf8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab5f346b99fea7abfa0872cabef0dcdf8">&#9670;&nbsp;</a></span>cmidi2_ump_get_byte_from_uint64()</h2>
+<a id="a4e54c6e0217554fd4bcc050845ea4a34"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e54c6e0217554fd4bcc050845ea4a34">&#9670;&nbsp;</a></span>cmidi2_ump_get_byte_from_uint64()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3661,7 +3935,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">static uint8_t cmidi2_ump_get_byte_from_uint64 </td>
           <td>(</td>
-          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramtype">uint64_t&#160;</td>
           <td class="paramname"><em>src</em>, </td>
         </tr>
         <tr>
@@ -7223,6 +7497,58 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a892a0842e0a3a5e054ecf11bd927cdbb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a892a0842e0a3a5e054ecf11bd927cdbb">&#9670;&nbsp;</a></span>cmidi2_ump_read_uint32_bytes_be()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static uint32_t cmidi2_ump_read_uint32_bytes_be </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>sequence</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a189dea47df1f74339a99db579ca24966"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a189dea47df1f74339a99db579ca24966">&#9670;&nbsp;</a></span>cmidi2_ump_read_uint32_bytes_le()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static uint32_t cmidi2_ump_read_uint32_bytes_le </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>sequence</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a927570b02ad8c0346fb4ea4f3f6f57d0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a927570b02ad8c0346fb4ea4f3f6f57d0">&#9670;&nbsp;</a></span>cmidi2_ump_read_uint64_bytes()</h2>
 
@@ -7249,6 +7575,58 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="abbe0e543e8fb5e9cae2f4a419d73b170"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abbe0e543e8fb5e9cae2f4a419d73b170">&#9670;&nbsp;</a></span>cmidi2_ump_read_uint64_bytes_be()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static uint64_t cmidi2_ump_read_uint64_bytes_be </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>sequence</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4e86e5f284038a02fb2f3fca76d3ccd7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e86e5f284038a02fb2f3fca76d3ccd7">&#9670;&nbsp;</a></span>cmidi2_ump_read_uint64_bytes_le()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static uint64_t cmidi2_ump_read_uint64_bytes_le </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>sequence</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="abb46fe060a1462d4c85cf522f54f4918"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abb46fe060a1462d4c85cf522f54f4918">&#9670;&nbsp;</a></span>cmidi2_ump_sequence_next()</h2>
 
@@ -7260,6 +7638,32 @@ Functions</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">static void* cmidi2_ump_sequence_next </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>ptr</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a59037ce9ebd63257e537e12dbfd5a39c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a59037ce9ebd63257e537e12dbfd5a39c">&#9670;&nbsp;</a></span>cmidi2_ump_sequence_next_le()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void* cmidi2_ump_sequence_next_le </td>
           <td>(</td>
           <td class="paramtype">void *&#160;</td>
           <td class="paramname"><em>ptr</em></td><td>)</td>
@@ -7935,8 +8339,39 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a889d508652a3cfd0dd4501a785d09e52"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a889d508652a3cfd0dd4501a785d09e52">&#9670;&nbsp;</a></span>cmidi2_util_is_platform_little_endian()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool cmidi2_util_is_platform_little_endian </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 </div><!-- contents -->
-<div class="ttc" id="acmidi2_8h_html_abb46fe060a1462d4c85cf522f54f4918"><div class="ttname"><a href="cmidi2_8h.html#abb46fe060a1462d4c85cf522f54f4918">cmidi2_ump_sequence_next</a></div><div class="ttdeci">static void * cmidi2_ump_sequence_next(void *ptr)</div><div class="ttdef"><b>Definition:</b> cmidi2.h:857</div></div>
+<div class="ttc" id="acmidi2_8h_html_adde753403be90167865525f5d280488fa46e11747342a8ce6540d84d8b16eb797"><div class="ttname"><a href="cmidi2_8h.html#adde753403be90167865525f5d280488fa46e11747342a8ce6540d84d8b16eb797">CMIDI2_MESSAGE_TYPE_UTILITY</a></div><div class="ttdeci">@ CMIDI2_MESSAGE_TYPE_UTILITY</div><div class="ttdef"><b>Definition:</b> cmidi2.h:32</div></div>
+<div class="ttc" id="acmidi2_8h_html_a11f21c8b288d1e98e284c6fdf9ad5d9c"><div class="ttname"><a href="cmidi2_8h.html#a11f21c8b288d1e98e284c6fdf9ad5d9c">cmidi2_ump_get_message_type</a></div><div class="ttdeci">static uint8_t cmidi2_ump_get_message_type(cmidi2_ump *ump)</div><div class="ttdef"><b>Definition:</b> cmidi2.h:675</div></div>
+<div class="ttc" id="acmidi2_8h_html_a816cee9d6ddfda417dc12a58dea6a1b5"><div class="ttname"><a href="cmidi2_8h.html#a816cee9d6ddfda417dc12a58dea6a1b5">cmidi2_ump_get_channel</a></div><div class="ttdeci">static uint8_t cmidi2_ump_get_channel(cmidi2_ump *ump)</div><div class="ttdef"><b>Definition:</b> cmidi2.h:687</div></div>
+<div class="ttc" id="acmidi2_8h_html_a59037ce9ebd63257e537e12dbfd5a39c"><div class="ttname"><a href="cmidi2_8h.html#a59037ce9ebd63257e537e12dbfd5a39c">cmidi2_ump_sequence_next_le</a></div><div class="ttdeci">static void * cmidi2_ump_sequence_next_le(void *ptr)</div><div class="ttdef"><b>Definition:</b> cmidi2.h:888</div></div>
+<div class="ttc" id="acmidi2_8h_html_ad1b6aec5ee5f3f5da802bac28f6af1e9"><div class="ttname"><a href="cmidi2_8h.html#ad1b6aec5ee5f3f5da802bac28f6af1e9">cmidi2_internal_add_midi1_delta_time</a></div><div class="ttdeci">static size_t cmidi2_internal_add_midi1_delta_time(uint8_t *dst, cmidi2_midi_conversion_context *context, int32_t deltaTime)</div><div class="ttdef"><b>Definition:</b> cmidi2.h:1561</div></div>
+<div class="ttc" id="acmidi2_8h_html_abb46fe060a1462d4c85cf522f54f4918"><div class="ttname"><a href="cmidi2_8h.html#abb46fe060a1462d4c85cf522f54f4918">cmidi2_ump_sequence_next</a></div><div class="ttdeci">static void * cmidi2_ump_sequence_next(void *ptr)</div><div class="ttdef"><b>Definition:</b> cmidi2.h:878</div></div>
+<div class="ttc" id="acmidi2_8h_html_a60bb167abecf2a02ff721ad16bb0831daf5f5c6437496ccbc489257b3b4357784"><div class="ttname"><a href="cmidi2_8h.html#a60bb167abecf2a02ff721ad16bb0831daf5f5c6437496ccbc489257b3b4357784">CMIDI2_JR_TIMESTAMP</a></div><div class="ttdeci">@ CMIDI2_JR_TIMESTAMP</div><div class="ttdef"><b>Definition:</b> cmidi2.h:218</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">
