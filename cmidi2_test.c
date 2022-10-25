@@ -277,19 +277,18 @@ void testForEach()
 
     CMIDI2_UMP_SEQUENCE_FOREACH((void*) buf, sizeof(buf), iter) {
         uint64_t ret;
-        switch (cmidi2_ump_get_num_bytes(cmidi2_ump_read_uint32_bytes(iter))) {
+        int32_t size = cmidi2_ump_get_num_bytes(cmidi2_ump_read_uint32_bytes_be(iter));
+        switch (size) {
         case 4:
-            ret = cmidi2_ump_read_uint32_bytes(iter);
-            printf("32bit DATA: %08" PRIX32 " \n", (uint32_t) ret);
+            ret = cmidi2_ump_read_uint32_bytes_be(iter);
             assert(ret == expected[current++]);
             break;
         case 8:
-            ret = cmidi2_ump_read_uint64_bytes(iter);
-            printf("64bit DATA: %016" PRIX64 " \n", ret);
+            ret = cmidi2_ump_read_uint64_bytes_be(iter);
             assert(ret == expected[current++]);
             break;
         default:
-            printf("unexpected bytes at %d\n", current);
+            printf("unexpected bytes at %d: %d\n", current, size);
             assert(false);
             break;
         }
@@ -1168,6 +1167,102 @@ int testConvertMidi1ToUmpPitchBend()
     return 0;
 }
 
+int testConvertUmpToMidi1Notes()
+{
+    uint8_t dst[9];
+    cmidi2_midi_conversion_context context;
+
+    // Note On - JR Timestamp - Note Off
+    cmidi2_midi_conversion_context_initialize(&context);
+    memset(dst, 0, sizeof(dst));
+    uint32_t ump1[] = {0x40903000, 0xF0000000, 0x202345, 0x40803000, 0};
+    uint8_t midi1Bytes1[] = {0x90, 0x30, 0x78, 0x80, 0x30, 0};
+    context.midi1 = dst;
+    context.midi1_num_bytes = 8;
+    context.ump = (cmidi2_ump*) ump1;
+    context.ump_num_bytes = 20;
+    context.group = 7;
+    context.skip_delta_time = true;
+
+    assert(cmidi2_convert_ump_to_midi1(&context) == CMIDI2_CONVERSION_RESULT_OK);
+    assert(context.midi1_proceeded_bytes == 6);
+    assert(context.ump_proceeded_bytes == 20);
+    for (int i = 0; i < 6; i++)
+        assert(0 + dst[i] == midi1Bytes1[i]);
+
+    // take 2: skip_delta_time is false this time.
+    cmidi2_midi_conversion_context_initialize(&context);
+    memset(dst, 0, sizeof(dst));
+    context.midi1 = dst;
+    context.midi1_num_bytes = 8;
+    context.ump = (cmidi2_ump*) ump1;
+    context.ump_num_bytes = 20;
+    context.group = 7;
+
+    assert(cmidi2_convert_ump_to_midi1(&context) == CMIDI2_CONVERSION_RESULT_OK);
+    assert(context.midi1_proceeded_bytes == 9); // length 2345 in JR Timestamp will become some bigger number that goes 0x80 <= n < 0x4000
+    assert(context.ump_proceeded_bytes == 20);
+    assert(dst[0] == 0);
+    for (int i = 0; i < 3; i++)
+        assert(1 * dst[i + 1] == midi1Bytes1[i]);
+    assert(dst[3] != 0); // JR-Timestamp is 2345, do not expect meaningful value here, just expect two bytes, non-zero.
+    assert(dst[4] != 0);
+    for (int i = 3; i < 6; i++)
+        assert(-0 + dst[i + 3] == midi1Bytes1[i]);
+
+    context.midi1 = NULL;
+    return 0;
+}
+
+
+int testConvertUmpToMidi1Sysex()
+{
+    uint8_t dst[16];
+    cmidi2_ump* ump = (cmidi2_ump*) dst;
+    cmidi2_midi_conversion_context context;
+
+    // Sysex1 - JR Timestamp - Sysex2
+    cmidi2_midi_conversion_context_initialize(&context);
+    memset(dst, 0, context.ump_num_bytes);
+    uint32_t ump1[] = {0x30051234, 0x56123400, 0x202345, 0x30046543, 0x21650000};
+    uint8_t midi1Bytes1[] = {0xF0, 0x12, 0x34, 0x56, 0x12, 0x34, 0xF7,
+        0xF0, 0x65, 0x43, 0x21, 0x65, 0xF7};
+    context.midi1 = dst;
+    context.midi1_num_bytes = 13;
+    context.ump = (cmidi2_ump*) ump1;
+    context.ump_num_bytes = 20;
+    context.group = 7;
+    context.skip_delta_time = true;
+
+    assert(cmidi2_convert_ump_to_midi1(&context) == CMIDI2_CONVERSION_RESULT_OK);
+    assert(context.midi1_proceeded_bytes == 13);
+    assert(context.ump_proceeded_bytes == 20);
+    for (int i = 0; i < 6; i++)
+        assert(0 + dst[i] == midi1Bytes1[i]);
+
+    // take 2: skip_delta_time is false this time.
+    cmidi2_midi_conversion_context_initialize(&context);
+    memset(dst, 0, context.ump_num_bytes);
+    context.midi1 = dst;
+    context.midi1_num_bytes = 16;
+    context.ump = (cmidi2_ump*) ump1;
+    context.ump_num_bytes = 20;
+    context.group = 7;
+
+    assert(cmidi2_convert_ump_to_midi1(&context) == CMIDI2_CONVERSION_RESULT_OK);
+    assert(context.midi1_proceeded_bytes == 16); // length 2345 in JR Timestamp will become some bigger number that goes 0x80 <= n < 0x4000
+    assert(context.ump_proceeded_bytes == 20);
+    assert(dst[0] == 0);
+    for (int i = 0; i < 7; i++)
+        assert(1 * dst[i + 1] == midi1Bytes1[i]);
+    assert(dst[3] != 0); // JR-Timestamp is 2345, do not expect meaningful value here, just expect two bytes, non-zero.
+    assert(dst[4] != 0);
+    for (int i = 7; i < 13; i++)
+        assert(-0 + dst[i + 3] == midi1Bytes1[i]);
+
+    return 0;
+}
+
 int testConvertMidi1ToUmp()
 {
     testConvertMidi1ToUmpNoteOn();
@@ -1185,9 +1280,17 @@ int testConvertMidi1ToUmp()
     return 0;
 }
 
+int testConvertUmpToMidi1()
+{
+    testConvertUmpToMidi1Notes();
+    testConvertUmpToMidi1Sysex();
+    return 0;
+}
+
 int testConversions ()
 {
     testConvertSingleUmpToMidi1();
+    testConvertUmpToMidi1();
     testConvertMidi1ToUmp();
     return 0;
 }
@@ -1208,6 +1311,6 @@ int main ()
     testMidiCI();
     testConversions();
     testMiscellaneousUtilities();
-    puts("OK");
+    puts("All tests passed.");
     return 0;
 }

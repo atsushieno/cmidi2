@@ -403,7 +403,7 @@ static inline uint8_t cmidi2_ump_get_byte_from_uint32(uint32_t src, uint8_t inde
     return (uint8_t) (src >> ((7 - index) * 8) & 0xFF);
 }
 
-static inline uint8_t cmidi2_ump_get_byte_from_uint64(uint32_t src, uint8_t index) {
+static inline uint8_t cmidi2_ump_get_byte_from_uint64(uint64_t src, uint8_t index) {
     return (uint8_t) (src >> ((7 - index) * 8) & 0xFF);
 }
 
@@ -431,18 +431,21 @@ static inline bool cmidi2_util_is_platform_little_endian() {
     int i = 1;
     return *(char*) &i;
 }
-static bool isPlatformLE = cmidi2_util_is_platform_little_endian();
 
 static inline uint32_t cmidi2_ump_read_uint32_bytes(void *sequence) {
-    return isPlatformLE ? cmidi2_ump_read_uint32_bytes_le(sequence) : cmidi2_ump_read_uint32_bytes_be(sequence);
+    return cmidi2_util_is_platform_little_endian() ? cmidi2_ump_read_uint32_bytes_le(sequence) : cmidi2_ump_read_uint32_bytes_be(sequence);
+}
+
+static inline uint64_t cmidi2_ump_read_uint64_bytes_le(void *sequence) {
+    return ((uint64_t) cmidi2_ump_read_uint32_bytes_le(sequence) << 32) + cmidi2_ump_read_uint32_bytes_le((uint8_t*) sequence + 4);
+}
+
+static inline uint64_t cmidi2_ump_read_uint64_bytes_be(void *sequence) {
+    return ((uint64_t) cmidi2_ump_read_uint32_bytes_be(sequence) << 32) + cmidi2_ump_read_uint32_bytes_be((uint8_t*) sequence + 4);
 }
 
 static inline uint64_t cmidi2_ump_read_uint64_bytes(void *sequence) {
-    uint8_t *bytes = (uint8_t*) sequence;
-    uint64_t ret = 0;
-    for (int i = 0; i < 8; i++)
-        ret += ((uint64_t) bytes[i]) << ((7 - i) * 8);
-    return ret;
+    return cmidi2_util_is_platform_little_endian() ? cmidi2_ump_read_uint64_bytes_le(sequence) : cmidi2_ump_read_uint64_bytes_be(sequence);
 }
 
 static inline void cmidi2_ump_sysex_get_packet_of(uint64_t* result1, uint64_t* result2, uint8_t group, uint8_t numBytes, void* srcData, int32_t index,
@@ -480,9 +483,9 @@ static inline void cmidi2_ump_sysex_get_packet_of(uint64_t* result1, uint64_t* r
     for (uint8_t i = 0, j = index * radix; i < size; i++, j++)
         dst8[i + dstOffset] = src8[j];
 
-    *result1 = cmidi2_ump_read_uint64_bytes(dst8);
+    *result1 = cmidi2_ump_read_uint64_bytes_be(dst8);
     if (result2)
-        *result2 = cmidi2_ump_read_uint64_bytes(dst8 + 8);
+        *result2 = cmidi2_ump_read_uint64_bytes_be(dst8 + 8);
 }
 
 // 4.4 System Exclusive 7-Bit Messages
@@ -591,9 +594,9 @@ static inline void cmidi2_ump_mds_get_header(uint8_t group, uint8_t mdsId,
     *((uint16_t*) (void*) (dst8 + 12)) = subId;
     *((uint16_t*) (void*) (dst8 + 14)) = subId2;
 
-    *result1 = cmidi2_ump_read_uint64_bytes(dst8);
+    *result1 = cmidi2_ump_read_uint64_bytes_be(dst8);
     if (result2)
-        *result2 = cmidi2_ump_read_uint64_bytes(dst8 + 8);
+        *result2 = cmidi2_ump_read_uint64_bytes_be(dst8 + 8);
 }
 
 // srcData points to exact start of the source data.
@@ -611,9 +614,9 @@ static inline void cmidi2_ump_mds_get_payload_of(uint8_t group, uint8_t mdsId, u
     for (uint8_t i = 0, j = 0; i < size; i++, j++)
         dst8[i + 2] = src8[j];
 
-    *result1 = cmidi2_ump_read_uint64_bytes(dst8);
+    *result1 = cmidi2_ump_read_uint64_bytes_be(dst8);
     if (result2)
-        *result2 = cmidi2_ump_read_uint64_bytes(dst8 + 8);
+        *result2 = cmidi2_ump_read_uint64_bytes_be(dst8 + 8);
 }
 
 /* process() - more complicated function */
@@ -873,7 +876,7 @@ static inline uint16_t cmidi2_ump_get_mds_sub_id_2(cmidi2_ump* ump) {
 /* byte stream splitter */
 
 static inline void* cmidi2_ump_sequence_next(void* ptr) {
-    return (uint8_t*) ptr + cmidi2_ump_get_num_bytes(cmidi2_ump_read_uint32_bytes(ptr));
+    return (uint8_t*) ptr + cmidi2_ump_get_num_bytes(cmidi2_ump_read_uint32_bytes_be(ptr));
 }
 
 // similar to LV2_ATOM Utilities API...
@@ -882,6 +885,14 @@ static inline void* cmidi2_ump_sequence_next(void* ptr) {
         (iter) < ((uint8_t*) ptr) + numBytes; \
         (iter) = (uint8_t*) cmidi2_ump_sequence_next(iter))
 
+static inline void* cmidi2_ump_sequence_next_le(void* ptr) {
+    return (uint8_t*) ptr + cmidi2_ump_get_num_bytes(cmidi2_ump_read_uint32_bytes_le(ptr));
+}
+
+#define CMIDI2_UMP_SEQUENCE_FOREACH_LE(ptr, numBytes, iter) \
+    for (uint8_t* (iter) = (uint8_t*) ptr; \
+        (iter) < ((uint8_t*) ptr) + numBytes; \
+        (iter) = (uint8_t*) cmidi2_ump_sequence_next_le(iter))
 
 // MIDI CI support.
 
@@ -1174,6 +1185,7 @@ static inline int32_t cmidi2_ci_try_parse_new_protocol(uint8_t* buf, size_t leng
 
 // Miscellaneous MIDI Utilities
 
+/** Encodes `value` into `bytes` stream. Returns the length of the encoded value in bytes. */
 static inline uint8_t cmidi2_midi1_write_7bit_encoded_int(uint8_t* bytes, uint32_t value)
 {
     uint8_t pos = 0;
@@ -1187,6 +1199,7 @@ static inline uint8_t cmidi2_midi1_write_7bit_encoded_int(uint8_t* bytes, uint32
     }
 }
 
+/** Returns the length of `value` when it would be encoded into a byte stream. */
 static inline uint8_t cmidi2_midi1_get_7bit_encoded_int_length(uint32_t value) {
     for (uint8_t ret = 1; ; ret++) {
         if (value >= 0x80)
@@ -1197,6 +1210,7 @@ static inline uint8_t cmidi2_midi1_get_7bit_encoded_int_length(uint32_t value) {
     return 0;
 }
 
+/** Returns the 7-bit encoded value in `bytes` stream of `length` bytes. */
 static inline uint32_t cmidi2_midi1_get_7bit_encoded_int(uint8_t* bytes, uint32_t length)
 {
     uint8_t* start = bytes;
@@ -1244,149 +1258,7 @@ static inline uint32_t cmidi2_midi1_get_message_size(uint8_t* bytes, uint32_t le
     return bytes - start;
 }
 
-/// Convert one single UMP (without JR Timestamp) to MIDI 1.0 Message (without delta time)
-/// It is a lengthy function, so it is recommended to wrap it in another non-inline function.
-static inline size_t cmidi2_convert_single_ump_to_midi1(uint8_t* dst, size_t maxBytes, cmidi2_ump* ump) {
-    size_t midiEventSize = 0;
-    uint64_t sysex7, sysex8_1, sysex8_2;
-
-    uint8_t messageType = cmidi2_ump_get_message_type(ump);
-    uint8_t statusCode = cmidi2_ump_get_status_code(ump); // may not apply, but won't break.
-
-    dst[0] = statusCode | cmidi2_ump_get_channel(ump);
-
-    switch (messageType) {
-    case CMIDI2_MESSAGE_TYPE_SYSTEM:
-        midiEventSize = 1;
-        switch (statusCode) {
-        case 0xF1:
-        case 0xF3:
-        case 0xF9:
-            dst[1] = cmidi2_ump_get_system_message_byte2(ump);
-            midiEventSize = 2;
-            break;
-        }
-        break;
-    case CMIDI2_MESSAGE_TYPE_MIDI_1_CHANNEL:
-        midiEventSize = 3;
-        dst[1] = cmidi2_ump_get_midi1_byte2(ump);
-        switch (statusCode) {
-        case 0xC0:
-        case 0xD0:
-            midiEventSize = 2;
-            break;
-        default:
-            dst[2] = cmidi2_ump_get_midi1_byte3(ump);
-            break;
-        }
-        break;
-    case CMIDI2_MESSAGE_TYPE_MIDI_2_CHANNEL:
-        // FIXME: convert MIDI2 to MIDI1 as long as possible
-        switch (statusCode) {
-        case CMIDI2_STATUS_RPN:
-            midiEventSize = 12;
-            dst[0] = cmidi2_ump_get_channel(ump) + CMIDI2_STATUS_CC;
-            dst[1] = CMIDI2_CC_RPN_MSB;
-            dst[2] = cmidi2_ump_get_midi2_rpn_msb(ump);
-            dst[3] = dst[0]; // CC + channel
-            dst[4] = CMIDI2_CC_RPN_LSB;
-            dst[5] = cmidi2_ump_get_midi2_rpn_lsb(ump);
-            dst[6] = dst[0]; // CC + channel
-            dst[7] = CMIDI2_CC_DTE_MSB;
-            dst[8] = (cmidi2_ump_get_midi2_rpn_data(ump) >> 25) & 0x7F;
-            dst[9] = dst[0]; // CC + channel
-            dst[10] = CMIDI2_CC_DTE_LSB;
-            dst[11] = (cmidi2_ump_get_midi2_rpn_data(ump) >> 18) & 0x7F;
-            break;
-        case CMIDI2_STATUS_NRPN:
-            midiEventSize = 12;
-            dst[0] = cmidi2_ump_get_channel(ump) + CMIDI2_STATUS_CC;
-            dst[1] = CMIDI2_CC_NRPN_MSB;
-            dst[2] = cmidi2_ump_get_midi2_nrpn_msb(ump);
-            dst[3] = dst[0]; // CC + channel
-            dst[4] = CMIDI2_CC_NRPN_LSB;
-            dst[5] = cmidi2_ump_get_midi2_nrpn_lsb(ump);
-            dst[6] = dst[0]; // CC + channel
-            dst[7] = CMIDI2_CC_DTE_MSB;
-            dst[8] = (cmidi2_ump_get_midi2_nrpn_data(ump) >> 25) & 0x7F;
-            dst[9] = dst[0]; // CC + channel
-            dst[10] = CMIDI2_CC_DTE_LSB;
-            dst[11] = (cmidi2_ump_get_midi2_nrpn_data(ump) >> 18) & 0x7F;
-            break;
-        case CMIDI2_STATUS_NOTE_OFF:
-        case CMIDI2_STATUS_NOTE_ON:
-            midiEventSize = 3;
-            dst[1] = cmidi2_ump_get_midi2_note_note(ump);
-            dst[2] = cmidi2_ump_get_midi2_note_velocity(ump) / 0x200;
-            break;
-        case CMIDI2_STATUS_PAF:
-            midiEventSize = 3;
-            dst[1] = cmidi2_ump_get_midi2_paf_note(ump);
-            dst[2] = cmidi2_ump_get_midi2_paf_data(ump) / 0x2000000;
-            break;
-        case CMIDI2_STATUS_CC:
-            midiEventSize = 3;
-            dst[1] = cmidi2_ump_get_midi2_cc_index(ump);
-            dst[2] = cmidi2_ump_get_midi2_cc_data(ump) / 0x2000000;
-            break;
-        case CMIDI2_STATUS_PROGRAM:
-            if (cmidi2_ump_get_midi2_program_options(ump) & CMIDI2_PROGRAM_CHANGE_OPTION_BANK_VALID) {
-                midiEventSize = 8;
-                dst[6] = dst[0]; // copy
-                dst[7] = cmidi2_ump_get_midi2_program_program(ump);
-                dst[0] = (dst[6] & 0xF) + CMIDI2_STATUS_CC;
-                dst[1] = 0; // Bank MSB
-                dst[2] = cmidi2_ump_get_midi2_program_bank_msb(ump);
-                dst[3] = (dst[6] & 0xF) + CMIDI2_STATUS_CC;
-                dst[4] = 32; // Bank LSB
-                dst[5] = cmidi2_ump_get_midi2_program_bank_lsb(ump);
-            } else {
-                midiEventSize = 2;
-                dst[1] = cmidi2_ump_get_midi2_program_program(ump);
-            }
-            break;
-        case CMIDI2_STATUS_CAF:
-            midiEventSize = 2;
-            dst[1] = cmidi2_ump_get_midi2_caf_data(ump) / 0x2000000;
-            break;
-        case CMIDI2_STATUS_PITCH_BEND:
-            midiEventSize = 3;
-            uint32_t pitchBendV1 = cmidi2_ump_get_midi2_pitch_bend_data(ump) / 0x40000;
-            dst[1] = pitchBendV1 % 0x80;
-            dst[2] = pitchBendV1 / 0x80;
-            break;
-            // skip for other status bytes; we cannot support them.
-        }
-        break;
-    case CMIDI2_MESSAGE_TYPE_SYSEX7:
-        // FIXME: process all sysex7 packets
-        midiEventSize = 1 + cmidi2_ump_get_sysex7_num_bytes(ump);
-        sysex7 = cmidi2_ump_read_uint64_bytes(ump);
-        for (size_t i = 0; i < midiEventSize - 1; i++)
-            dst[i] = cmidi2_ump_get_byte_from_uint64(sysex7, 2 + i);
-        break;
-    case CMIDI2_MESSAGE_TYPE_SYSEX8_MDS:
-        // FIXME: reject MDS.
-        // FIXME: process all sysex8 packets
-        // Note that sysex8 num_bytes contains streamId, which is NOT part of MIDI 1.0 sysex7.
-        midiEventSize = 1 + cmidi2_ump_get_sysex8_num_bytes(ump) - 1;
-        sysex8_1 = cmidi2_ump_read_uint64_bytes(ump);
-        sysex8_2 = cmidi2_ump_read_uint64_bytes(ump);
-        for (size_t i = 0; i < 5 && i < midiEventSize - 1; i++)
-            dst[i] = cmidi2_ump_get_byte_from_uint64(sysex8_1, 3 + i);
-        for (size_t i = 6; i < midiEventSize - 1; i++)
-            dst[i] = cmidi2_ump_get_byte_from_uint64(sysex8_2, i);
-        // verify 7bit compatibility and then SYSEX8 to SYSEX7
-        for (size_t i = 1; i < midiEventSize; i++) {
-            if (dst[i] > 0x80) {
-                midiEventSize = 0;
-                break;
-            }
-        }
-        break;
-    }
-    return midiEventSize;
-}
+// MIDI1 to UMP Translator
 
 /* Should we define some structs like this to support conversion from MIDI1 UMP to MIDI2 UMP and complicate the API?
    I'm not sure if there are enough need, and it's better to avoid another cmidi2_convert_midi1_to_ump() (200-ish LoC).
@@ -1459,6 +1331,8 @@ typedef struct cmidi2_midi_conversion_context {
     enum cmidi2_ci_protocol_values midi_protocol;
     // Sysex conversion can be done to sysex8
     bool use_sysex8;
+    // Determine whether delta time is skipped or not (inserted like SMF) in the output MIDI1 stream.
+    bool skip_delta_time;
 } cmidi2_midi_conversion_context;
 
 enum cmidi2_midi_conversion_result {
@@ -1466,7 +1340,8 @@ enum cmidi2_midi_conversion_result {
     CMIDI2_CONVERSION_RESULT_OUT_OF_SPACE = 1,
     CMIDI2_CONVERSION_RESULT_INVALID_SYSEX = 0x10,
     CMIDI2_CONVERSION_RESULT_INVALID_DTE_SEQUENCE = 0x11,
-    CMIDI2_CONVERSION_RESULT_INVALID_STATUS = 0x13
+    CMIDI2_CONVERSION_RESULT_INVALID_STATUS = 0x13,
+    CMIDI2_CONVERSION_RESULT_INCOMPLETE_SYSEX7 = 0x20,
 };
 
 static inline void cmidi2_midi_conversion_context_initialize(cmidi2_midi_conversion_context* context) {
@@ -1486,6 +1361,7 @@ static inline void cmidi2_midi_conversion_context_initialize(cmidi2_midi_convers
     context->group = 0;
     context->midi_protocol = CMIDI2_PROTOCOL_TYPE_MIDI2;
     context->use_sysex8 = false;
+    context->skip_delta_time = false;
 }
 
 typedef struct cmidi2_convert_sysex_context {
@@ -1673,6 +1549,248 @@ static enum cmidi2_midi_conversion_result cmidi2_convert_midi1_to_ump(cmidi2_mid
         return CMIDI2_CONVERSION_RESULT_INVALID_DTE_SEQUENCE;
     
     return CMIDI2_CONVERSION_RESULT_OK;
+}
+
+// UMP to MIDI1 Translator
+
+static int32_t cmidi2_internal_convert_jr_timestamp_to_timecode(int32_t deltaTime, cmidi2_midi_conversion_context* context) {
+    // FIXME: implement
+    return deltaTime;
+}
+
+static size_t cmidi2_internal_add_midi1_delta_time(uint8_t* dst, cmidi2_midi_conversion_context* context, int32_t deltaTime) {
+    if (!context || context->skip_delta_time)
+        return 0;
+    size_t dLen = context->midi1_num_bytes;
+    size_t *dIdx = (size_t*) &context->midi1_proceeded_bytes;
+    int32_t len = cmidi2_midi1_get_7bit_encoded_int_length(deltaTime);
+    cmidi2_midi1_write_7bit_encoded_int(dst, deltaTime);
+    *dIdx += len;
+    return len;
+}
+
+/// Convert one single UMP (without JR Timestamp) to MIDI 1.0 Message (without delta time)
+/// It is a lengthy function, so it is recommended to wrap it in another non-inline function.
+static inline size_t cmidi2_convert_single_ump_to_timed_midi1(
+        uint8_t* dst, size_t maxBytes, cmidi2_ump* ump, int32_t deltaTime,
+        cmidi2_midi_conversion_context* context, uint8_t* sysex7Buffer, size_t* sysex7BufferIndex) {
+    size_t midiEventSize = 0;
+    uint64_t sysex7U64, sysex8_1, sysex8_2;
+    uint8_t sysex7NumBytesInUmp;
+
+    uint8_t messageType = cmidi2_ump_get_message_type(ump);
+    uint8_t statusCode = cmidi2_ump_get_status_code(ump); // may not apply, but won't break.
+
+#define CMIDI2_INTERNAL_ADD_DELTA_TIME \
+        dst += cmidi2_internal_add_midi1_delta_time(dst, context, deltaTime); \
+        dst[0] = statusCode | cmidi2_ump_get_channel(ump);
+
+    switch (messageType) {
+    case CMIDI2_MESSAGE_TYPE_SYSTEM:
+        CMIDI2_INTERNAL_ADD_DELTA_TIME
+        midiEventSize = 1;
+        switch (statusCode) {
+        case 0xF1:
+        case 0xF3:
+        case 0xF9:
+            dst[1] = cmidi2_ump_get_system_message_byte2(ump);
+            midiEventSize = 2;
+            break;
+        }
+        break;
+    case CMIDI2_MESSAGE_TYPE_MIDI_1_CHANNEL:
+        CMIDI2_INTERNAL_ADD_DELTA_TIME
+        midiEventSize = 3;
+        dst[1] = cmidi2_ump_get_midi1_byte2(ump);
+        switch (statusCode) {
+        case 0xC0:
+        case 0xD0:
+            midiEventSize = 2;
+            break;
+        default:
+            dst[2] = cmidi2_ump_get_midi1_byte3(ump);
+            break;
+        }
+        break;
+    case CMIDI2_MESSAGE_TYPE_MIDI_2_CHANNEL:
+        // FIXME: convert MIDI2 to MIDI1 as long as possible
+        switch (statusCode) {
+        case CMIDI2_STATUS_RPN:
+            CMIDI2_INTERNAL_ADD_DELTA_TIME
+            midiEventSize = 12;
+            dst[0] = cmidi2_ump_get_channel(ump) + CMIDI2_STATUS_CC;
+            dst[1] = CMIDI2_CC_RPN_MSB;
+            dst[2] = cmidi2_ump_get_midi2_rpn_msb(ump);
+            dst[3] = dst[0]; // CC + channel
+            dst[4] = CMIDI2_CC_RPN_LSB;
+            dst[5] = cmidi2_ump_get_midi2_rpn_lsb(ump);
+            dst[6] = dst[0]; // CC + channel
+            dst[7] = CMIDI2_CC_DTE_MSB;
+            dst[8] = (cmidi2_ump_get_midi2_rpn_data(ump) >> 25) & 0x7F;
+            dst[9] = dst[0]; // CC + channel
+            dst[10] = CMIDI2_CC_DTE_LSB;
+            dst[11] = (cmidi2_ump_get_midi2_rpn_data(ump) >> 18) & 0x7F;
+            break;
+        case CMIDI2_STATUS_NRPN:
+            CMIDI2_INTERNAL_ADD_DELTA_TIME
+            midiEventSize = 12;
+            dst[0] = cmidi2_ump_get_channel(ump) + CMIDI2_STATUS_CC;
+            dst[1] = CMIDI2_CC_NRPN_MSB;
+            dst[2] = cmidi2_ump_get_midi2_nrpn_msb(ump);
+            dst[3] = dst[0]; // CC + channel
+            dst[4] = CMIDI2_CC_NRPN_LSB;
+            dst[5] = cmidi2_ump_get_midi2_nrpn_lsb(ump);
+            dst[6] = dst[0]; // CC + channel
+            dst[7] = CMIDI2_CC_DTE_MSB;
+            dst[8] = (cmidi2_ump_get_midi2_nrpn_data(ump) >> 25) & 0x7F;
+            dst[9] = dst[0]; // CC + channel
+            dst[10] = CMIDI2_CC_DTE_LSB;
+            dst[11] = (cmidi2_ump_get_midi2_nrpn_data(ump) >> 18) & 0x7F;
+            break;
+        case CMIDI2_STATUS_NOTE_OFF:
+        case CMIDI2_STATUS_NOTE_ON:
+            CMIDI2_INTERNAL_ADD_DELTA_TIME
+            midiEventSize = 3;
+            dst[1] = cmidi2_ump_get_midi2_note_note(ump);
+            dst[2] = cmidi2_ump_get_midi2_note_velocity(ump) / 0x200;
+            break;
+        case CMIDI2_STATUS_PAF:
+            CMIDI2_INTERNAL_ADD_DELTA_TIME
+            midiEventSize = 3;
+            dst[1] = cmidi2_ump_get_midi2_paf_note(ump);
+            dst[2] = cmidi2_ump_get_midi2_paf_data(ump) / 0x2000000;
+            break;
+        case CMIDI2_STATUS_CC:
+            CMIDI2_INTERNAL_ADD_DELTA_TIME
+            midiEventSize = 3;
+            dst[0] = statusCode | cmidi2_ump_get_channel(ump);
+            dst[1] = cmidi2_ump_get_midi2_cc_index(ump);
+            dst[2] = cmidi2_ump_get_midi2_cc_data(ump) / 0x2000000;
+            break;
+        case CMIDI2_STATUS_PROGRAM:
+            CMIDI2_INTERNAL_ADD_DELTA_TIME
+            dst[0] = statusCode | cmidi2_ump_get_channel(ump);
+            if (cmidi2_ump_get_midi2_program_options(ump) & CMIDI2_PROGRAM_CHANGE_OPTION_BANK_VALID) {
+                midiEventSize = 8;
+                dst[6] = dst[0]; // copy
+                dst[7] = cmidi2_ump_get_midi2_program_program(ump);
+                dst[0] = (dst[6] & 0xF) + CMIDI2_STATUS_CC;
+                dst[1] = 0; // Bank MSB
+                dst[2] = cmidi2_ump_get_midi2_program_bank_msb(ump);
+                dst[3] = (dst[6] & 0xF) + CMIDI2_STATUS_CC;
+                dst[4] = 32; // Bank LSB
+                dst[5] = cmidi2_ump_get_midi2_program_bank_lsb(ump);
+            } else {
+                midiEventSize = 2;
+                dst[1] = cmidi2_ump_get_midi2_program_program(ump);
+            }
+            break;
+        case CMIDI2_STATUS_CAF:
+            CMIDI2_INTERNAL_ADD_DELTA_TIME
+            midiEventSize = 2;
+            dst[1] = cmidi2_ump_get_midi2_caf_data(ump) / 0x2000000;
+            break;
+        case CMIDI2_STATUS_PITCH_BEND:
+            CMIDI2_INTERNAL_ADD_DELTA_TIME
+            midiEventSize = 3;
+            uint32_t pitchBendV1 = cmidi2_ump_get_midi2_pitch_bend_data(ump) / 0x40000;
+            dst[1] = pitchBendV1 % 0x80;
+            dst[2] = pitchBendV1 / 0x80;
+            break;
+            // skip for other status bytes; we cannot support them.
+        }
+        break;
+    case CMIDI2_MESSAGE_TYPE_SYSEX7:
+        if (sysex7Buffer) {
+            // sysex7 buffer is processed at cmidi2_convert_ump_to_midi1().
+            midiEventSize = 0;
+            sysex7U64 = cmidi2_ump_read_uint64_bytes(ump);
+            sysex7NumBytesInUmp = cmidi2_ump_get_sysex7_num_bytes(ump);
+            for (size_t i = 0; i < sysex7NumBytesInUmp; i++)
+                sysex7Buffer[*sysex7BufferIndex + i] = cmidi2_ump_get_byte_from_uint64(sysex7U64, 2 + i);
+            *sysex7BufferIndex += sysex7NumBytesInUmp;
+        } else {
+            // minimal implementation for single-byte sysex7
+            CMIDI2_INTERNAL_ADD_DELTA_TIME
+            midiEventSize = 1 + cmidi2_ump_get_sysex7_num_bytes(ump);
+            sysex7U64 = cmidi2_ump_read_uint64_bytes(ump);
+            for (size_t i = 0; i < midiEventSize - 1; i++)
+                dst[i] = cmidi2_ump_get_byte_from_uint64(sysex7U64, 2 + i);
+        }
+        break;
+    case CMIDI2_MESSAGE_TYPE_SYSEX8_MDS:
+        // By the UMP specification they cannot be translated in Default Translation
+        midiEventSize = 0;
+        break;
+    }
+    return midiEventSize;
+}
+
+// Left for API backward compatibility.
+static inline size_t cmidi2_convert_single_ump_to_midi1(uint8_t* dst, size_t maxBytes, cmidi2_ump* ump) {
+    return cmidi2_convert_single_ump_to_timed_midi1(dst, maxBytes, ump, 0, NULL, NULL, 0);
+}
+
+#define IS_JR_TIMESTAMP(ump) \
+    (cmidi2_ump_get_message_type(ump) == CMIDI2_MESSAGE_TYPE_UTILITY && \
+    cmidi2_ump_get_status_code(ump) == CMIDI2_JR_TIMESTAMP)
+
+static enum cmidi2_midi_conversion_result cmidi2_convert_ump_to_midi1(cmidi2_midi_conversion_context* context) {
+    uint8_t* dst = (uint8_t*) context->midi1;
+    size_t sLen = context->ump_num_bytes;
+    size_t dLen = context->midi1_num_bytes;
+    size_t *sIdx = (size_t*) &context->ump_proceeded_bytes;
+    size_t *dIdx = (size_t*) &context->midi1_proceeded_bytes;
+    uint8_t sysex7_buffer[1024];
+    size_t sysex7_buffer_index = 0;
+
+    while (*sIdx < sLen) {
+        int32_t deltaTimeInJRTimestamp = 0;
+        cmidi2_ump* ump;
+        bool wasTimestamp = false;
+        do {
+            ump = (cmidi2_ump*) ((uint8_t*) context->ump + *sIdx);
+            if (IS_JR_TIMESTAMP(ump)) {
+                wasTimestamp = true;
+                if (!context->skip_delta_time)
+                    deltaTimeInJRTimestamp += cmidi2_ump_get_jr_timestamp_timestamp(ump);
+            }
+            else
+                break;
+            *sIdx += 4; // 4 = sizeof JR Timestamp message
+        } while (*sIdx < sLen);
+
+        if (*sIdx >= sLen)
+            break;
+
+        int32_t deltaTime = cmidi2_internal_convert_jr_timestamp_to_timecode(deltaTimeInJRTimestamp, context);
+
+        int32_t len = cmidi2_convert_single_ump_to_timed_midi1(
+            dst + *dIdx, dLen - *dIdx, ump, deltaTime,
+            context, sysex7_buffer, &sysex7_buffer_index);
+        *dIdx += len;
+        *sIdx += cmidi2_ump_get_num_bytes(*ump);
+
+        if (cmidi2_ump_get_message_type(ump) == CMIDI2_MESSAGE_TYPE_SYSEX7) {
+            switch (cmidi2_ump_get_status_code(ump)) {
+            case CMIDI2_SYSEX_END:
+            case CMIDI2_SYSEX_IN_ONE_UMP:
+                if (!context->skip_delta_time)
+                    cmidi2_internal_add_midi1_delta_time(dst + *dIdx, context, deltaTime);
+                dst[*dIdx] = 0xF0;
+                *dIdx += 1;
+                memcpy(dst+ *dIdx, sysex7_buffer, sysex7_buffer_index);
+                *dIdx += sysex7_buffer_index;
+                sysex7_buffer_index = 0;
+                dst[*dIdx] = 0xF7;
+                *dIdx += 1;
+                break;
+            }
+        }
+        deltaTime = 0;
+    }
+
+    return sysex7_buffer_index > 0 ? CMIDI2_CONVERSION_RESULT_INCOMPLETE_SYSEX7 : CMIDI2_CONVERSION_RESULT_OK;
 }
 
 #ifdef __cplusplus
