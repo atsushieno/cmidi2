@@ -1282,6 +1282,12 @@ typedef struct cmidi2_midi1_sequence_umps {
 } cmidi2_midi1_sequence_ump;
 */
 
+enum cmidi2_translator_endianness {
+    CMIDI2_TRANSLATOR_DEFAULT_ENDIAN,
+    CMIDI2_TRANSLATOR_BIG_ENDIAN,
+    CMIDI2_TRANSLATOR_LITTLE_ENDIAN
+};
+
 // Conversion from MIDI1 message bytes or SMF event list to MIDI2 UMP stream
 //
 // The conversion requires some preserved context e.g. RPN/NRPN/DTE
@@ -1333,6 +1339,8 @@ typedef struct cmidi2_midi_conversion_context {
     bool use_sysex8;
     // Determine whether delta time is skipped or not (inserted like SMF) in the output MIDI1 stream.
     bool skip_delta_time;
+    // UMP serialization endianness
+    int32_t ump_serialization_endianness;
 } cmidi2_midi_conversion_context;
 
 enum cmidi2_midi_conversion_result {
@@ -1362,6 +1370,7 @@ static inline void cmidi2_midi_conversion_context_initialize(cmidi2_midi_convers
     context->midi_protocol = CMIDI2_PROTOCOL_TYPE_MIDI2;
     context->use_sysex8 = false;
     context->skip_delta_time = false;
+    context->ump_serialization_endianness = CMIDI2_TRANSLATOR_DEFAULT_ENDIAN;
 }
 
 typedef struct cmidi2_convert_sysex_context {
@@ -1401,6 +1410,16 @@ static inline uint64_t cmidi2_internal_convert_midi1_dte_to_ump(cmidi2_midi_conv
         cmidi2_ump_midi2_nrpn(context->group, channel, msb, lsb, data);
 }
 
+static inline uint32_t cmidi2_internal_swap_endian(uint32_t v) {
+    return ((v & 0xFF) << 24) +
+            (((v >> 8) & 0xFF) << 16) +
+            (((v >> 16) & 0xFF) << 8) +
+            ((v >> 24) & 0xFF);
+}
+
+/** converts MIDI1 bytestream which can contain deltaTime in SMF, to MIDI2 UMP stream.
+ * The resulting stream is native endianness.
+ */
 static enum cmidi2_midi_conversion_result cmidi2_convert_midi1_to_ump(cmidi2_midi_conversion_context* context) {
     uint8_t* dst = (uint8_t*) context->ump;
     size_t sLen = context->midi1_num_bytes;
@@ -1534,6 +1553,11 @@ static enum cmidi2_midi_conversion_result cmidi2_convert_midi1_to_ump(cmidi2_mid
                         return CMIDI2_CONVERSION_RESULT_INVALID_STATUS;
                 }
                 if (!skipEmitUmp) {
+                    auto platEndian = cmidi2_util_is_platform_little_endian() ?                             CMIDI2_TRANSLATOR_LITTLE_ENDIAN : CMIDI2_TRANSLATOR_BIG_ENDIAN;
+                    auto actualEndian = context->ump_serialization_endianness != CMIDI2_TRANSLATOR_DEFAULT_ENDIAN ?
+                                        context->ump_serialization_endianness : platEndian;
+                    if (platEndian != actualEndian)
+                        m2 = (((uint64_t) cmidi2_internal_swap_endian(m2 >> 32)) << 32) | cmidi2_internal_swap_endian(m2 & 0xFFFFFFFF);
                     *(uint32_t*) (dst + *dIdx) = m2 >> 32;
                     *dIdx += 4;
                     *(uint32_t*) (dst + *dIdx) = m2 & 0xFFFFFFFF;
