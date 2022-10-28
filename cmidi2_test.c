@@ -258,9 +258,33 @@ void testForEach()
 
     uint8_t buf[sizeof(ump)];
     for (int i = 0; i < sizeof(buf) / sizeof(uint64_t); i++) {
-        for (int b = 0; b < 8; b++) {
-            uint8_t v = (ump[i] >> (7 - b) * 8) & 0xFF;
-            buf[i * 8 + b] = v;
+        // first 32 bits
+        uint32_t head = ump[i] >> 32;
+        for (int b = 0; b < 4; b++) {
+            uint8_t v = (head >> b * 8) & 0xFF;
+            buf[i * 8 + b + 0] = v;
+        }
+        // next 32 bits
+        uint32_t tail = ump[i] & 0xFFFFFFFF;
+        for (int b = 0; b < 4; b++) {
+            uint8_t v = (tail >> b * 8) & 0xFF;
+            buf[i * 8 + b + 4] = v;
+        }
+    }
+
+    uint8_t bufBE[sizeof(ump)];
+    for (int i = 0; i < sizeof(bufBE) / sizeof(uint64_t); i++) {
+        // first 32 bits
+        uint32_t head = ump[i] >> 32;
+        for (int b = 0; b < 4; b++) {
+            uint8_t v = (head >> (7 - b) * 8) & 0xFF;
+            bufBE[i * 8 + b + 0] = v;
+        }
+        // next 32 bits
+        uint32_t tail = ump[i] & 0xFFFFFFFF;
+        for (int b = 0; b < 4; b++) {
+            uint8_t v = (tail >> (7 - b) * 8) & 0xFF;
+            bufBE[i * 8 + b + 4] = v;
         }
     }
 
@@ -275,7 +299,28 @@ void testForEach()
 
     int current = 0;
 
-    CMIDI2_UMP_SEQUENCE_FOREACH((void*) buf, sizeof(buf), iter) {
+    CMIDI2_UMP_SEQUENCE_FOREACH_LE((void*) buf, sizeof(buf), iter) {
+        uint64_t ret;
+        int32_t size = cmidi2_ump_get_num_bytes(cmidi2_ump_read_uint32_bytes_le(iter));
+        switch (size) {
+        case 4:
+            ret = cmidi2_ump_read_uint32_bytes_le(iter);
+            assert(ret == expected[current++]);
+            break;
+        case 8:
+            ret = cmidi2_ump_read_uint64_bytes_le(iter);
+            assert(ret == expected[current++]);
+            break;
+        default:
+            printf("unexpected bytes at %d: %d\n", current, size);
+            assert(false);
+            break;
+        }
+    }
+
+    current = 0;
+
+    CMIDI2_UMP_SEQUENCE_FOREACH_BE((void*) bufBE, sizeof(bufBE), iter) {
         uint64_t ret;
         int32_t size = cmidi2_ump_get_num_bytes(cmidi2_ump_read_uint32_bytes_be(iter));
         switch (size) {

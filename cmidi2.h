@@ -876,7 +876,7 @@ static inline uint16_t cmidi2_ump_get_mds_sub_id_2(cmidi2_ump* ump) {
 /* byte stream splitter */
 
 static inline void* cmidi2_ump_sequence_next(void* ptr) {
-    return (uint8_t*) ptr + cmidi2_ump_get_num_bytes(cmidi2_ump_read_uint32_bytes_be(ptr));
+    return (uint8_t*) ptr + cmidi2_ump_get_num_bytes(cmidi2_ump_read_uint32_bytes(ptr));
 }
 
 // similar to LV2_ATOM Utilities API...
@@ -893,6 +893,15 @@ static inline void* cmidi2_ump_sequence_next_le(void* ptr) {
     for (uint8_t* (iter) = (uint8_t*) ptr; \
         (iter) < ((uint8_t*) ptr) + numBytes; \
         (iter) = (uint8_t*) cmidi2_ump_sequence_next_le(iter))
+
+static inline void* cmidi2_ump_sequence_next_be(void* ptr) {
+    return (uint8_t*) ptr + cmidi2_ump_get_num_bytes(cmidi2_ump_read_uint32_bytes_be(ptr));
+}
+
+#define CMIDI2_UMP_SEQUENCE_FOREACH_BE(ptr, numBytes, iter) \
+    for (uint8_t* (iter) = (uint8_t*) ptr; \
+        (iter) < ((uint8_t*) ptr) + numBytes; \
+        (iter) = (uint8_t*) cmidi2_ump_sequence_next_be(iter))
 
 // MIDI CI support.
 
