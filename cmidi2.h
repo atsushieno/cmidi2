@@ -1,3 +1,7 @@
+
+#ifndef CMIDI2_H_INCLUDED
+#define CMIDI2_H_INCLUDED
+
 #include <stdbool.h>
 #include <stdint.h>
 #include <memory.h>
@@ -1829,3 +1833,5 @@ static enum cmidi2_midi_conversion_result cmidi2_convert_ump_to_midi1(cmidi2_mid
 #ifdef __cplusplus
 }
 #endif
+
+#endif /* CMIDI2_H_INCLUDED */
