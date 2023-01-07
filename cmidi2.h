@@ -680,6 +680,21 @@ static inline uint8_t cmidi2_ump_get_message_type(cmidi2_ump* ump) {
     return *ump >> 28;
 }
 
+static inline uint8_t cmidi2_ump_get_message_size_bytes(cmidi2_ump* ump) {
+    switch (cmidi2_ump_get_message_type(ump)) {
+        case CMIDI2_MESSAGE_TYPE_UTILITY:
+        case CMIDI2_MESSAGE_TYPE_SYSTEM:
+        case CMIDI2_MESSAGE_TYPE_MIDI_1_CHANNEL:
+            return 4;
+        case CMIDI2_MESSAGE_TYPE_SYSEX7:
+        case CMIDI2_MESSAGE_TYPE_MIDI_2_CHANNEL:
+            return 8;
+        case CMIDI2_MESSAGE_TYPE_SYSEX8_MDS:
+            return 16;
+    }
+    return 0; // invalid
+}
+
 static inline uint8_t cmidi2_ump_get_group(cmidi2_ump* ump) {
     return (*ump >> 24) & 0xF;
 }
