@@ -18,7 +18,7 @@ If you use it then you should not expect any API/ABI stability at this state.
 
 ## Usages
 
-[atsushieno/android-audio-plugin-framework](https://github.com/atsushieno/android-audio-plugin-framework/), [atsushieno/aap-lv2](https://github.com/atsushieno/aap-lv2), and [atsushieno/aap-juce](https://github.com/atsushieno/aap-juce) make use of this library.
+[atsushieno/aap-core](https://github.com/atsushieno/aap-core/), [atsushieno/aap-lv2](https://github.com/atsushieno/aap-lv2), and [atsushieno/aap-juce](https://github.com/atsushieno/aap-juce) make use of this library.
 
 ## License
 
