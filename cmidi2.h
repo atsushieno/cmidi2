@@ -1845,6 +1845,149 @@ static enum cmidi2_midi_conversion_result cmidi2_convert_ump_to_midi1(cmidi2_mid
     return sysex7_buffer_index > 0 ? CMIDI2_CONVERSION_RESULT_INCOMPLETE_SYSEX7 : CMIDI2_CONVERSION_RESULT_OK;
 }
 
+// UMP forge (like LV2 Atom Forge, but flat and simpler)
+
+typedef struct cmidi2_ump_forge {
+    cmidi2_ump* ump;
+    size_t capacity;
+    size_t offset;
+} cmidi2_ump_forge;
+
+void cmidi2_ump_forge_init(cmidi2_ump_forge *forge, cmidi2_ump* buffer, size_t capacity)
+{
+    forge->ump = buffer;
+    forge->capacity = capacity;
+    forge->offset = 0;
+}
+
+bool cmidi2_ump_forge_add_packet_32(cmidi2_ump_forge* forge, uint32_t ump)
+{
+    auto size = 4;
+    if (forge->offset + size > forge->capacity)
+        return false;
+    uint8_t* p = (uint8_t*) forge->ump + forge->offset;
+    cmidi2_ump_write32((cmidi2_ump*) p, ump);
+    forge->offset += size;
+    return true;
+}
+
+bool cmidi2_ump_forge_add_packet_64(cmidi2_ump_forge* forge, uint64_t ump)
+{
+    auto size = 8;
+    if (forge->offset + size > forge->capacity)
+        return false;
+    uint8_t* p = (uint8_t*) forge->ump + forge->offset;
+    cmidi2_ump_write64((cmidi2_ump*) p, ump);
+    forge->offset += size;
+    return true;
+}
+
+bool cmidi2_ump_forge_add_packet_128(cmidi2_ump_forge* forge, uint64_t ump1, uint64_t ump2)
+{
+    auto size = 16;
+    if (forge->offset + size > forge->capacity)
+        return false;
+    uint8_t* p = (uint8_t*) forge->ump + forge->offset;
+    cmidi2_ump_write128((cmidi2_ump*) p, ump1, ump2);
+    forge->offset += size;
+    return true;
+}
+
+bool cmidi2_ump_forge_add_single_packet(cmidi2_ump_forge* forge, cmidi2_ump* ump)
+{
+    auto size = cmidi2_ump_get_message_size_bytes(ump);
+    if (forge->offset + size > forge->capacity)
+        return false;
+    memcpy((uint8_t*) forge->ump + forge->offset, ump, size);
+    forge->offset += size;
+    return true;
+}
+
+bool cmidi2_ump_forge_add_packets(cmidi2_ump_forge* forge, cmidi2_ump* ump, int32_t size)
+{
+    if (forge->offset + size > forge->capacity)
+        return false;
+    memcpy((uint8_t*) forge->ump + forge->offset, ump, size);
+    forge->offset += size;
+    return true;
+}
+
+// UMP sequence merger
+
+static inline bool cmidi2_internal_ump_merge_sequence_write_delta_time(int32_t timestamp1, int32_t timestamp2,
+                                                             int32_t* lastTimestamp,
+                                                             void* dst, int32_t *dIdx, size_t dstSize) {
+    int32_t deltaTime = (timestamp1 <= timestamp2 ? timestamp1 : timestamp2) - *lastTimestamp;
+    uint8_t jrTSSize = deltaTime / 0x10000 + (deltaTime % 0x10000 ? 1 : 0);
+    if (*dIdx + jrTSSize * 4 > dstSize)
+        return false;
+    for (int32_t dt = deltaTime; dt > 0; dt -= 0x10000) {
+        cmidi2_ump_write32((cmidi2_ump*) ((uint8_t*) dst + *dIdx),
+        cmidi2_ump_jr_timestamp_direct(0, deltaTime > 0xFFFF ? 0xFFFF : deltaTime));
+        *dIdx += 4;
+    }
+    *lastTimestamp += deltaTime;
+    return true;
+}
+
+static inline void cmidi2_ump_merge_sequences(cmidi2_ump* dst, size_t dstSize,
+                                              cmidi2_ump* seq1, size_t seq1Size,
+                                              cmidi2_ump* seq2, size_t seq2Size) {
+    int32_t dIdx = 0, seq1Idx = 0, seq2Idx = 0;
+    int32_t timestamp1 = 0, timestamp2 = 0, lastTimestamp = 0;
+    while (true) {
+        cmidi2_ump* s1 = (cmidi2_ump*) ((uint8_t*) seq1 + seq1Idx);
+        while (cmidi2_ump_get_message_type(s1) == CMIDI2_MESSAGE_TYPE_UTILITY &&
+               cmidi2_ump_get_status_code(s1) == CMIDI2_JR_TIMESTAMP) {
+            timestamp1 += cmidi2_ump_get_jr_timestamp_timestamp(s1);
+            seq1Idx += 4;
+            if (seq1Idx >= seq1Size)
+                break;
+            s1 = (cmidi2_ump*) ((uint8_t*) seq1 + seq1Idx);
+        }
+        cmidi2_ump* s2 = (cmidi2_ump*) ((uint8_t*) seq2 + seq2Idx);
+        while (cmidi2_ump_get_message_type(s2) == CMIDI2_MESSAGE_TYPE_UTILITY &&
+               cmidi2_ump_get_status_code(s2) == CMIDI2_JR_TIMESTAMP) {
+            timestamp2 += cmidi2_ump_get_jr_timestamp_timestamp(s2);
+            seq2Idx += 4;
+            if (seq2Idx >= seq2Size)
+                break;
+            s2 = (cmidi2_ump*) ((uint8_t*) seq2 + seq2Idx);
+        }
+        if (seq1Idx >= seq1Size || seq2Idx >= seq2Size)
+            break;
+        if (!cmidi2_internal_ump_merge_sequence_write_delta_time(
+                timestamp1, timestamp2, &lastTimestamp, dst, &dIdx, dstSize))
+            break;
+
+        if (timestamp1 <= timestamp2) {
+            cmidi2_ump* sp = (cmidi2_ump*) ((uint8_t*) seq1 + seq1Idx);
+            uint8_t size = cmidi2_ump_get_message_size_bytes(sp);
+            memcpy((uint8_t*) dst + dIdx, sp, size);
+            seq1Idx += size;
+            dIdx += size;
+        } else {
+            cmidi2_ump* sp = (cmidi2_ump*) ((uint8_t*) seq2 + seq2Idx);
+            uint8_t size = cmidi2_ump_get_message_size_bytes(sp);
+            memcpy((uint8_t*) dst + dIdx, sp, size);
+            seq2Idx += size;
+            dIdx += size;
+        }
+    }
+    if (!cmidi2_internal_ump_merge_sequence_write_delta_time(
+            timestamp1, timestamp2, &lastTimestamp, dst, &dIdx, dstSize))
+        return;
+    if (seq1Idx < seq1Size && dIdx + seq1Size - seq1Idx < dstSize) {
+        cmidi2_ump* sp = (cmidi2_ump*) ((uint8_t*) seq1 + seq1Idx);
+        memcpy((uint8_t*) dst + dIdx, sp, seq1Size - seq1Idx);
+    }
+    if (seq2Idx < seq2Size && dIdx + seq2Size - seq2Idx < dstSize) {
+        cmidi2_ump* sp = (cmidi2_ump*) ((uint8_t*) seq2 + seq2Idx);
+        memcpy((uint8_t*) dst + dIdx, sp, seq2Size - seq2Idx);
+    }
+}
+
+
 #ifdef __cplusplus
 }
 #endif

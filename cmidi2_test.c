@@ -1308,6 +1308,48 @@ int testConvertUmpToMidi1Sysex()
     return 0;
 }
 
+// FIXME: we should split forge tests and merger tests...
+int testMergeSequences()
+{
+    uint8_t seq1[64], seq2[64];
+    uint32_t dst[32];
+    memset(dst, 0, sizeof(dst));
+    cmidi2_ump_forge forge1, forge2;
+    cmidi2_ump_forge_init(&forge1, (cmidi2_ump*) seq1, sizeof(seq1));
+    cmidi2_ump_forge_add_packet_64(&forge1, cmidi2_ump_midi2_note_on(0, 0, 0x54, 0, 0xE000, 0));
+    cmidi2_ump_forge_add_packet_32(&forge1, cmidi2_ump_jr_timestamp_direct(0, 0x8000));
+    cmidi2_ump_forge_add_packet_64(&forge1, cmidi2_ump_midi2_note_off(0, 0, 0x54, 0, 0, 0));
+
+    cmidi2_ump_forge_init(&forge2, (cmidi2_ump*) seq2, sizeof(seq2));
+    cmidi2_ump_forge_add_packet_32(&forge2, cmidi2_ump_jr_timestamp_direct(0, 0x4000));
+    cmidi2_ump_forge_add_packet_64(&forge2, cmidi2_ump_midi2_note_on(0, 0, 0x60, 0, 0xD800, 0));
+    cmidi2_ump_forge_add_packet_32(&forge2, cmidi2_ump_jr_timestamp_direct(0, 0x4000));
+    cmidi2_ump_forge_add_packet_64(&forge2, cmidi2_ump_midi2_note_off(0, 0, 0x60, 0, 0, 0));
+    // it is merged *after* seq1, meaning that it will be appended *after* note-off, at the same timestamp.
+    cmidi2_ump_forge_add_packet_64(&forge2, cmidi2_ump_midi2_note_on(0, 0, 0x54, 0, 0xD800, 0));
+    cmidi2_ump_forge_add_packet_32(&forge2, cmidi2_ump_jr_timestamp_direct(0, 0x8000));
+    cmidi2_ump_forge_add_packet_64(&forge2, cmidi2_ump_midi2_note_off(0, 0, 0x54, 0, 0x1000, 0));
+
+    cmidi2_ump_merge_sequences((cmidi2_ump*) dst, sizeof(dst), forge1.ump, forge1.offset, forge2.ump, forge2.offset);
+
+    uint32_t reference[] = {
+        0x40905400, 0xE0000000,
+        0x00204000,
+        0x40906000, 0xD8000000,
+        0x00204000,
+        0x40805400, 0x00000000,
+        0x40806000, 0x00000000,
+        0x40905400, 0xD8000000,
+        0x00208000,
+        0x40805400, 0x10000000,
+        };
+    
+    for(int i = 0; i < 15; i++)
+        assert(dst[i] == reference[i]);
+
+    return 0;
+}
+
 int testConvertMidi1ToUmp()
 {
     testConvertMidi1ToUmpNoteOn();
@@ -1340,6 +1382,12 @@ int testConversions ()
     return 0;
 }
 
+int testMergers()
+{
+    testMergeSequences();
+    return 0;
+}
+
 int testMiscellaneousUtilities ()
 {
     testMidi1_7BitEncodings();
@@ -1355,6 +1403,7 @@ int main ()
     testUMP();
     testMidiCI();
     testConversions();
+    testMergers();
     testMiscellaneousUtilities();
     puts("All tests passed.");
     return 0;
