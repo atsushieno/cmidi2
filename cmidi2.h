@@ -1853,14 +1853,14 @@ typedef struct cmidi2_ump_forge {
     size_t offset;
 } cmidi2_ump_forge;
 
-void cmidi2_ump_forge_init(cmidi2_ump_forge *forge, cmidi2_ump* buffer, size_t capacity)
+static inline void cmidi2_ump_forge_init(cmidi2_ump_forge *forge, cmidi2_ump* buffer, size_t capacity)
 {
     forge->ump = buffer;
     forge->capacity = capacity;
     forge->offset = 0;
 }
 
-bool cmidi2_ump_forge_add_packet_32(cmidi2_ump_forge* forge, uint32_t ump)
+static inline bool cmidi2_ump_forge_add_packet_32(cmidi2_ump_forge* forge, uint32_t ump)
 {
     auto size = 4;
     if (forge->offset + size > forge->capacity)
@@ -1871,7 +1871,7 @@ bool cmidi2_ump_forge_add_packet_32(cmidi2_ump_forge* forge, uint32_t ump)
     return true;
 }
 
-bool cmidi2_ump_forge_add_packet_64(cmidi2_ump_forge* forge, uint64_t ump)
+static inline bool cmidi2_ump_forge_add_packet_64(cmidi2_ump_forge* forge, uint64_t ump)
 {
     auto size = 8;
     if (forge->offset + size > forge->capacity)
@@ -1882,7 +1882,7 @@ bool cmidi2_ump_forge_add_packet_64(cmidi2_ump_forge* forge, uint64_t ump)
     return true;
 }
 
-bool cmidi2_ump_forge_add_packet_128(cmidi2_ump_forge* forge, uint64_t ump1, uint64_t ump2)
+static inline bool cmidi2_ump_forge_add_packet_128(cmidi2_ump_forge* forge, uint64_t ump1, uint64_t ump2)
 {
     auto size = 16;
     if (forge->offset + size > forge->capacity)
@@ -1893,7 +1893,7 @@ bool cmidi2_ump_forge_add_packet_128(cmidi2_ump_forge* forge, uint64_t ump1, uin
     return true;
 }
 
-bool cmidi2_ump_forge_add_single_packet(cmidi2_ump_forge* forge, cmidi2_ump* ump)
+static inline bool cmidi2_ump_forge_add_single_packet(cmidi2_ump_forge* forge, cmidi2_ump* ump)
 {
     auto size = cmidi2_ump_get_message_size_bytes(ump);
     if (forge->offset + size > forge->capacity)
@@ -1903,7 +1903,7 @@ bool cmidi2_ump_forge_add_single_packet(cmidi2_ump_forge* forge, cmidi2_ump* ump
     return true;
 }
 
-bool cmidi2_ump_forge_add_packets(cmidi2_ump_forge* forge, cmidi2_ump* ump, int32_t size)
+static inline bool cmidi2_ump_forge_add_packets(cmidi2_ump_forge* forge, cmidi2_ump* ump, int32_t size)
 {
     if (forge->offset + size > forge->capacity)
         return false;
@@ -1930,7 +1930,7 @@ static inline bool cmidi2_internal_ump_merge_sequence_write_delta_time(int32_t t
     return true;
 }
 
-static inline void cmidi2_ump_merge_sequences(cmidi2_ump* dst, size_t dstSize,
+static inline size_t cmidi2_ump_merge_sequences(cmidi2_ump* dst, size_t dstCapacity,
                                               cmidi2_ump* seq1, size_t seq1Size,
                                               cmidi2_ump* seq2, size_t seq2Size) {
     int32_t dIdx = 0, seq1Idx = 0, seq2Idx = 0;
@@ -1957,34 +1957,41 @@ static inline void cmidi2_ump_merge_sequences(cmidi2_ump* dst, size_t dstSize,
         if (seq1Idx >= seq1Size || seq2Idx >= seq2Size)
             break;
         if (!cmidi2_internal_ump_merge_sequence_write_delta_time(
-                timestamp1, timestamp2, &lastTimestamp, dst, &dIdx, dstSize))
+                timestamp1, timestamp2, &lastTimestamp, dst, &dIdx, dstCapacity))
             break;
 
         if (timestamp1 <= timestamp2) {
             cmidi2_ump* sp = (cmidi2_ump*) ((uint8_t*) seq1 + seq1Idx);
             uint8_t size = cmidi2_ump_get_message_size_bytes(sp);
+            if (size == 0)
+                return dIdx; // invalid bytes
             memcpy((uint8_t*) dst + dIdx, sp, size);
             seq1Idx += size;
             dIdx += size;
         } else {
             cmidi2_ump* sp = (cmidi2_ump*) ((uint8_t*) seq2 + seq2Idx);
             uint8_t size = cmidi2_ump_get_message_size_bytes(sp);
+            if (size == 0)
+                return dIdx; // invalid bytes
             memcpy((uint8_t*) dst + dIdx, sp, size);
             seq2Idx += size;
             dIdx += size;
         }
     }
     if (!cmidi2_internal_ump_merge_sequence_write_delta_time(
-            timestamp1, timestamp2, &lastTimestamp, dst, &dIdx, dstSize))
-        return;
-    if (seq1Idx < seq1Size && dIdx + seq1Size - seq1Idx < dstSize) {
+            timestamp1, timestamp2, &lastTimestamp, dst, &dIdx, dstCapacity))
+        return dIdx;
+    if (seq1Idx < seq1Size && dIdx + seq1Size - seq1Idx < dstCapacity) {
         cmidi2_ump* sp = (cmidi2_ump*) ((uint8_t*) seq1 + seq1Idx);
         memcpy((uint8_t*) dst + dIdx, sp, seq1Size - seq1Idx);
+        dIdx += seq1Size - seq1Idx;
     }
-    if (seq2Idx < seq2Size && dIdx + seq2Size - seq2Idx < dstSize) {
+    if (seq2Idx < seq2Size && dIdx + seq2Size - seq2Idx < dstCapacity) {
         cmidi2_ump* sp = (cmidi2_ump*) ((uint8_t*) seq2 + seq2Idx);
         memcpy((uint8_t*) dst + dIdx, sp, seq2Size - seq2Idx);
+        dIdx += seq2Size - seq2Idx;
     }
+    return dIdx;
 }
 
 
