@@ -1,4 +1,4 @@
-# cmidi2: header-only MIDI 2.0 UMP and MICI-CI binary processor library
+# cmidi2: header-only MIDI 2.0 UMP and MIDI-CI binary processor library
 
 This is a small header-only library to process MIDI 2.0 UMP (Universal MIDI Packet)
 and MIDI-CI system exclusive packets.
