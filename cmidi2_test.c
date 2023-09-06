@@ -218,7 +218,9 @@ bool cmidi2_ump_binary_reader_helper_check_continuity(cmidi2_ump_binary_read_sta
 void testType5Messages_sysex8_reader_writer()
 {
     uint8_t gsReset[] = {0x41, 0x10, 0x42, 0x12, 0x40, 0x00, 0x7F, 0x00, 0x41};
-    uint8_t* ump_buffer = calloc(1, 4096);
+    uint8_t ump_buffer[4096];
+    memset(ump_buffer, 0, 4096);
+
     cmidi2_ump_forge forge;
     cmidi2_ump_forge_init(&forge, (cmidi2_ump*) ump_buffer, 4096);
     assert(NULL == cmidi2_ump_sysex8_process(0, gsReset, sizeof(gsReset), 0, sysex8_binary_reader_helper_read_into_ump_forge, &forge));

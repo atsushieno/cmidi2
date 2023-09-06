@@ -980,7 +980,7 @@ typedef cmidi2_ump_binary_read_state*(*cmidi2_ump_stream_selector_func)(uint8_t 
 typedef bool(*cmidi2_ump_binary_read_continuity_checker_func)(cmidi2_ump_binary_read_state* stream, cmidi2_ump* ump);
 
 // it is a special copy function that only works with sysex8 memory state at `src` that can access beyond `sizeInBytes`.
-void cmidi2_internal_sysex8_copy_data_byte_swapping(uint8_t* dst, uint8_t srcHead, uint32_t* srcTail, size_t sizeInBytes) {
+static inline void cmidi2_internal_sysex8_copy_data_byte_swapping(uint8_t* dst, uint8_t srcHead, uint32_t* srcTail, size_t sizeInBytes) {
     if (sizeInBytes == 0)
         return;
 
