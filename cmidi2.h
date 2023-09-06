@@ -31,6 +31,8 @@ enum cmidi2_status_code {
     CMIDI2_STATUS_PER_NOTE_MANAGEMENT = 0xF0,
 };
 
+// TODO: it still does not support June 2023 updates.
+
 enum cmidi2_message_type {
     // MIDI 2.0 UMP Section 3.
     CMIDI2_MESSAGE_TYPE_UTILITY = 0,
@@ -236,6 +238,9 @@ static inline uint8_t cmidi2_ump_get_num_bytes(uint32_t data) {
     }
     return 0xFF; /* wrong */
 }
+
+// --------
+// UMP generators
 
 // 4.8 Utility Messages
 static inline uint32_t cmidi2_ump_noop(uint8_t group) { return (group & 0xF) << 24; }
@@ -643,6 +648,7 @@ static inline void cmidi2_ump_mds_process(uint8_t group, uint8_t mdsId, void* da
 }
 
 
+// --------
 // Strongly-typed(?) UMP.
 // I kind of think those getters are overkill, so I would collect almost use `cmidi2_ump_get_xxx()`
 // as those strongly typed functions, so that those who don't want them can safely ignore them.
@@ -890,6 +896,174 @@ static inline uint16_t cmidi2_ump_get_mds_sub_id_2(const cmidi2_ump* ump) {
     return (cmidi2_ump_get_byte_at(ump, 14) << 8) + cmidi2_ump_get_byte_at(ump, 15);
 }
 
+// --------
+// Realtime-safe SysEx8 binary reader
+//
+// The primary end-user facing function is `cmidi2_ump_get_sysex8_data()`, but the
+// function signature needs some explanation as it requires some complicated processing.
+//
+// There can be multiple SysEx8 "streams" that simultaneously run within a UMP stream
+// (e.g. sysex8 start packet for stream #1, sysex8 continue packet for stream #1,
+//  sysex8 start packet for stream #2, sysex8 continue packet for stream #1,
+//  sysex8 continue packet for stream #2, sysex8 complete packet for stream #3,
+//  sysex8 end packet for stream #2, sysex8 end packet for strean #1 ...).
+//
+// Those stream state must be preserved during UMP parsing. It is represented as
+// `cmidi2_ump_binary_read_state` struct.
+//
+// There are handful of usage scenarios where we...
+// - want to handle them all
+// - want to handle only relevant ones
+// - can control what we generate and determine that only one stream can appear so
+//   the context stream is always obvious
+//
+// To handle them all, we need "stream selector". There is a function type
+// `cmidi2_ump_stream_selector_func`, and a function pointer is passed to the entry
+// point `cmidi2_ump_get_sysex8_data()` function.
+//
+// Another control point is where we want to finish parsing sysex8. Whenever a relevant
+// stream is parsed, `cmidi2_ump_get_syex8_data()` calls "continuity checker" function
+// which is typed as `cmidi2_ump_binary_read_continuity_checker_func`.
+// If this function returns true, then it completes parsing, returning the number of
+// the parsed UMPs (in uint32_t length).
+//
+// See `testType5Messages_sysex8_reader_writer()` testcase for the actual usage example.
+//
+
+enum cmidi2_ump_binary_reader_result_code {
+    CMIDI2_BINARY_READER_RESULT_INCOMPLETE = 0,
+    CMIDI2_BINARY_READER_RESULT_COMPLETE = 1,
+    CMIDI2_BINARY_READER_RESULT_NO_SPACE = 2,
+};
+
+typedef struct cmidi2_ump_binary_read_state {
+    void* context;
+    uint8_t *data;
+    size_t dataCapacity;
+    size_t dataSize;
+    bool continueOnCompletion;
+    enum cmidi2_ump_binary_reader_result_code resultCode;
+} cmidi2_ump_binary_read_state;
+
+static inline void cmidi2_ump_binary_read_state_reset(cmidi2_ump_binary_read_state* state) {
+    state->dataSize = 0;
+    state->resultCode = CMIDI2_BINARY_READER_RESULT_INCOMPLETE;
+}
+
+static inline void cmidi2_ump_binary_read_state_init(cmidi2_ump_binary_read_state* state,
+                                                     void* context,
+                                                     uint8_t *dataBuffer,
+                                                     size_t dataCapacity,
+                                                     bool continueOnCompletion) {
+    state->context = context;
+    state->data = dataBuffer;
+    state->dataCapacity = dataCapacity;
+    state->continueOnCompletion = continueOnCompletion;
+    cmidi2_ump_binary_read_state_reset(state);
+}
+
+/// Binary stream selector for cmidi2_ump_get_sysex8_data() function.
+/// If you do not support simultaneous streams, just return a reference to a fixed `cmidi2_ump_binary_read_state` instance.
+/// If the targetSteramId does not indicate the streams the client handles, then it should return NULL.
+/// Note that the resulting state must contain a non-null data and valid dataCapacity i.e. it must be already assigned.
+/// Also note that the function implementation should not try to allocate a new instance of state
+/// - otherwise it will break realtime safety.
+typedef cmidi2_ump_binary_read_state*(*cmidi2_ump_stream_selector_func)(uint8_t targetStreamId, void* context);
+
+/// Binary stream continuity checker for cmidi2_ump_get_sysex8_data() function.
+/// If you do not support simultaneous streams, then it should reset stream state (dataSize etc.) when new stream starts.
+/// Return true to continue parsing, otherwise return false. It is useful to determine whether it
+/// should break or not when a stream is fully read (status code is 3 = CMIDI2_SYSEX_END).
+/// `cmidi2_ump_get_sysex8_data()` can take NULL for this function pointer at `continuityChecker` argument,
+/// then it falls back to the "default" behavior.
+/// By default, it finishes parsing when a stream completed and `continueOnCompletion` was `false`.
+typedef bool(*cmidi2_ump_binary_read_continuity_checker_func)(cmidi2_ump_binary_read_state* stream, cmidi2_ump* ump);
+
+// it is a special copy function that only works with sysex8 memory state at `src` that can access beyond `sizeInBytes`.
+void cmidi2_internal_sysex8_copy_data_byte_swapping(uint8_t* dst, uint8_t srcHead, uint32_t* srcTail, size_t sizeInBytes) {
+    if (sizeInBytes == 0)
+        return;
+
+    // the first byte is at the lowest byte so it is always safe to copy as is.
+    dst[0] = srcHead;
+    uint8_t* d = dst + 1;
+    uint32_t* s = srcTail;
+    sizeInBytes--;
+
+    // copy the rest
+    size_t i = 0;
+    while (i + 3 < sizeInBytes) {
+        uint32_t i32 = *s;
+        d[i++] = i32 >> 24;
+        d[i++] = (i32 >> 16) & 0xFF;
+        d[i++] = (i32 >> 8) & 0xFF;
+        d[i++] = i32 & 0xFF;
+        s++;
+    }
+    for (; i < sizeInBytes; i++)
+        d[i] = s[i + 3 - i % 4];
+}
+
+/// Parse and store sysex8 binary, using some fine-tuned behavioral functions.
+/// Return the number of parsed packets (in cmidi2_ump == uint32_t)
+static inline size_t cmidi2_ump_get_sysex8_data(
+        cmidi2_ump_stream_selector_func streamSelector,
+        void* streamSelectorContext,
+        cmidi2_ump_binary_read_continuity_checker_func continuityChecker,
+        const cmidi2_ump* ump,
+        const size_t umpCapacityInInt) {
+
+    cmidi2_ump *umpPtr = (cmidi2_ump*) ump, *umpEnd = (cmidi2_ump*) ump + umpCapacityInInt;
+    for (;umpPtr < umpEnd; umpPtr++) {
+        if (cmidi2_ump_get_message_type(umpPtr) != CMIDI2_MESSAGE_TYPE_SYSEX8_MDS)
+            continue;
+        switch (cmidi2_ump_get_status_code(umpPtr)) {
+            case CMIDI2_SYSEX_IN_ONE_UMP:
+            case CMIDI2_SYSEX_START:
+            case CMIDI2_SYSEX_END:
+            case CMIDI2_SYSEX_CONTINUE:
+                break;
+            default:
+                continue; // the only expected value here is MDS (8 or 9)
+        }
+
+        cmidi2_ump_binary_read_state *state = streamSelector(cmidi2_ump_get_sysex8_stream_id(umpPtr), streamSelectorContext);
+        if (state == NULL)
+            continue;
+
+        size_t copySize = cmidi2_ump_get_sysex8_num_bytes(umpPtr);
+        if (state->dataSize + copySize >= state->dataCapacity) {
+            state->resultCode = CMIDI2_BINARY_READER_RESULT_NO_SPACE;
+            return umpPtr - ump;
+        }
+
+        if (cmidi2_util_is_platform_little_endian())
+            // We need to swap data along with byte order for resulting data...
+            cmidi2_internal_sysex8_copy_data_byte_swapping(state->data + state->dataSize, (*umpPtr) & 0xFF, umpPtr + 1, copySize);
+        else
+            memcpy(state->data + state->dataSize, ((uint8_t*) (void*) umpPtr) + 3, copySize);
+
+        state->dataSize += copySize;
+
+        if (continuityChecker != NULL)
+            if (continuityChecker(state, umpPtr))
+                return ++umpPtr - ump; // "break here" is indicated
+
+        // otherwise default continuity checker
+        switch (cmidi2_ump_get_status_code(umpPtr)) {
+            case CMIDI2_SYSEX_IN_ONE_UMP:
+            case CMIDI2_SYSEX_END:
+                state->resultCode = CMIDI2_BINARY_READER_RESULT_COMPLETE;
+                if (state->continueOnCompletion)
+                    return ++umpPtr - ump; // default "break here" condition.
+                break;
+        }
+    }
+    // finished parsing while no stream indicated "break here" for completion.
+    return umpPtr - ump;
+}
+
+// --------
 // sequence iterator
 
 /* byte stream splitter */
@@ -922,7 +1096,9 @@ static inline void* cmidi2_ump_sequence_next_be(const void* ptr) {
         (iter) < ((uint8_t*) ptr) + numBytes; \
         (iter) = (uint8_t*) cmidi2_ump_sequence_next_be(iter))
 
+// --------
 // MIDI CI support.
+// TODO: it still does not support June 2023 updates.
 
 #define CMIDI2_CI_SUB_ID 0xD
 #define CMIDI2_CI_SUB_ID_2_DISCOVERY_INQUIRY 0x70

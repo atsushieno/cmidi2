@@ -2,6 +2,7 @@
 #include <inttypes.h>
 #include <assert.h>
 #include <string.h>
+#include <stdlib.h>
 #include "cmidi2.h"
 
 
@@ -194,6 +195,86 @@ void testType5Messages_sysex()
     assert(result2 == 0x0000000000000000);
 }
 
+void* sysex8_binary_reader_helper_read_into_ump_forge(uint64_t data1, uint64_t data2, size_t index, void* context) {
+    cmidi2_ump_forge* forge = (cmidi2_ump_forge*) context;
+    cmidi2_ump_forge_add_packet_128(forge, data1, data2);
+    return NULL;
+}
+
+cmidi2_ump_binary_read_state* sysex8_binary_reader_helper_select_stream(uint8_t targetStreamId, void* context) {
+    return (cmidi2_ump_binary_read_state*) context;
+}
+
+bool cmidi2_ump_binary_reader_helper_check_continuity(cmidi2_ump_binary_read_state* stream, cmidi2_ump* ump) {
+    switch (cmidi2_ump_get_status_code(ump)) {
+        case CMIDI2_SYSEX_IN_ONE_UMP:
+        case CMIDI2_SYSEX_END:
+            stream->resultCode = CMIDI2_BINARY_READER_RESULT_COMPLETE;
+            break;
+    }
+    return true; // break here
+}
+
+void testType5Messages_sysex8_reader_writer()
+{
+    uint8_t gsReset[] = {0x41, 0x10, 0x42, 0x12, 0x40, 0x00, 0x7F, 0x00, 0x41};
+    uint8_t* ump_buffer = calloc(1, 4096);
+    cmidi2_ump_forge forge;
+    cmidi2_ump_forge_init(&forge, (cmidi2_ump*) ump_buffer, 4096);
+    assert(NULL == cmidi2_ump_sysex8_process(0, gsReset, sizeof(gsReset), 0, sysex8_binary_reader_helper_read_into_ump_forge, &forge));
+    
+    //for (int i = 0; i < 16; i++)
+    //    printf("%x ", ump_buffer[i]);
+    //printf("\n");
+
+    // Note that bytes are in native order.
+    // FIXME: support big endian platform
+    assert(ump_buffer[3] == 0x50); // sysex8
+    assert(ump_buffer[2] == 0x0A); // complete packet, size (note that size contains that of streamId)
+    assert(ump_buffer[1] == 0); // stream Id
+    assert(ump_buffer[0] == 0x41); // sysex contents...
+    assert(ump_buffer[7] == 0x10);
+    assert(ump_buffer[6] == 0x42);
+    assert(ump_buffer[5] == 0x12);
+    assert(ump_buffer[4] == 0x40);
+    assert(ump_buffer[11] == 0);
+    assert(ump_buffer[10] == 0x7F);
+    assert(ump_buffer[9] == 0);
+    assert(ump_buffer[8] == 0x41);
+    assert(ump_buffer[15] == 0);
+    assert(ump_buffer[14] == 0);
+    assert(ump_buffer[13] == 0);
+    assert(ump_buffer[12] == 0);
+
+    uint8_t parseBuffer[4096];
+    memset(parseBuffer, 0, 4096);
+    cmidi2_ump_binary_read_state readState;
+    cmidi2_ump_binary_read_state_init(&readState, NULL, parseBuffer, 4096, false);
+    size_t numUmpParsed = cmidi2_ump_get_sysex8_data(
+        sysex8_binary_reader_helper_select_stream,
+        &readState,
+        cmidi2_ump_binary_reader_helper_check_continuity,
+        (cmidi2_ump*) ump_buffer,
+        4096);
+    assert(numUmpParsed == 1);
+    assert(readState.dataSize == 10);
+    assert(readState.resultCode == CMIDI2_BINARY_READER_RESULT_COMPLETE);
+
+    //for (int i = 0; i < 16; i++)
+    //    printf("%x ", parseBuffer[i]);
+    //printf("\n");
+
+    assert(parseBuffer[0] == 0x41); // sysex contents...
+    assert(parseBuffer[1] == 0x10);
+    assert(parseBuffer[2] == 0x42);
+    assert(parseBuffer[3] == 0x12);
+    assert(parseBuffer[4] == 0x40);
+    assert(parseBuffer[5] == 0);
+    assert(parseBuffer[6] == 0x7F);
+    assert(parseBuffer[7] == 0);
+    assert(parseBuffer[8] == 0x41);
+}
+
 void testType5Messages_mds()
 {
     int length = cmidi2_ump_mds_get_num_payloads(0);
@@ -244,6 +325,7 @@ void testType5Messages_mds()
 void testType5Messages()
 {
     testType5Messages_sysex();
+    testType5Messages_sysex8_reader_writer();
     testType5Messages_mds();
 }
 
