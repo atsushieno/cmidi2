@@ -20,6 +20,8 @@ If you use it then you should not expect any API/ABI stability at this state.
 
 [atsushieno/aap-core](https://github.com/atsushieno/aap-core/), [atsushieno/aap-lv2](https://github.com/atsushieno/aap-lv2), and [atsushieno/aap-juce](https://github.com/atsushieno/aap-juce) make use of this library.
 
+[libremidi](https://github.com/jcelerier/libremidi) internally uses cmidi2 too.
+
 ## License
 
 cmidi2 is distributed under the MIT License.
