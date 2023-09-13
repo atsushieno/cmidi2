@@ -258,8 +258,8 @@ void testType5Messages_sysex8_reader_writer()
         cmidi2_ump_binary_reader_helper_check_continuity,
         (cmidi2_ump*) ump_buffer,
         4096);
-    assert(numUmpParsed == 1);
-    assert(readState.dataSize == 10);
+    assert(numUmpParsed == 4);
+    assert(readState.dataSize == 9);
     assert(readState.resultCode == CMIDI2_BINARY_READER_RESULT_COMPLETE);
 
     //for (int i = 0; i < 16; i++)

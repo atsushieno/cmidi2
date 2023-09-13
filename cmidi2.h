@@ -1005,7 +1005,7 @@ static inline void cmidi2_internal_sysex8_copy_data_byte_swapping(uint8_t* dst, 
 }
 
 /// Parse and store sysex8 binary, using some fine-tuned behavioral functions.
-/// Return the number of parsed packets (in cmidi2_ump == uint32_t)
+/// Return the number of 32-bit ints (number of `cmidi2_ump`s)
 static inline size_t cmidi2_ump_get_sysex8_data(
         cmidi2_ump_stream_selector_func streamSelector,
         void* streamSelectorContext,
@@ -1014,7 +1014,7 @@ static inline size_t cmidi2_ump_get_sysex8_data(
         const size_t umpCapacityInInt) {
 
     cmidi2_ump *umpPtr = (cmidi2_ump*) ump, *umpEnd = (cmidi2_ump*) ump + umpCapacityInInt;
-    for (;umpPtr < umpEnd; umpPtr++) {
+    for (;umpPtr < umpEnd; umpPtr += cmidi2_ump_get_message_size_bytes(umpPtr) / sizeof(cmidi2_ump)) {
         if (cmidi2_ump_get_message_type(umpPtr) != CMIDI2_MESSAGE_TYPE_SYSEX8_MDS)
             continue;
         switch (cmidi2_ump_get_status_code(umpPtr)) {
@@ -1031,7 +1031,7 @@ static inline size_t cmidi2_ump_get_sysex8_data(
         if (state == NULL)
             continue;
 
-        size_t copySize = cmidi2_ump_get_sysex8_num_bytes(umpPtr);
+        size_t copySize = cmidi2_ump_get_sysex8_num_bytes(umpPtr) - 1; // SysEx8 size field contains the size byte itself, hence -1.
         if (state->dataSize + copySize >= state->dataCapacity) {
             state->resultCode = CMIDI2_BINARY_READER_RESULT_NO_SPACE;
             return umpPtr - ump;
@@ -1047,7 +1047,7 @@ static inline size_t cmidi2_ump_get_sysex8_data(
 
         if (continuityChecker != NULL)
             if (continuityChecker(state, umpPtr))
-                return ++umpPtr - ump; // "break here" is indicated
+                return umpPtr + cmidi2_ump_get_message_size_bytes(umpPtr) / sizeof(cmidi2_ump) - ump; // "break here" is indicated
 
         // otherwise default continuity checker
         switch (cmidi2_ump_get_status_code(umpPtr)) {
@@ -1055,7 +1055,7 @@ static inline size_t cmidi2_ump_get_sysex8_data(
             case CMIDI2_SYSEX_END:
                 state->resultCode = CMIDI2_BINARY_READER_RESULT_COMPLETE;
                 if (state->continueOnCompletion)
-                    return ++umpPtr - ump; // default "break here" condition.
+                    return umpPtr + cmidi2_ump_get_message_size_bytes(umpPtr) / sizeof(cmidi2_ump) - ump; // default "break here" condition.
                 break;
         }
     }
@@ -2029,10 +2029,10 @@ typedef struct cmidi2_ump_forge {
     size_t offset;
 } cmidi2_ump_forge;
 
-static inline void cmidi2_ump_forge_init(cmidi2_ump_forge *forge, cmidi2_ump* buffer, size_t capacity)
+static inline void cmidi2_ump_forge_init(cmidi2_ump_forge *forge, cmidi2_ump* buffer, size_t capacityInBytes)
 {
     forge->ump = buffer;
-    forge->capacity = capacity;
+    forge->capacity = capacityInBytes;
     forge->offset = 0;
 }
 
@@ -2063,7 +2063,7 @@ static inline bool cmidi2_ump_forge_add_packet_128(cmidi2_ump_forge* forge, uint
     int size = 16;
     if (forge->offset + size > forge->capacity)
         return false;
-    uint8_t* p = (uint8_t*) forge->ump + forge->offset;
+    uint8_t* p = ((uint8_t*) forge->ump) + forge->offset;
     cmidi2_ump_write128((cmidi2_ump*) p, ump1, ump2);
     forge->offset += size;
     return true;
