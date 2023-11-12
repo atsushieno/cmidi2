@@ -31,16 +31,17 @@ enum cmidi2_status_code {
     CMIDI2_STATUS_PER_NOTE_MANAGEMENT = 0xF0,
 };
 
-// TODO: it still does not support June 2023 updates.
+// TODO: it still does not support most of June 2023 updates.
 
 enum cmidi2_message_type {
-    // MIDI 2.0 UMP Section 3.
     CMIDI2_MESSAGE_TYPE_UTILITY = 0,
     CMIDI2_MESSAGE_TYPE_SYSTEM = 1,
     CMIDI2_MESSAGE_TYPE_MIDI_1_CHANNEL = 2,
     CMIDI2_MESSAGE_TYPE_SYSEX7 = 3,
     CMIDI2_MESSAGE_TYPE_MIDI_2_CHANNEL = 4,
     CMIDI2_MESSAGE_TYPE_SYSEX8_MDS = 5,
+    CMIDI2_MESSAGE_TYPE_FLEX_DATA = 0xD,
+    CMIDI2_MESSAGE_TYPE_UMP_STREAM = 0xF,
 };
 
 enum cmidi2_ci_protocol_bytes {
@@ -1104,6 +1105,7 @@ static inline void* cmidi2_ump_sequence_next_be(const void* ptr) {
 #define CMIDI2_CI_SUB_ID_2_DISCOVERY_INQUIRY 0x70
 #define CMIDI2_CI_SUB_ID_2_DISCOVERY_REPLY 0x71
 #define CMIDI2_CI_SUB_ID_2_INVALIDATE_MUID 0x7E
+#define CMIDI2_CI_SUB_ID_2_ACK 0x7F
 #define CMIDI2_CI_SUB_ID_2_NAK 0x7F
 #define CMIDI2_CI_SUB_ID_2_PROTOCOL_NEGOTIATION_INQUIRY 0x10
 #define CMIDI2_CI_SUB_ID_2_PROTOCOL_NEGOTIATION_REPLY 0x11
@@ -1198,7 +1200,8 @@ static inline void cmidi2_ci_message_common(uint8_t* buf,
 static inline void cmidi2_ci_discovery_common(uint8_t* buf, uint8_t sysexSubId2,
     uint8_t versionAndFormat, uint32_t sourceMUID, uint32_t destinationMUID,
     uint32_t deviceManufacturer3Bytes, uint16_t deviceFamily, uint16_t deviceFamilyModelNumber,
-    uint32_t softwareRevisionLevel, uint8_t ciCategorySupported, uint32_t receivableMaxSysExSize) {
+    uint32_t softwareRevisionLevel, uint8_t ciCategorySupported, uint32_t receivableMaxSysExSize,
+    uint8_t initiatorOutputPathId) {
     cmidi2_ci_message_common(buf, 0x7F, sysexSubId2, versionAndFormat, sourceMUID, destinationMUID);
     cmidi2_ci_direct_uint32_at(buf + 13, deviceManufacturer3Bytes); // the last byte is extraneous, but will be overwritten next.
     cmidi2_ci_direct_uint16_at(buf + 16, deviceFamily);
@@ -1207,40 +1210,71 @@ static inline void cmidi2_ci_discovery_common(uint8_t* buf, uint8_t sysexSubId2,
     cmidi2_ci_direct_uint32_at(buf + 20, softwareRevisionLevel);
     buf[24] = ciCategorySupported;
     cmidi2_ci_direct_uint32_at(buf + 25, receivableMaxSysExSize);
+    buf[29] = initiatorOutputPathId;
 }
 
 static inline void cmidi2_ci_discovery(uint8_t* buf,
     uint8_t versionAndFormat, uint32_t sourceMUID,
     uint32_t deviceManufacturer, uint16_t deviceFamily, uint16_t deviceFamilyModelNumber,
-    uint32_t softwareRevisionLevel, uint8_t ciCategorySupported, uint32_t receivableMaxSysExSize) {
+    uint32_t softwareRevisionLevel, uint8_t ciCategorySupported, uint32_t receivableMaxSysExSize,
+    uint8_t initiatorOutputPathId) {
     cmidi2_ci_discovery_common(buf, CMIDI2_CI_SUB_ID_2_DISCOVERY_INQUIRY,
         versionAndFormat, sourceMUID, 0x7F7F7F7F,
         deviceManufacturer, deviceFamily, deviceFamilyModelNumber,
-        softwareRevisionLevel, ciCategorySupported, receivableMaxSysExSize);
+        softwareRevisionLevel, ciCategorySupported, receivableMaxSysExSize,
+        initiatorOutputPathId);
 }
 
 static inline void cmidi2_ci_discovery_reply(uint8_t* buf,
     uint8_t versionAndFormat, uint32_t sourceMUID, uint32_t destinationMUID,
     uint32_t deviceManufacturer, uint16_t deviceFamily, uint16_t deviceFamilyModelNumber,
-    uint32_t softwareRevisionLevel, uint8_t ciCategorySupported, uint32_t receivableMaxSysExSize) {
+    uint32_t softwareRevisionLevel, uint8_t ciCategorySupported, uint32_t receivableMaxSysExSize,
+    uint8_t initiatorOutputPathId, uint8_t functionBlockOr7Fh) {
     cmidi2_ci_discovery_common(buf, CMIDI2_CI_SUB_ID_2_DISCOVERY_REPLY,
         versionAndFormat, sourceMUID, destinationMUID,
         deviceManufacturer, deviceFamily, deviceFamilyModelNumber,
-        softwareRevisionLevel, ciCategorySupported, receivableMaxSysExSize);
+        softwareRevisionLevel, ciCategorySupported, receivableMaxSysExSize,
+        initiatorOutputPathId);
+    buf[30] = functionBlockOr7Fh;
 }
 
 static inline void cmidi2_ci_discovery_invalidate_muid(uint8_t* buf,
     uint8_t versionAndFormat, uint32_t sourceMUID, uint32_t targetMUID) {
-    cmidi2_ci_message_common(buf, 0x7F, 0x7E, versionAndFormat, sourceMUID, 0x7F7F7F7F);
+    cmidi2_ci_message_common(buf, 0x7F, CMIDI2_CI_SUB_ID_2_INVALIDATE_MUID, versionAndFormat, sourceMUID, 0x7F7F7F7F);
     cmidi2_ci_direct_uint32_at(buf + 13, targetMUID);
 }
 
-static inline void cmidi2_ci_discovery_nak(uint8_t* buf, uint8_t deviceId,
-    uint8_t versionAndFormat, uint32_t sourceMUID, uint32_t destinationMUID) {
-    cmidi2_ci_message_common(buf, deviceId, 0x7F, versionAndFormat, sourceMUID, destinationMUID);
+static inline void cmidi2_ci_ack_nak_common(uint8_t* buf, uint8_t deviceId,
+    uint8_t versionAndFormat, uint32_t sourceMUID, uint32_t destinationMUID,
+    uint8_t originalTransactionSubID2Class, uint8_t statusCode, uint8_t statusData,
+    uint8_t* details5Bytes, uint16_t messageLength, const char* messageText) {
+    cmidi2_ci_message_common(buf, deviceId, CMIDI2_CI_SUB_ID_2_ACK, versionAndFormat, sourceMUID, destinationMUID);
+    buf[13] = originalTransactionSubID2Class;
+    buf[14] = statusCode;
+    buf[15] = statusData;
+    memcpy(buf + 16, details5Bytes, 5);
+    cmidi2_ci_direct_uint16_at(buf + 21, messageLength);
+    memcpy(buf + 23, messageText, messageLength);
+}
+
+static inline void cmidi2_ci_ack(uint8_t* buf, uint8_t deviceId,
+    uint8_t versionAndFormat, uint32_t sourceMUID, uint32_t destinationMUID,
+    uint8_t originalTransactionSubID2Class, uint8_t ackStatusCode, uint8_t ackStatusData,
+    uint8_t* ackDetails5Bytes, uint16_t messageLength, const char* messageText) {
+    cmidi2_ci_ack_nak_common(buf, deviceId, versionAndFormat, sourceMUID, destinationMUID,
+        originalTransactionSubID2Class, ackStatusCode, ackStatusData, ackDetails5Bytes, messageLength, messageText);
+}
+
+static inline void cmidi2_ci_nak(uint8_t* buf, uint8_t deviceId,
+    uint8_t versionAndFormat, uint32_t sourceMUID, uint32_t destinationMUID,
+    uint8_t originalTransactionSubID2Class, uint8_t nakStatusCode, uint8_t nakStatusData,
+    uint8_t* nakDetails5Bytes, uint16_t messageLength, const char* messageText) {
+    cmidi2_ci_ack_nak_common(buf, deviceId, versionAndFormat, sourceMUID, destinationMUID,
+        originalTransactionSubID2Class, nakStatusCode, nakStatusData, nakDetails5Bytes, messageLength, messageText);
 }
 
 // Protocol Negotiation
+// Note that it was removed in MIDI 2.0 specification June 2023 Updates (MIDI-CI 1.2).
 
 static inline void cmidi2_ci_protocol_info(uint8_t* buf, cmidi2_ci_protocol_type_info info) {
     buf[0] = info.type;

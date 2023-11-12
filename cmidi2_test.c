@@ -447,22 +447,23 @@ void testDiscoveryMessages()
         // LAMESPEC: Software Revision Level does not mention in which endianness this field is stored.
         0x7F, 0x5F, 0x3F, 0x1F,
         0b00001110,
-        0x00, 0x02, 0, 0
+        0x00, 0x02, 0, 0,
+        9
         };
-    uint8_t actual1[29];
+    uint8_t actual1[30];
     cmidi2_ci_discovery(actual1, 1, 0x10101010,
         0x123456, 0x1357, 0x2468, 0x1F3F5F7F,
         CMIDI2_CI_PROTOCOL_NEGOTIATION_SUPPORTED | CMIDI2_CI_PROFILE_CONFIGURATION_SUPPORTED | CMIDI2_CI_PROPERTY_EXCHANGE_SUPPORTED,
-        512);
+        512, 9);
     //for (int i = 0; i < 29; i++) printf("%x ", actual1[i]); puts("");
-    assert(memcmp(expected1, actual1, 29) == 0);
+    assert(memcmp(expected1, actual1, 30) == 0);
 
     // Service Discovery Reply
-    uint8_t actual2[29];
+    uint8_t actual2[31];
     cmidi2_ci_discovery_reply(actual2, 1, 0x10101010, 0x20202020,
         0x123456, 0x1357, 0x2468, 0x1F3F5F7F,
         CMIDI2_CI_PROTOCOL_NEGOTIATION_SUPPORTED | CMIDI2_CI_PROFILE_CONFIGURATION_SUPPORTED | CMIDI2_CI_PROPERTY_EXCHANGE_SUPPORTED,
-        512);
+        512, 9, 0x7F);
     assert(actual2[3] == 0x71);
     for (int i = 9; i < 13; i++) assert(actual2[i] == 0x20); // destination ID is not 7F7F7F7F.
 
@@ -476,12 +477,17 @@ void testDiscoveryMessages()
 
     // NAK
     uint8_t expected4[] = {0x7E, 5, 0x0D, 0x7F, 1,
-        0x10, 0x10, 0x10, 0x10, 0x20, 0x20, 0x20, 0x20};
-    uint8_t actual4[13];
-    cmidi2_ci_discovery_nak(actual4, 5, 1, 0x10101010, 0x20202020);
-    //for (int i = 0; i < 13; i++) printf("%x ", actual4[i]); puts("");
-    assert(memcmp(expected4, actual4, 13) == 0);
+        0x10, 0x10, 0x10, 0x10, 0x20, 0x20, 0x20, 0x20,
+        0x34, 0, 0, 1,2,3,4,5, 9, 0, 'Z', 'A', 'P', 'Z', 'A', 'P', 'Z', 'A', 'P'};
+    uint8_t actual4[32];
+    uint8_t nakDetails[5] = {1,2,3,4,5};
+    cmidi2_ci_nak(actual4, 5, 1, 0x10101010, 0x20202020,
+        0x34, 0, 0, nakDetails, 9, "ZAPZAPZAP");
+    //for (int i = 0; i < 32; i++) printf("%x ", actual4[i]); puts("");
+    assert(memcmp(expected4, actual4, 32) == 0);
 }
+
+// Note that Protocol Negotiation was removed in MIDI 2.0 specification June 2023 Updates (MIDI-CI 1.2).
 
 void testProtocolNegotiationMessages()
 {
@@ -724,7 +730,7 @@ void testPropertyExchangeMessages()
 int testMidiCI ()
 {
     testDiscoveryMessages();
-    testProtocolNegotiationMessages();
+    //testProtocolNegotiationMessages();
     testProfileConfigurationMessages();
     testPropertyExchangeMessages();
     return 0;
