@@ -1122,19 +1122,26 @@ static inline void* cmidi2_ump_sequence_next_be(const void* ptr) {
 #define CMIDI2_CI_SUB_ID_2_PROFILE_SPECIFIC_DATA 0x2F
 #define CMIDI2_CI_SUB_ID_2_PROPERTY_CAPABILITIES_INQUIRY 0x30
 #define CMIDI2_CI_SUB_ID_2_PROPERTY_CAPABILITIES_REPLY 0x31
-#define CMIDI2_CI_SUB_ID_2_PROPERTY_HAS_DATA_INQUIRY 0x32
+#define CMIDI2_CI_SUB_ID_2_PROPERTY_HAS_DATA 0x32
 #define CMIDI2_CI_SUB_ID_2_PROPERTY_HAS_DATA_REPLY 0x33
-#define CMIDI2_CI_SUB_ID_2_PROPERTY_GET_DATA_INQUIRY 0x34
+#define CMIDI2_CI_SUB_ID_2_PROPERTY_GET_DATA 0x34
 #define CMIDI2_CI_SUB_ID_2_PROPERTY_GET_DATA_REPLY 0x35
-#define CMIDI2_CI_SUB_ID_2_PROPERTY_SET_DATA_INQUIRY 0x36
+#define CMIDI2_CI_SUB_ID_2_PROPERTY_SET_DATA 0x36
 #define CMIDI2_CI_SUB_ID_2_PROPERTY_SET_DATA_REPLY 0x37
 #define CMIDI2_CI_SUB_ID_2_PROPERTY_SUBSCRIBE 0x38
 #define CMIDI2_CI_SUB_ID_2_PROPERTY_SUBSCRIBE_REPLY 0x39
 #define CMIDI2_CI_SUB_ID_2_PROPERTY_NOTIFY 0x3F
+#define CMIDI2_CI_SUB_ID_2_PROCESS_GET_CAPABILITIES 0x40
+#define CMIDI2_CI_SUB_ID_2_PROCESS_GET_CAPABILITIES_REPLY 0x41
+#define CMIDI2_CI_SUB_ID_2_PROCESS_GET_MIDI_REPORT 0x42
+#define CMIDI2_CI_SUB_ID_2_PROCESS_GET_MIDI_REPORT_REPLY 0x43
+#define CMIDI2_CI_SUB_ID_2_PROCESS_GET_MIDI_REPORT_END 0x44
 
 #define CMIDI2_CI_PROTOCOL_NEGOTIATION_SUPPORTED 2
 #define CMIDI2_CI_PROFILE_CONFIGURATION_SUPPORTED 4
 #define CMIDI2_CI_PROPERTY_EXCHANGE_SUPPORTED 8
+
+#define CMIDI2_CI_DEVICE_ID_WHOLE_FUNCTION_BLOCK 0x7F
 
 typedef struct {
     uint8_t type;
@@ -1188,7 +1195,7 @@ static inline void cmidi2_ci_message_common(uint8_t* buf,
         uint8_t destination, uint8_t sysexSubId2, uint8_t versionAndFormat, uint32_t sourceMUID, uint32_t destinationMUID) {
     buf[0] = 0x7E;
     buf[1] = destination;
-    buf[2] = 0xD;
+    buf[2] = CMIDI2_CI_SUB_ID;
     buf[3] = sysexSubId2;
     buf[4] = versionAndFormat;
     cmidi2_ci_direct_uint32_at(buf + 5, sourceMUID);
@@ -1202,7 +1209,7 @@ static inline void cmidi2_ci_discovery_common(uint8_t* buf, uint8_t sysexSubId2,
     uint32_t deviceManufacturer3Bytes, uint16_t deviceFamily, uint16_t deviceFamilyModelNumber,
     uint32_t softwareRevisionLevel, uint8_t ciCategorySupported, uint32_t receivableMaxSysExSize,
     uint8_t initiatorOutputPathId) {
-    cmidi2_ci_message_common(buf, 0x7F, sysexSubId2, versionAndFormat, sourceMUID, destinationMUID);
+    cmidi2_ci_message_common(buf, CMIDI2_CI_DEVICE_ID_WHOLE_FUNCTION_BLOCK, sysexSubId2, versionAndFormat, sourceMUID, destinationMUID);
     cmidi2_ci_direct_uint32_at(buf + 13, deviceManufacturer3Bytes); // the last byte is extraneous, but will be overwritten next.
     cmidi2_ci_direct_uint16_at(buf + 16, deviceFamily);
     cmidi2_ci_direct_uint16_at(buf + 18, deviceFamilyModelNumber);
@@ -1331,6 +1338,11 @@ static inline void cmidi2_ci_protocol_confirm_established(uint8_t* buf,
     buf[13] = authorityLevel;
 }
 
+static inline int32_t cmidi2_ci_try_parse_new_protocol(uint8_t* buf, size_t length) {
+    return (length != 19 || buf[0] != 0x7E || buf[1] != 0x7F || buf[2] != CMIDI2_CI_SUB_ID ||
+            buf[3] != CMIDI2_CI_SUB_ID_2_SET_NEW_PROTOCOL || buf[4] != 1) ? 0 : buf[14];
+}
+
 // Profile Configuration
 
 static inline void cmidi2_ci_profile(uint8_t* buf, cmidi2_profile_id info) {
@@ -1415,11 +1427,146 @@ static inline void cmidi2_ci_property_common(uint8_t* buf, uint8_t destination, 
     memcpy(buf + 22 + headerSize, data, dataSize);
 }
 
-static inline int32_t cmidi2_ci_try_parse_new_protocol(uint8_t* buf, size_t length) {
-    return (length != 19 || buf[0] != 0x7E || buf[1] != 0x7F || buf[2] != CMIDI2_CI_SUB_ID ||
-            buf[3] != CMIDI2_CI_SUB_ID_2_SET_NEW_PROTOCOL || buf[4] != 1) ? 0 : buf[14];
+static inline void cmidi2_ci_property_get_capabilities_reply(uint8_t* buf, uint8_t versionAndFormat,
+    uint32_t sourceMUID, uint32_t destinationMUID, uint8_t maxSupportedRequests,
+    uint8_t peMajorVersion, uint8_t peMinorVersion) {
+    cmidi2_ci_message_common(buf, CMIDI2_CI_DEVICE_ID_WHOLE_FUNCTION_BLOCK, CMIDI2_CI_SUB_ID_2_PROPERTY_CAPABILITIES_REPLY,
+        versionAndFormat, sourceMUID, destinationMUID);
+    buf[13] = maxSupportedRequests;
+    buf[14] = peMajorVersion;
+    buf[15] = peMinorVersion;
 }
 
+static inline void cmidi2_ci_property_data_common(uint8_t* buf, uint8_t subId2,
+    uint8_t versionAndFormat, uint32_t sourceMUID, uint32_t destinationMUID, uint8_t requestId,
+    size_t headerSize, const uint8_t* headerData,
+    uint16_t numChunksInMessage, uint16_t currentChunk, uint16_t propertyDataLength, const char* propertyData) {
+    cmidi2_ci_message_common(buf, CMIDI2_CI_DEVICE_ID_WHOLE_FUNCTION_BLOCK, subId2,
+        versionAndFormat, sourceMUID, destinationMUID);
+    buf[13] = requestId;
+    buf[14] = headerSize % 0xFF;
+    buf[15] = headerSize / 0xFF;
+    memcpy(buf + 16, headerData, headerSize);
+    cmidi2_ci_direct_uint16_at(buf + headerSize + 16, numChunksInMessage);
+    cmidi2_ci_direct_uint16_at(buf + headerSize + 18, currentChunk);
+    cmidi2_ci_direct_uint16_at(buf + headerSize + 20, propertyDataLength);
+    if (propertyData)
+        memcpy(buf + headerSize + 22, propertyData, propertyDataLength);
+}
+
+static inline void cmidi2_ci_property_get_data(uint8_t* buf, uint8_t versionAndFormat,
+    uint32_t sourceMUID, uint32_t destinationMUID, uint8_t requestId,
+    size_t headerSize, const uint8_t* headerData) {
+    cmidi2_ci_property_data_common(buf, CMIDI2_CI_SUB_ID_2_PROPERTY_GET_DATA,
+        versionAndFormat, sourceMUID, destinationMUID,
+        requestId, headerSize, headerData, 1, 1, 0, NULL);
+}
+
+static inline void cmidi2_ci_property_get_data_reply(uint8_t* buf, uint8_t versionAndFormat,
+    uint32_t sourceMUID, uint32_t destinationMUID, uint8_t requestId,
+    size_t headerSize, const uint8_t* headerData,
+    uint16_t numChunksInMessage, uint16_t currentChunk, uint16_t propertyDataLength, const char* propertyData) {
+    cmidi2_ci_property_data_common(buf, CMIDI2_CI_SUB_ID_2_PROPERTY_GET_DATA_REPLY,
+        versionAndFormat, sourceMUID, destinationMUID,
+        requestId, headerSize, headerData, numChunksInMessage, currentChunk, propertyDataLength, propertyData);
+}
+
+static inline void cmidi2_ci_property_set_data(uint8_t* buf, uint8_t versionAndFormat,
+    uint32_t sourceMUID, uint32_t destinationMUID, uint8_t requestId,
+    size_t headerSize, const uint8_t* headerData,
+    uint16_t numChunksInMessage, uint16_t currentChunk, uint16_t propertyDataLength, const char* propertyData) {
+    cmidi2_ci_property_data_common(buf, CMIDI2_CI_SUB_ID_2_PROPERTY_SET_DATA,
+        versionAndFormat, sourceMUID, destinationMUID,
+        requestId, headerSize, headerData, numChunksInMessage, currentChunk, propertyDataLength, propertyData);
+}
+
+static inline void cmidi2_ci_property_set_data_reply(uint8_t* buf, uint8_t versionAndFormat,
+    uint32_t sourceMUID, uint32_t destinationMUID, uint8_t requestId,
+    size_t headerSize, const uint8_t* headerData) {
+    cmidi2_ci_property_data_common(buf, CMIDI2_CI_SUB_ID_2_PROPERTY_SET_DATA_REPLY,
+        versionAndFormat, sourceMUID, destinationMUID,
+        requestId, headerSize, headerData, 1, 1, 0, NULL);
+}
+
+static inline void cmidi2_ci_property_subscribe(uint8_t* buf, uint8_t versionAndFormat,
+    uint32_t sourceMUID, uint32_t destinationMUID, uint8_t requestId,
+    size_t headerSize, const uint8_t* headerData,
+    uint16_t numChunksInMessage, uint16_t currentChunk, uint16_t propertyDataLength, const char* propertyData) {
+    cmidi2_ci_property_data_common(buf, CMIDI2_CI_SUB_ID_2_PROPERTY_SUBSCRIBE,
+        versionAndFormat, sourceMUID, destinationMUID,
+        requestId, headerSize, headerData, numChunksInMessage, currentChunk, propertyDataLength, propertyData);
+}
+
+static inline void cmidi2_ci_property_subscribe_reply(uint8_t* buf, uint8_t versionAndFormat,
+    uint32_t sourceMUID, uint32_t destinationMUID, uint8_t requestId,
+    size_t headerSize, const uint8_t* headerData,
+    uint16_t numChunksInMessage, uint16_t currentChunk, uint16_t propertyDataLength, const char* propertyData) {
+    cmidi2_ci_property_data_common(buf, CMIDI2_CI_SUB_ID_2_PROPERTY_SUBSCRIBE_REPLY,
+        versionAndFormat, sourceMUID, destinationMUID,
+        requestId, headerSize, headerData, numChunksInMessage, currentChunk, propertyDataLength, propertyData);
+}
+
+static inline void cmidi2_ci_property_notify(uint8_t* buf, uint8_t versionAndFormat,
+    uint32_t sourceMUID, uint32_t destinationMUID, uint8_t requestId,
+    size_t headerSize, const uint8_t* headerData,
+    uint16_t numChunksInMessage, uint16_t currentChunk, uint16_t propertyDataLength, const char* propertyData) {
+    cmidi2_ci_property_data_common(buf, CMIDI2_CI_SUB_ID_2_PROPERTY_NOTIFY,
+        versionAndFormat, sourceMUID, destinationMUID,
+        requestId, headerSize, headerData, numChunksInMessage, currentChunk, propertyDataLength, propertyData);
+}
+
+// Process Inquiry
+
+static inline void cmidi2_ci_process_get_capabilities(uint8_t* buf, uint8_t subId2, uint8_t versionAndFormat,
+    uint32_t sourceMUID, uint32_t destinationMUID) {
+    cmidi2_ci_message_common(buf, CMIDI2_CI_DEVICE_ID_WHOLE_FUNCTION_BLOCK, CMIDI2_CI_SUB_ID_2_PROCESS_GET_CAPABILITIES,
+        versionAndFormat, sourceMUID, destinationMUID);
+}
+
+static inline void cmidi2_ci_process_get_capabilities_reply(uint8_t* buf, uint8_t subId2, uint8_t versionAndFormat,
+    uint32_t sourceMUID, uint32_t destinationMUID, uint8_t processInquirySupportedFeatures) {
+    cmidi2_ci_message_common(buf, CMIDI2_CI_DEVICE_ID_WHOLE_FUNCTION_BLOCK, CMIDI2_CI_SUB_ID_2_PROCESS_GET_CAPABILITIES_REPLY,
+        versionAndFormat, sourceMUID, destinationMUID);
+    buf[13] = processInquirySupportedFeatures;
+}
+
+static inline void cmidi2_ci_process_midi_report_common(uint8_t* buf, uint8_t deviceId, uint8_t subId2, uint8_t versionAndFormat,
+    uint32_t sourceMUID, uint32_t destinationMUID,
+    uint8_t messageDataControl, uint8_t requestedSystemMessages,
+    uint8_t requestedChannelControllerMessages,
+    uint8_t requestedNoteDataMessages) {
+    cmidi2_ci_message_common(buf, deviceId, CMIDI2_CI_SUB_ID_2_PROCESS_GET_CAPABILITIES,
+        versionAndFormat, sourceMUID, destinationMUID);
+    buf[13] = messageDataControl;
+    buf[14] = requestedSystemMessages;
+    buf[15] = 0; // reserved
+    buf[16] = requestedChannelControllerMessages;
+    buf[17] = requestedNoteDataMessages;
+}
+
+static inline void cmidi2_ci_process_get_midi_report(uint8_t* buf, uint8_t deviceId, uint8_t versionAndFormat,
+    uint32_t sourceMUID, uint32_t destinationMUID,
+    uint8_t messageDataControl, uint8_t requestedSystemMessages,
+    uint8_t requestedChannelControllerMessages,
+    uint8_t requestedNoteDataMessages) {
+    cmidi2_ci_process_midi_report_common(buf, deviceId, CMIDI2_CI_SUB_ID_2_PROCESS_GET_MIDI_REPORT, versionAndFormat, sourceMUID, destinationMUID,
+        messageDataControl, requestedSystemMessages, requestedChannelControllerMessages, requestedNoteDataMessages);
+}
+
+static inline void cmidi2_ci_process_get_midi_report_reply(uint8_t* buf, uint8_t deviceId, uint8_t versionAndFormat,
+    uint32_t sourceMUID, uint32_t destinationMUID,
+    uint8_t messageDataControl, uint8_t requestedSystemMessages,
+    uint8_t requestedChannelControllerMessages,
+    uint8_t requestedNoteDataMessages) {
+    cmidi2_ci_process_midi_report_common(buf, deviceId, CMIDI2_CI_SUB_ID_2_PROCESS_GET_MIDI_REPORT_REPLY, versionAndFormat, sourceMUID, destinationMUID,
+        messageDataControl, requestedSystemMessages, requestedChannelControllerMessages, requestedNoteDataMessages);
+}
+
+static inline void cmidi2_ci_process_get_midi_report_end(uint8_t* buf, uint8_t deviceId, uint8_t versionAndFormat,
+    uint32_t sourceMUID, uint32_t destinationMUID) {
+    cmidi2_ci_message_common(buf, deviceId, CMIDI2_CI_SUB_ID_2_PROCESS_GET_MIDI_REPORT_END,
+        versionAndFormat, sourceMUID, destinationMUID);
+}
 
 // Miscellaneous MIDI Utilities
 

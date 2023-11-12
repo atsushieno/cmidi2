@@ -664,7 +664,7 @@ void testPropertyExchangeMessages()
         5, 0,
         55,66,77,88,99};
     uint8_t actual3[31];
-    cmidi2_ci_property_common(actual3, 5, CMIDI2_CI_SUB_ID_2_PROPERTY_HAS_DATA_INQUIRY,
+    cmidi2_ci_property_common(actual3, 5, CMIDI2_CI_SUB_ID_2_PROPERTY_HAS_DATA,
         0x10101010, 0x20202020,
         2, 4, header, 3, 1, 5, data);
     //for (int i = 0; i < 31; i++) printf("%x ", actual3[i]); puts("");
@@ -679,7 +679,7 @@ void testPropertyExchangeMessages()
 
     // Get Property Data
     uint8_t actual5[31];
-    cmidi2_ci_property_common(actual5, 5, CMIDI2_CI_SUB_ID_2_PROPERTY_GET_DATA_INQUIRY,
+    cmidi2_ci_property_common(actual5, 5, CMIDI2_CI_SUB_ID_2_PROPERTY_GET_DATA,
         0x10101010, 0x20202020,
         2, 4, header, 3, 1, 5, data);
     assert(actual5[3] == 0x34);
@@ -693,7 +693,7 @@ void testPropertyExchangeMessages()
 
     // Set Property Data
     uint8_t actual7[31];
-    cmidi2_ci_property_common(actual7, 5, CMIDI2_CI_SUB_ID_2_PROPERTY_SET_DATA_INQUIRY,
+    cmidi2_ci_property_common(actual7, 5, CMIDI2_CI_SUB_ID_2_PROPERTY_SET_DATA,
         0x10101010, 0x20202020,
         2, 4, header, 3, 1, 5, data);
     assert(actual7[3] == 0x36);
@@ -727,12 +727,18 @@ void testPropertyExchangeMessages()
     assert(actual11[3] == 0x3F);
 }
 
+void testProcessInquiryMessages()
+{
+    // FIXME: add tests
+}
+
 int testMidiCI ()
 {
     testDiscoveryMessages();
     //testProtocolNegotiationMessages();
     testProfileConfigurationMessages();
     testPropertyExchangeMessages();
+    testProcessInquiryMessages();
     return 0;
 }
 
