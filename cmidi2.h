@@ -383,8 +383,8 @@ enum cmidi2_ump_function_block_discovery_flags {
 
 static inline cmidi2_ump128_t cmidi2_ump_endpoint_discovery(cmidi2_ump_version_t version, uint8_t filterBitmap) {
     cmidi2_ump128_t ret = {
-        (CMIDI2_MESSAGE_TYPE_UMP_STREAM << 28) + (CMIDI2_UMP_STREAM_STATUS_ENDPOINT_DISCOVERY << 16) + (version.major << 8) + version.minor,
-        filterBitmap & 0x1F,
+        (uint32_t) ((CMIDI2_MESSAGE_TYPE_UMP_STREAM << 28) + (CMIDI2_UMP_STREAM_STATUS_ENDPOINT_DISCOVERY << 16) + (version.major << 8) + version.minor),
+        (uint32_t) (filterBitmap & 0x1F),
         0,
         0
         };
@@ -393,8 +393,8 @@ static inline cmidi2_ump128_t cmidi2_ump_endpoint_discovery(cmidi2_ump_version_t
 
 static inline cmidi2_ump128_t cmidi2_ump_endpoint_info_notification(cmidi2_ump_version_t version, bool isStaticFunctionBlock, uint8_t numFunctionBlocks, bool midi2Capable, bool midi1Capable, bool rxJR, bool txJR) {
     cmidi2_ump128_t ret = {
-        (CMIDI2_MESSAGE_TYPE_UMP_STREAM << 28) + (CMIDI2_UMP_STREAM_STATUS_ENDPOINT_INFO << 16) + (version.major << 8) + version.minor,
-        (isStaticFunctionBlock ? 1 << 31 : 0) + (numFunctionBlocks << 24) + (midi2Capable ? 0x1000 : 0) + (midi1Capable ? 0x100 : 0) + (rxJR ? 2 : 0) + (txJR ? 1 : 0),
+        (uint32_t) (CMIDI2_MESSAGE_TYPE_UMP_STREAM << 28) + (CMIDI2_UMP_STREAM_STATUS_ENDPOINT_INFO << 16) + (version.major << 8) + version.minor,
+        (uint32_t) (isStaticFunctionBlock ? 1 << 31 : 0) + (numFunctionBlocks << 24) + (midi2Capable ? 0x1000 : 0) + (midi1Capable ? 0x100 : 0) + (rxJR ? 2 : 0) + (txJR ? 1 : 0),
         0,
         0
         };
@@ -403,9 +403,9 @@ static inline cmidi2_ump128_t cmidi2_ump_endpoint_info_notification(cmidi2_ump_v
 
 static inline cmidi2_ump128_t cmidi2_ump_device_identity_notification(uint32_t manufacturerIdIn7bitArray, uint8_t deviceFamilyLSB, uint8_t deviceFamilyMSB, uint8_t deviceFamilyModelLSB, uint8_t deviceFamilyModelMSB, uint32_t softwareRevisionIn7bitArray) {
     cmidi2_ump128_t ret = {
-        (CMIDI2_MESSAGE_TYPE_UMP_STREAM << 28) + (CMIDI2_UMP_STREAM_STATUS_DEVICE_IDENTITY << 16),
+        (uint32_t) (CMIDI2_MESSAGE_TYPE_UMP_STREAM << 28) + (CMIDI2_UMP_STREAM_STATUS_DEVICE_IDENTITY << 16),
         manufacturerIdIn7bitArray,
-        (deviceFamilyLSB << 24) + (deviceFamilyMSB << 16) + (deviceFamilyModelLSB << 8) + deviceFamilyMSB,
+        (uint32_t) (deviceFamilyLSB << 24) + (deviceFamilyMSB << 16) + (deviceFamilyModelLSB << 8) + deviceFamilyMSB,
         softwareRevisionIn7bitArray
         };
     return ret;
@@ -413,10 +413,10 @@ static inline cmidi2_ump128_t cmidi2_ump_device_identity_notification(uint32_t m
 
 static inline cmidi2_ump128_t cmidi2_ump_internal_name_notification(uint8_t statusCode, const char name[14]) {
     cmidi2_ump128_t ret = {
-        (CMIDI2_MESSAGE_TYPE_UMP_STREAM << 28) + (statusCode << 16) + (name[0] << 8) + name[1],
-        (name[2] << 24) + (name[3] << 16) + (name[4] << 8) + name[5],
-        (name[6] << 24) + (name[7] << 16) + (name[8] << 8) + name[9],
-        (name[10] << 24) + (name[11] << 16) + (name[12] << 8) + name[13]
+        (uint32_t) (CMIDI2_MESSAGE_TYPE_UMP_STREAM << 28) + (statusCode << 16) + (name[0] << 8) + name[1],
+        (uint32_t) (name[2] << 24) + (name[3] << 16) + (name[4] << 8) + name[5],
+        (uint32_t) (name[6] << 24) + (name[7] << 16) + (name[8] << 8) + name[9],
+        (uint32_t) (name[10] << 24) + (name[11] << 16) + (name[12] << 8) + name[13]
         };
     return ret;
 }
@@ -431,7 +431,7 @@ static inline cmidi2_ump128_t cmidi2_ump_product_instance_id_notification(const 
 
 static inline cmidi2_ump128_t cmidi2_ump_stream_configuration_request(uint8_t protocol, bool rxJR, bool txJR) {
     cmidi2_ump128_t ret = {
-        (CMIDI2_MESSAGE_TYPE_UMP_STREAM << 28) + (CMIDI2_UMP_STREAM_STATUS_STREAM_CONFIGURATION_REQUEST << 16) + (protocol << 8) + (rxJR ? 2 : 0) + (txJR ? 1 : 0),
+        (uint32_t) (CMIDI2_MESSAGE_TYPE_UMP_STREAM << 28) + (CMIDI2_UMP_STREAM_STATUS_STREAM_CONFIGURATION_REQUEST << 16) + (protocol << 8) + (rxJR ? 2 : 0) + (txJR ? 1 : 0),
         0,
         0
         };
@@ -440,7 +440,7 @@ static inline cmidi2_ump128_t cmidi2_ump_stream_configuration_request(uint8_t pr
 
 static inline cmidi2_ump128_t cmidi2_ump_stream_configuration_notification(uint8_t protocol, bool rxJR, bool txJR) {
     cmidi2_ump128_t ret = {
-        (CMIDI2_MESSAGE_TYPE_UMP_STREAM << 28) + (CMIDI2_UMP_STREAM_STATUS_STREAM_CONFIGURATION_NOTIFICATION << 16) + (protocol << 8) + (rxJR ? 2 : 0) + (txJR ? 1 : 0),
+        (uint32_t) (CMIDI2_MESSAGE_TYPE_UMP_STREAM << 28) + (CMIDI2_UMP_STREAM_STATUS_STREAM_CONFIGURATION_NOTIFICATION << 16) + (protocol << 8) + (rxJR ? 2 : 0) + (txJR ? 1 : 0),
         0,
         0
         };
@@ -449,7 +449,7 @@ static inline cmidi2_ump128_t cmidi2_ump_stream_configuration_notification(uint8
 
 static inline cmidi2_ump128_t cmidi2_ump_function_block_discovery(uint8_t numFunctionBlocks, uint8_t filter) {
     cmidi2_ump128_t ret = {
-        (CMIDI2_MESSAGE_TYPE_UMP_STREAM << 28) + (CMIDI2_UMP_STREAM_STATUS_FUNCTION_BLOCK_DISCOVERY << 16) + (numFunctionBlocks << 8) + filter,
+        (uint32_t) (CMIDI2_MESSAGE_TYPE_UMP_STREAM << 28) + (CMIDI2_UMP_STREAM_STATUS_FUNCTION_BLOCK_DISCOVERY << 16) + (numFunctionBlocks << 8) + filter,
         0,
         0,
         0
@@ -459,8 +459,8 @@ static inline cmidi2_ump128_t cmidi2_ump_function_block_discovery(uint8_t numFun
 
 static inline cmidi2_ump128_t cmidi2_ump_function_block_info_notification(bool active, uint8_t numFunctionBlocks, uint8_t uiHint, uint8_t midi1, uint8_t direction, uint8_t firstGroup, uint8_t numSpannedGroup, uint8_t midiCIVersionFormat, uint8_t maxNumSysEx8Streams) {
     cmidi2_ump128_t ret = {
-        (CMIDI2_MESSAGE_TYPE_UMP_STREAM << 28) + (CMIDI2_UMP_STREAM_STATUS_FUNCTION_BLOCK_INFO << 16) + (active ? 0x8000 : 0) + (numFunctionBlocks << 8) + (uiHint << 4) + (midi1 << 2) + direction,
-        (firstGroup << 24) + (numSpannedGroup << 16) + (midiCIVersionFormat << 8) + maxNumSysEx8Streams,
+        (uint32_t) (CMIDI2_MESSAGE_TYPE_UMP_STREAM << 28) + (CMIDI2_UMP_STREAM_STATUS_FUNCTION_BLOCK_INFO << 16) + (active ? 0x8000 : 0) + (numFunctionBlocks << 8) + (uiHint << 4) + (midi1 << 2) + direction,
+        (uint32_t) (firstGroup << 24) + (numSpannedGroup << 16) + (midiCIVersionFormat << 8) + maxNumSysEx8Streams,
         0,
         0
         };
@@ -472,12 +472,12 @@ static inline cmidi2_ump128_t cmidi2_ump_function_block_name_notification(const 
 }
 
 static inline cmidi2_ump128_t cmidi2_ump_start_of_clip() {
-    cmidi2_ump128_t ret = {(CMIDI2_MESSAGE_TYPE_UMP_STREAM << 28) + (CMIDI2_UMP_STREAM_STATUS_START_OF_CLIP << 16), 0, 0, 0};
+    cmidi2_ump128_t ret = {(uint32_t) (CMIDI2_MESSAGE_TYPE_UMP_STREAM << 28) + (CMIDI2_UMP_STREAM_STATUS_START_OF_CLIP << 16), 0, 0, 0};
     return ret;
 }
 
 static inline cmidi2_ump128_t cmidi2_ump_end_of_clip() {
-    cmidi2_ump128_t ret = {(CMIDI2_MESSAGE_TYPE_UMP_STREAM << 28) + (CMIDI2_UMP_STREAM_STATUS_END_OF_CLIP << 16), 0, 0, 0};
+    cmidi2_ump128_t ret = {(uint32_t) (CMIDI2_MESSAGE_TYPE_UMP_STREAM << 28) + (CMIDI2_UMP_STREAM_STATUS_END_OF_CLIP << 16), 0, 0, 0};
     return ret;
 }
 
@@ -485,7 +485,7 @@ static inline cmidi2_ump128_t cmidi2_ump_end_of_clip() {
 static inline uint32_t cmidi2_ump_noop(uint8_t group) { return (group & 0xF) << 24; }
 
 static inline uint32_t cmidi2_ump_jr_clock_direct(uint8_t group, uint32_t senderClockTime) {
-        return cmidi2_ump_noop(group) + (CMIDI2_UTILITY_STATUS_JR_CLOCK << 16) + senderClockTime;
+    return cmidi2_ump_noop(group) + (CMIDI2_UTILITY_STATUS_JR_CLOCK << 16) + senderClockTime;
 }
 
 static inline uint32_t cmidi2_ump_jr_clock(uint8_t group, double senderClockTime) {
@@ -494,7 +494,7 @@ static inline uint32_t cmidi2_ump_jr_clock(uint8_t group, double senderClockTime
 }
 
 static inline uint32_t cmidi2_ump_jr_timestamp_direct(uint8_t group, uint16_t senderClockTimestamp) {
-        return cmidi2_ump_noop(group) + (CMIDI2_UTILITY_STATUS_JR_TIMESTAMP << 16) + senderClockTimestamp;
+    return cmidi2_ump_noop(group) + (CMIDI2_UTILITY_STATUS_JR_TIMESTAMP << 16) + senderClockTimestamp;
 }
 
 static inline uint32_t cmidi2_ump_jr_timestamp(uint8_t group, double senderClockTimestamp) {
@@ -503,12 +503,12 @@ static inline uint32_t cmidi2_ump_jr_timestamp(uint8_t group, double senderClock
 }
 
 static inline uint32_t cmidi2_ump_dctpq(uint8_t group, uint32_t dctpq) {
-        return cmidi2_ump_noop(group) + (CMIDI2_UTILITY_STATUS_DCTPQ << 16) + dctpq;
+    return cmidi2_ump_noop(group) + (CMIDI2_UTILITY_STATUS_DCTPQ << 16) + dctpq;
 }
 
 static inline uint32_t cmidi2_ump_dcs(uint8_t group, uint32_t ticks) {
-        // Note that unlike JR timestamp delta clockstamps accepts ticks up to 20 bits.
-        return cmidi2_ump_noop(group) + (CMIDI2_UTILITY_STATUS_DELTA_CLOCKSTAMP << 16) + (ticks & 0xFFFFF);
+    // Note that unlike JR timestamp delta clockstamps accepts ticks up to 20 bits.
+    return cmidi2_ump_noop(group) + (CMIDI2_UTILITY_STATUS_DELTA_CLOCKSTAMP << 16) + (ticks & 0xFFFFF);
 }
 
 // 7.6 System Common and System Real Time Messages
