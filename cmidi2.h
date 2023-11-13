@@ -338,8 +338,150 @@ static inline uint8_t cmidi2_ump_get_num_bytes(uint32_t data) {
     return 0xFF; /* wrong */
 }
 
+typedef struct cmidi2_ump128 {
+    uint32_t p1;
+    uint32_t p2;
+    uint32_t p3;
+    uint32_t p4;
+} cmidi2_ump128_t;
+
+typedef struct cmidi2_ump_version {
+    uint8_t major;
+    uint8_t minor;
+} cmidi2_ump_version_t;
+
+enum cmidi2_ump_stream_status {
+    CMIDI2_UMP_STREAM_STATUS_ENDPOINT_DISCOVERY = 0,
+    CMIDI2_UMP_STREAM_STATUS_ENDPOINT_INFO = 1,
+    CMIDI2_UMP_STREAM_STATUS_DEVICE_IDENTITY = 2,
+    CMIDI2_UMP_STREAM_STATUS_ENDPOINT_NAME = 3,
+    CMIDI2_UMP_STREAM_STATUS_PRODUCT_INSTANCE_ID = 4,
+    CMIDI2_UMP_STREAM_STATUS_STREAM_CONFIGURATION_REQUEST = 5,
+    CMIDI2_UMP_STREAM_STATUS_STREAM_CONFIGURATION_NOTIFICATION = 6,
+    CMIDI2_UMP_STREAM_STATUS_FUNCTION_BLOCK_DISCOVERY = 0x10,
+    CMIDI2_UMP_STREAM_STATUS_FUNCTION_BLOCK_INFO = 0x11,
+    CMIDI2_UMP_STREAM_STATUS_FUNCTION_BLOCK_NAME = 0x12,
+    CMIDI2_UMP_STREAM_STATUS_START_OF_CLIP = 0x20,
+    CMIDI2_UMP_STREAM_STATUS_END_OF_CLIP = 0x21,
+};
+
+enum cmidi2_ump_endpoint_filter_flags {
+    CMIDI2_UMP_ENDPOINT_FILTER_ENDPOINT_INFO = 1,
+    CMIDI2_UMP_ENDPOINT_FILTER_DEVICE_IDENTITY = 2,
+    CMIDI2_UMP_ENDPOINT_FILTER_ENDPOINT_NAME = 4,
+    CMIDI2_UMP_ENDPOINT_FILTER_PRODUCT_INSTANCE_ID = 8,
+    CMIDI2_UMP_ENDPOINT_FILTER_STREAM_CONFIGURATION = 0x10,
+};
+
+enum cmidi2_ump_function_block_discovery_flags {
+    CMIDI2_UMP_FUNCTION_BLOCK_FILTER_INFO = 1,
+    CMIDI2_UMP_FUNCTION_BLOCK_FILTER_NAME = 2,
+};
+
 // --------
 // UMP generators
+
+// 7.1 UMP Stream Messages
+
+static inline cmidi2_ump128_t cmidi2_ump_endpoint_discovery(cmidi2_ump_version_t version, uint8_t filterBitmap) {
+    cmidi2_ump128_t ret = {
+        (CMIDI2_MESSAGE_TYPE_UMP_STREAM << 28) + (CMIDI2_UMP_STREAM_STATUS_ENDPOINT_DISCOVERY << 16) + (version.major << 8) + version.minor,
+        filterBitmap & 0x1F,
+        0,
+        0
+        };
+    return ret;
+}
+
+static inline cmidi2_ump128_t cmidi2_ump_endpoint_info_notification(cmidi2_ump_version_t version, bool isStaticFunctionBlock, uint8_t numFunctionBlocks, bool midi2Capable, bool midi1Capable, bool rxJR, bool txJR) {
+    cmidi2_ump128_t ret = {
+        (CMIDI2_MESSAGE_TYPE_UMP_STREAM << 28) + (CMIDI2_UMP_STREAM_STATUS_ENDPOINT_INFO << 16) + (version.major << 8) + version.minor,
+        (isStaticFunctionBlock ? 1 << 31 : 0) + (numFunctionBlocks << 24) + (midi2Capable ? 0x1000 : 0) + (midi1Capable ? 0x100 : 0) + (rxJR ? 2 : 0) + (txJR ? 1 : 0),
+        0,
+        0
+        };
+    return ret;
+}
+
+static inline cmidi2_ump128_t cmidi2_ump_device_identity_notification(uint32_t manufacturerIdIn7bitArray, uint8_t deviceFamilyLSB, uint8_t deviceFamilyMSB, uint8_t deviceFamilyModelLSB, uint8_t deviceFamilyModelMSB, uint32_t softwareRevisionIn7bitArray) {
+    cmidi2_ump128_t ret = {
+        (CMIDI2_MESSAGE_TYPE_UMP_STREAM << 28) + (CMIDI2_UMP_STREAM_STATUS_DEVICE_IDENTITY << 16),
+        manufacturerIdIn7bitArray,
+        (deviceFamilyLSB << 24) + (deviceFamilyMSB << 16) + (deviceFamilyModelLSB << 8) + deviceFamilyMSB,
+        softwareRevisionIn7bitArray
+        };
+    return ret;
+}
+
+static inline cmidi2_ump128_t cmidi2_ump_internal_name_notification(uint8_t statusCode, const char name[14]) {
+    cmidi2_ump128_t ret = {
+        (CMIDI2_MESSAGE_TYPE_UMP_STREAM << 28) + (statusCode << 16) + (name[0] << 8) + name[1],
+        (name[2] << 24) + (name[3] << 16) + (name[4] << 8) + name[5],
+        (name[6] << 24) + (name[7] << 16) + (name[8] << 8) + name[9],
+        (name[10] << 24) + (name[11] << 16) + (name[12] << 8) + name[13]
+        };
+    return ret;
+}
+
+static inline cmidi2_ump128_t cmidi2_ump_endpoint_name_notification(const char name[14]) {
+    return cmidi2_ump_internal_name_notification( CMIDI2_UMP_STREAM_STATUS_ENDPOINT_NAME, name);
+}
+
+static inline cmidi2_ump128_t cmidi2_ump_product_instance_id_notification(const char id[14]) {
+    return cmidi2_ump_internal_name_notification( CMIDI2_UMP_STREAM_STATUS_PRODUCT_INSTANCE_ID, id);
+}
+
+static inline cmidi2_ump128_t cmidi2_ump_stream_configuration_request(uint8_t protocol, bool rxJR, bool txJR) {
+    cmidi2_ump128_t ret = {
+        (CMIDI2_MESSAGE_TYPE_UMP_STREAM << 28) + (CMIDI2_UMP_STREAM_STATUS_STREAM_CONFIGURATION_REQUEST << 16) + (protocol << 8) + (rxJR ? 2 : 0) + (txJR ? 1 : 0),
+        0,
+        0
+        };
+    return ret;
+}
+
+static inline cmidi2_ump128_t cmidi2_ump_stream_configuration_notification(uint8_t protocol, bool rxJR, bool txJR) {
+    cmidi2_ump128_t ret = {
+        (CMIDI2_MESSAGE_TYPE_UMP_STREAM << 28) + (CMIDI2_UMP_STREAM_STATUS_STREAM_CONFIGURATION_NOTIFICATION << 16) + (protocol << 8) + (rxJR ? 2 : 0) + (txJR ? 1 : 0),
+        0,
+        0
+        };
+    return ret;
+}
+
+static inline cmidi2_ump128_t cmidi2_ump_function_block_discovery(uint8_t numFunctionBlocks, uint8_t filter) {
+    cmidi2_ump128_t ret = {
+        (CMIDI2_MESSAGE_TYPE_UMP_STREAM << 28) + (CMIDI2_UMP_STREAM_STATUS_FUNCTION_BLOCK_DISCOVERY << 16) + (numFunctionBlocks << 8) + filter,
+        0,
+        0,
+        0
+        };
+    return ret;
+}
+
+static inline cmidi2_ump128_t cmidi2_ump_function_block_info_notification(bool active, uint8_t numFunctionBlocks, uint8_t uiHint, uint8_t midi1, uint8_t direction, uint8_t firstGroup, uint8_t numSpannedGroup, uint8_t midiCIVersionFormat, uint8_t maxNumSysEx8Streams) {
+    cmidi2_ump128_t ret = {
+        (CMIDI2_MESSAGE_TYPE_UMP_STREAM << 28) + (CMIDI2_UMP_STREAM_STATUS_FUNCTION_BLOCK_INFO << 16) + (active ? 0x8000 : 0) + (numFunctionBlocks << 8) + (uiHint << 4) + (midi1 << 2) + direction,
+        (firstGroup << 24) + (numSpannedGroup << 16) + (midiCIVersionFormat << 8) + maxNumSysEx8Streams,
+        0,
+        0
+        };
+    return ret;
+}
+
+static inline cmidi2_ump128_t cmidi2_ump_function_block_name_notification(const char name[14]) {
+    return cmidi2_ump_internal_name_notification( CMIDI2_UMP_STREAM_STATUS_FUNCTION_BLOCK_NAME, name);
+}
+
+static inline cmidi2_ump128_t cmidi2_ump_start_of_clip() {
+    cmidi2_ump128_t ret = {(CMIDI2_MESSAGE_TYPE_UMP_STREAM << 28) + (CMIDI2_UMP_STREAM_STATUS_START_OF_CLIP << 16), 0, 0, 0};
+    return ret;
+}
+
+static inline cmidi2_ump128_t cmidi2_ump_end_of_clip() {
+    cmidi2_ump128_t ret = {(CMIDI2_MESSAGE_TYPE_UMP_STREAM << 28) + (CMIDI2_UMP_STREAM_STATUS_END_OF_CLIP << 16), 0, 0, 0};
+    return ret;
+}
 
 // 7.2 Utility Messages
 static inline uint32_t cmidi2_ump_noop(uint8_t group) { return (group & 0xF) << 24; }
