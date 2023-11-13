@@ -331,6 +331,86 @@ void testType5Messages()
     testType5Messages_mds();
 }
 
+void* flex_data_binary_reader_helper_read_into_ump_forge(uint64_t data1, uint64_t data2, void* context) {
+    cmidi2_ump_forge* forge = (cmidi2_ump_forge*) context;
+    cmidi2_ump_forge_add_packet_128(forge, data1, data2);
+    return NULL;
+}
+
+void testTypeDMessages_set_tempo()
+{
+    uint64_t r1, r2;
+    cmidi2_ump_flex_data_set_tempo_direct(1, 2, 50000000, &r1, &r2);
+    //printf("%llx %llx\n", r1, r2);
+    assert(r1 == 0xD112000002faf080);
+    assert(r2 == 0);
+}
+
+void testTypeDMessages_set_time_signature()
+{
+    uint64_t r1, r2;
+    cmidi2_ump_flex_data_set_time_signature(1, 2, 3, 4, 5, &r1, &r2);
+    //printf("%llx %llx\n", r1, r2);
+    assert(r1 == 0xD112000103040500);
+    assert(r2 == 0);
+}
+
+void testTypeDMessages_set_metronome()
+{
+    uint64_t r1, r2;
+    cmidi2_ump_flex_data_set_metronome(1, 2, 0, 2, 1, 1, 2, 4, &r1, &r2);
+    //printf("%llx %llx\n", r1, r2);
+    assert(r1 == 0xD112000200020101);
+    assert(r2 == 0x0204000000000000);
+}
+
+void testTypeDMessages_set_key_signature()
+{
+    uint64_t r1, r2;
+    cmidi2_ump_flex_data_set_key_signature(1, 3, 2, 7, 3, &r1, &r2);
+    //printf("%llx %llx\n", r1, r2);
+    assert(r1 == 0xD132000507030000);
+    assert(r2 == 0);
+}
+
+void testTypeDMessages_set_chord_name()
+{
+    uint64_t r1, r2;
+    cmidi2_ump_flex_data_set_chord_name(1, 3, 2,
+         CMIDI2_UMP_CHORD_NAME_SHARP, CMIDI2_UMP_CHORD_NAME_C, CMIDI2_UMP_CHORD_TYPE_MINOR, 1, 1, 2, 2, 3, 3, 4, 4,
+         CMIDI2_UMP_CHORD_NAME_FLAT, CMIDI2_UMP_CHORD_NAME_G, CMIDI2_UMP_CHORD_TYPE_MAJOR_MINOR, 5, 5, 6, 6, &r1, &r2);
+    //printf("%llx %llx\n", r1, r2);
+    assert(r1 == 0xD132000613071122);
+    assert(r2 == 0x33440000F7165566);
+}
+
+void testTypeDMessages_metadata_text()
+{
+    uint8_t ump_buffer[4096];
+    memset(ump_buffer, 0, 4096);
+    cmidi2_ump_forge forge;
+    cmidi2_ump_forge_init(&forge, (cmidi2_ump*) ump_buffer, 4096);
+
+    const char* text = "\xC2\xA9""2022 AMEI"; // example in the spec
+    assert(NULL == cmidi2_ump_flex_data_process(1, 1, 2,
+        CMIDI2_FLEX_DATA_BANK_METADATA_TEXT, CMIDI2_FLEX_DATA_STATUS_COPYRIGHT_NAME,
+        text, strlen(text), flex_data_binary_reader_helper_read_into_ump_forge, &forge));
+
+    // FIXME: verify output UMPs
+}
+
+void testTypeDMessages()
+{
+    testTypeDMessages_set_tempo();
+    testTypeDMessages_set_time_signature();
+    testTypeDMessages_set_metronome();
+    testTypeDMessages_set_key_signature();
+    testTypeDMessages_set_chord_name();
+    testTypeDMessages_metadata_text();
+
+    // FIXME: write more tests
+}
+
 void testForEach()
 {
     int64_t ump[] = {
@@ -432,6 +512,7 @@ int testUMP ()
     testType3Messages();
     testType4Messages();
     testType5Messages();
+    testTypeDMessages();
     testForEach();
     return 0;
 }

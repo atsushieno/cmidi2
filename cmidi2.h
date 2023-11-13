@@ -31,7 +31,7 @@ enum cmidi2_status_code {
     CMIDI2_STATUS_PER_NOTE_MANAGEMENT = 0xF0,
 };
 
-// TODO: it still does not support most of June 2023 updates.
+// TODO: it still does not support all the additions in June 2023 updates.
 
 enum cmidi2_message_type {
     CMIDI2_MESSAGE_TYPE_UTILITY = 0,
@@ -225,6 +225,93 @@ enum cmidi2_jr_timestamp_status {
     CMIDI2_JR_TIMESTAMP = 0x20,
 };
 
+enum cmidi2_flex_data_status_bank {
+    CMIDI2_FLEX_DATA_BANK_SETUP_AND_PERFORMANCE = 0,
+    CMIDI2_FLEX_DATA_BANK_METADATA_TEXT = 1,
+    CMIDI2_FLEX_DATA_BANK_PERFORMANCE_TEXT = 2
+};
+enum cmidi2_flex_data_setup_status {
+    CMIDI2_FLEX_DATA_STATUS_SET_TEMPO = 0,
+    CMIDI2_FLEX_DATA_STATUS_SET_TIME_SIGNATURE = 1,
+    CMIDI2_FLEX_DATA_STATUS_SET_METRONOME = 2,
+    CMIDI2_FLEX_DATA_STATUS_SET_KEY_SIGNATURE = 5,
+    CMIDI2_FLEX_DATA_STATUS_SET_CHORD_NAME = 6
+};
+enum cmidi2_flex_data_metadata_text_status {
+    CMIDI2_FLEX_DATA_STATUS_UNKNOWN_METADATA_TEXT = 0,
+    CMIDI2_FLEX_DATA_STATUS_PROJECT_NAME = 1,
+    CMIDI2_FLEX_DATA_STATUS_SONG_NAME = 2,
+    CMIDI2_FLEX_DATA_STATUS_CLIP_NAME = 3,
+    CMIDI2_FLEX_DATA_STATUS_COPYRIGHT_NAME = 4,
+    CMIDI2_FLEX_DATA_STATUS_COMPOSER_NAME = 5,
+    CMIDI2_FLEX_DATA_STATUS_LYRICIST_NAME = 6,
+    CMIDI2_FLEX_DATA_STATUS_ARRANGER_NAME = 7,
+    CMIDI2_FLEX_DATA_STATUS_PUBLISHER_NAME = 8,
+    CMIDI2_FLEX_DATA_STATUS_PRIMARY_PERFORMER_NAME = 9,
+    CMIDI2_FLEX_DATA_STATUS_ACCOMPANYING_PERFORMAER_NAME = 10,
+    CMIDI2_FLEX_DATA_STATUS_RECORDING_DATE = 11,
+    CMIDI2_FLEX_DATA_STATUS_RECORDING_LOCATION = 12
+};
+enum cmidi2_flex_data_performance_text_status {
+    CMIDI2_FLEX_DATA_STATUS_UNKNOWN_PERFORMANCE_TEXT = 0,
+    CMIDI2_FLEX_DATA_STATUS_LYRICS = 1,
+    CMIDI2_FLEX_DATA_STATUS_LYRICS_LANGUAGE = 2,
+    CMIDI2_FLEX_DATA_STATUS_RUBY = 3,
+    CMIDI2_FLEX_DATA_STATUS_RUBY_LANGUAGE = 4
+};
+
+enum cmidi2_ump_chord_name_sharps_flats {
+    CMIDI2_UMP_CHORD_NAME_DOUBLE_SHARP = 2,
+    CMIDI2_UMP_CHORD_NAME_SHARP = 1,
+    CMIDI2_UMP_CHORD_NAME_NATURAL = 0,
+    CMIDI2_UMP_CHORD_NAME_FLAT = 0xF,
+    CMIDI2_UMP_CHORD_NAME_DOUBLE_FLAT = 0xE,
+};
+
+enum cmidi2_ump_chord_name_tonic_note {
+    CMIDI2_UMP_CHORD_NAME_UNKNOWN = 0,
+    CMIDI2_UMP_CHORD_NAME_A = 1,
+    CMIDI2_UMP_CHORD_NAME_B = 2,
+    CMIDI2_UMP_CHORD_NAME_C = 3,
+    CMIDI2_UMP_CHORD_NAME_D = 4,
+    CMIDI2_UMP_CHORD_NAME_E = 5,
+    CMIDI2_UMP_CHORD_NAME_F = 6,
+    CMIDI2_UMP_CHORD_NAME_G = 7,
+};
+
+enum cmidi2_ump_chor_name_chord_type {
+    CMIDI2_UMP_CHORD_TYPE_UNKNOWN = 0,
+    CMIDI2_UMP_CHORD_TYPE_MAJOR = 1,
+    CMIDI2_UMP_CHORD_TYPE_MAJOR_6TH = 2,
+    CMIDI2_UMP_CHORD_TYPE_MAJOR_7TH = 3,
+    CMIDI2_UMP_CHORD_TYPE_MAJOR_9TH = 4,
+    CMIDI2_UMP_CHORD_TYPE_MAJOR_11TH = 5,
+    CMIDI2_UMP_CHORD_TYPE_MAJOR_13TH = 6,
+    CMIDI2_UMP_CHORD_TYPE_MINOR = 7,
+    CMIDI2_UMP_CHORD_TYPE_MINOR_6TH = 8,
+    CMIDI2_UMP_CHORD_TYPE_MINOR_7TH = 9,
+    CMIDI2_UMP_CHORD_TYPE_MINOR_9TH = 10,
+    CMIDI2_UMP_CHORD_TYPE_MINOR_11TH = 11,
+    CMIDI2_UMP_CHORD_TYPE_MINOR_13TH = 12,
+    CMIDI2_UMP_CHORD_TYPE_DOMINANT = 13,
+    CMIDI2_UMP_CHORD_TYPE_DOMINANT_9TH = 14,
+    CMIDI2_UMP_CHORD_TYPE_DOMINANT_11TH = 15,
+    CMIDI2_UMP_CHORD_TYPE_DOMINANT_13TH = 16,
+    CMIDI2_UMP_CHORD_TYPE_AUGMENTED = 17,
+    CMIDI2_UMP_CHORD_TYPE_AUGMENTED_7TH = 18,
+    CMIDI2_UMP_CHORD_TYPE_DIMINISHED = 19,
+    CMIDI2_UMP_CHORD_TYPE_DIMINISHED_7TH = 20,
+    CMIDI2_UMP_CHORD_TYPE_HALF_DIMINISHED = 21,
+    CMIDI2_UMP_CHORD_TYPE_MAJOR_MINOR = 22,
+    CMIDI2_UMP_CHORD_TYPE_MINOR_MAJOR = 22, // same
+    CMIDI2_UMP_CHORD_TYPE_PEDAL = 23,
+    CMIDI2_UMP_CHORD_TYPE_POWER = 24,
+    CMIDI2_UMP_CHORD_TYPE_SUSPENDED_2ND = 25,
+    CMIDI2_UMP_CHORD_TYPE_SUSPENDED_4TH = 26,
+    CMIDI2_UMP_CHORD_TYPE_7_SUSPENDED_4TH = 27,
+};
+
+
 static inline uint8_t cmidi2_ump_get_num_bytes(uint32_t data) {
     switch (((data & 0xF0000000) >> 28) & 0xF) {
     case CMIDI2_MESSAGE_TYPE_UTILITY:
@@ -243,7 +330,7 @@ static inline uint8_t cmidi2_ump_get_num_bytes(uint32_t data) {
 // --------
 // UMP generators
 
-// 4.8 Utility Messages
+// 7.2 Utility Messages
 static inline uint32_t cmidi2_ump_noop(uint8_t group) { return (group & 0xF) << 24; }
 
 static inline uint32_t cmidi2_ump_jr_clock_direct(uint8_t group, uint32_t senderClockTime) {
@@ -264,12 +351,12 @@ static inline uint32_t cmidi2_ump_jr_timestamp(uint8_t group, double senderClock
     return cmidi2_ump_noop(group) + (CMIDI2_JR_TIMESTAMP << 16) + value;
 }
 
-// 4.3 System Common and System Real Time Messages
+// 7.6 System Common and System Real Time Messages
 static inline int32_t cmidi2_ump_system_message(uint8_t group, uint8_t status, uint8_t midi1Byte2, uint8_t midi1Byte3) {
     return (CMIDI2_MESSAGE_TYPE_SYSTEM << 28) + ((group & 0xF) << 24) + (status << 16) + ((midi1Byte2 & 0x7F) << 8) + (midi1Byte3 & 0x7F);
 }
 
-// 4.1 MIDI 1.0 Channel Voice Messages
+// 7.3 MIDI 1.0 Channel Voice Messages
 static inline int32_t cmidi2_ump_midi1_message(uint8_t group, uint8_t code, uint8_t channel, uint8_t byte3, uint8_t byte4) {
     return (CMIDI2_MESSAGE_TYPE_MIDI_1_CHANNEL << 28) + ((group & 0xF) << 24) + (((code & 0xF0) + (channel & 0xF)) << 16) + ((byte3 & 0x7F) << 8) + (byte4 & 0x7F);
 }
@@ -311,7 +398,7 @@ static inline int32_t cmidi2_ump_midi1_pitch_bend(uint8_t group, uint8_t channel
     return cmidi2_ump_midi1_message(group, CMIDI2_STATUS_PITCH_BEND, channel, data & 0x7F, (data >> 7) & 0x7F);
 }
 
-// 4.2 MIDI 2.0 Channel Voice Messages
+// 7.4 MIDI 2.0 Channel Voice Messages
 static inline int64_t cmidi2_ump_midi2_channel_message_8_8_16_16(
     uint8_t group, uint8_t code, uint8_t channel, uint8_t byte3, uint8_t byte4,
     uint16_t short1, uint16_t short2) {
@@ -498,7 +585,7 @@ static inline void cmidi2_ump_sysex_get_packet_of(uint64_t* result1, uint64_t* r
         *result2 = cmidi2_ump_read_uint64_bytes_be(dst8 + 8);
 }
 
-// 4.4 System Exclusive 7-Bit Messages
+// 7.7 System Exclusive 7-Bit Messages
 static inline uint64_t cmidi2_ump_sysex7_direct(uint8_t group, uint8_t status, uint8_t numBytes, uint8_t data1, uint8_t data2, uint8_t data3, uint8_t data4, uint8_t data5, uint8_t data6) {
     return (((uint64_t) ((CMIDI2_MESSAGE_TYPE_SYSEX7 << 28) + ((group & 0xF) << 24) + ((status + numBytes) << 16))) << 32) +
         ((uint64_t) data1 << 40) + ((uint64_t) data2 << 32) + (data3 << 24) + (data4 << 16) + (data5 << 8) + data6;
@@ -543,7 +630,7 @@ static inline void* cmidi2_ump_sysex7_process(uint8_t group, void* sysex, cmidi2
     return NULL;
 }
 
-// 4.5 System Exclusive 8-Bit Messages
+// 7.8 System Exclusive 8-Bit Messages
 
 static inline int8_t cmidi2_ump_sysex8_get_num_packets(uint8_t numBytes) {
     return cmidi2_ump_sysex_get_num_packets(numBytes, 13);
@@ -572,8 +659,7 @@ static inline void* cmidi2_ump_sysex8_process(uint8_t group, void* sysex, uint32
     return NULL;
 }
 
-// 4.6 Mixed Data Set Message ... should we come up with complicated chunk splitter function?
-
+// 7.9 Mixed Data Set Message
 
 static inline uint16_t cmidi2_ump_mds_get_num_chunks(uint32_t numTotalBytesInMDS) {
     uint32_t radix = 14 * 0x10000;
@@ -621,8 +707,8 @@ static inline void cmidi2_ump_mds_get_payload_of(uint8_t group, uint8_t mdsId, u
     uint8_t radix = 14;
     uint8_t size = numBytes < radix ? numBytes % radix : radix;
 
-    for (uint8_t i = 0, j = 0; i < size; i++, j++)
-        dst8[i + 2] = src8[j];
+    for (uint8_t i = 0; i < size; i++)
+        dst8[i + 2] = src8[i];
 
     *result1 = cmidi2_ump_read_uint64_bytes_be(dst8);
     if (result2)
@@ -630,9 +716,11 @@ static inline void cmidi2_ump_mds_get_payload_of(uint8_t group, uint8_t mdsId, u
 }
 
 /* process() - more complicated function */
-typedef void(*cmidi2_mds_handler)(uint64_t data1, uint64_t data2, size_t chunkId, size_t payloadId, void* context);
+// This returns NULL for success, or anything else for failure.
+typedef void*(*cmidi2_mds_handler)(uint64_t data1, uint64_t data2, size_t chunkId, size_t payloadId, void* context);
 
-static inline void cmidi2_ump_mds_process(uint8_t group, uint8_t mdsId, void* data, uint32_t length, cmidi2_mds_handler sendUMP, void* context)
+// This returns NULL for success, or anything else that `sendUMP` returns for failure.
+static inline void* cmidi2_ump_mds_process(uint8_t group, uint8_t mdsId, void* data, uint32_t length, cmidi2_mds_handler sendUMP, void* context)
 {
     int32_t numChunks = cmidi2_ump_mds_get_num_chunks(length);
     for (int c = 0; c < numChunks; c++) {
@@ -643,9 +731,152 @@ static inline void cmidi2_ump_mds_process(uint8_t group, uint8_t mdsId, void* da
             uint64_t result1, result2;
             size_t offset = 14 * (65536 * c + p);
             cmidi2_ump_mds_get_payload_of(group, mdsId, chunkSize, (uint8_t*) data + offset, &result1, &result2);
-            sendUMP(result1, result2, c, p, context);
+            void* retCode = sendUMP(result1, result2, c, p, context);
+            if (retCode)
+                return retCode;
         }
     }
+    return NULL;
+}
+
+// 7.5 Flex Data Message
+
+static inline uint16_t cmidi2_ump_flex_data_get_num_packets(uint32_t numTotalBytesInFlexData) {
+    return numTotalBytesInFlexData / 12 + (numTotalBytesInFlexData % 12 ? 1 : 0);
+}
+
+static inline void cmidi2_ump_flex_data_complete_packet(uint8_t group, uint8_t addressing, uint8_t channel,
+        uint8_t statusBank, uint8_t statusCode, uint32_t data1, uint32_t data2, uint32_t data3,
+        uint64_t* result1, uint64_t* result2) {
+    uint8_t dst8[4];
+    memset(dst8, 0, 4);
+    dst8[0] = (CMIDI2_MESSAGE_TYPE_FLEX_DATA << 4) + (group & 0xF);
+    dst8[1] = (CMIDI2_SYSEX_IN_ONE_UMP << 2) + ((addressing & 0x3) << 4) + (channel & 0xF);
+    dst8[2] = statusBank;
+    dst8[3] = statusCode;
+
+    *result1 = ((uint64_t) cmidi2_ump_read_uint32_bytes_be(dst8) << 32) + data1;
+    *result2 = ((uint64_t) data2 << 32) + data3;
+}
+
+static inline void cmidi2_ump_flex_data_get_packet_of(uint8_t group, uint8_t addressing, uint8_t channel,
+        uint8_t statusBank, uint8_t statusCode, uint16_t numBytes, const void* srcData, int32_t currentPacket,
+        uint64_t* result1, uint64_t* result2) {
+    uint8_t dst8[16];
+    memset(dst8, 0, 16);
+    const uint8_t *src8 = (const uint8_t*) srcData;
+
+    dst8[0] = (CMIDI2_MESSAGE_TYPE_FLEX_DATA << 4) + (group & 0xF);
+
+    const size_t radix = 12;
+    enum cmidi2_sysex_status format;
+    uint8_t size;
+    if (numBytes <= radix) {
+        format =  CMIDI2_SYSEX_IN_ONE_UMP;
+        size = numBytes; // single packet message
+    } else if (currentPacket == 0) {
+        format = CMIDI2_SYSEX_START;
+        size = radix;
+    } else {
+        uint8_t isEnd = currentPacket == cmidi2_ump_sysex_get_num_packets(numBytes, radix) - 1;
+        if (isEnd) {
+            size = numBytes % radix ? numBytes % radix : radix;
+            format = CMIDI2_SYSEX_END;
+        } else {
+            size = radix;
+            format = CMIDI2_SYSEX_CONTINUE;
+        }
+    }
+    dst8[1] = (format << 2) + ((addressing & 0x3) << 4) + (channel & 0xF);
+    dst8[2] = statusBank;
+    dst8[3] = statusCode;
+
+    for (uint8_t i = 0; i < size; i++)
+        dst8[i + 4] = src8[i];
+
+    *result1 = cmidi2_ump_read_uint64_bytes_be(dst8);
+    *result2 = cmidi2_ump_read_uint64_bytes_be(dst8 + 8);
+}
+
+/* process() - more complicated function */
+// This returns NULL for success, or anything else for failure.
+typedef void* (*cmidi2_flex_data_handler)(uint64_t data1, uint64_t data2, void* context);
+
+// This returns NULL for success, or anything else that `sendUMP` returns for failure.
+// `text` is usually a null-terminated text string, but it may contain `\0` as Melisma in lyricText. Hence we still need `length`.
+static inline void* cmidi2_ump_flex_data_process(uint8_t group, uint8_t addressing, uint8_t channel,
+        uint8_t statusBank, uint8_t statusCode, const char* text, uint32_t length, cmidi2_flex_data_handler sendUMP, void* context)
+{
+    int32_t numPackets = cmidi2_ump_flex_data_get_num_packets(length);
+    for (int p = 0; p < numPackets; p++) {
+        uint64_t result1, result2;
+        cmidi2_ump_flex_data_get_packet_of(group, addressing, channel, statusBank, statusCode, length, text, p, &result1, &result2);
+        void *retCode = sendUMP(result1, result2, context);
+        if (retCode != 0)
+            return retCode;
+    }
+    return NULL;
+}
+
+// individual flex data message generators
+
+static inline void cmidi2_ump_flex_data_set_tempo_direct(uint8_t group, uint8_t channel,
+        uint32_t tempoIn10NanosecondsPerQN,
+        uint64_t* result1, uint64_t* result2) {
+    cmidi2_ump_flex_data_complete_packet(group, 1, channel,
+        CMIDI2_FLEX_DATA_BANK_SETUP_AND_PERFORMANCE,
+        CMIDI2_FLEX_DATA_STATUS_SET_TEMPO,
+        tempoIn10NanosecondsPerQN, 0, 0,
+        result1, result2);
+}
+
+static inline void cmidi2_ump_flex_data_set_time_signature(uint8_t group, uint8_t channel,
+        uint8_t numerator, uint8_t denominator, uint8_t numberOf32thNotes, 
+        uint64_t* result1, uint64_t* result2) {
+    cmidi2_ump_flex_data_complete_packet(group, 1, channel,
+        CMIDI2_FLEX_DATA_BANK_SETUP_AND_PERFORMANCE,
+        CMIDI2_FLEX_DATA_STATUS_SET_TIME_SIGNATURE,
+        (numerator << 24) + (denominator << 16) + (numberOf32thNotes << 8),0, 0,
+        result1, result2);
+}
+
+static inline void cmidi2_ump_flex_data_set_metronome(uint8_t group, uint8_t channel,
+        uint8_t clocksPerPrimaryClick, uint8_t barAccent1, uint8_t barAccent2, uint8_t barAccent3, uint8_t subDivisionClicks1, uint8_t subDivisionClicks2,
+        uint64_t* result1, uint64_t* result2) {
+    cmidi2_ump_flex_data_complete_packet(group, 1, channel,
+        CMIDI2_FLEX_DATA_BANK_SETUP_AND_PERFORMANCE,
+        CMIDI2_FLEX_DATA_STATUS_SET_METRONOME,
+        (clocksPerPrimaryClick << 24) + (barAccent1 << 16) + (barAccent2 << 8) + barAccent3, (subDivisionClicks1 << 24) + (subDivisionClicks2 << 16), 0,
+        result1, result2);
+}
+
+static inline void cmidi2_ump_flex_data_set_key_signature(uint8_t group, uint8_t addressing, uint8_t channel,
+        uint8_t sharpsFlats, uint8_t tonicNote,
+        uint64_t* result1, uint64_t* result2) {
+    cmidi2_ump_flex_data_complete_packet(group, addressing, channel,
+        CMIDI2_FLEX_DATA_BANK_SETUP_AND_PERFORMANCE,
+        CMIDI2_FLEX_DATA_STATUS_SET_KEY_SIGNATURE,
+        (sharpsFlats << 24) + (tonicNote << 16), 0, 0,
+        result1, result2);
+}
+
+static inline void cmidi2_ump_flex_data_set_chord_name(uint8_t group, uint8_t addressing, uint8_t channel,
+        uint8_t sharpsFlats, uint8_t chordTonic, uint8_t chordType,
+        uint8_t alter1Type, uint8_t alter1Degree,
+        uint8_t alter2Type, uint8_t alter2Degree,
+        uint8_t alter3Type, uint8_t alter3Degree,
+        uint8_t alter4Type, uint8_t alter4Degree,
+        uint8_t bassSharpsFlats, uint8_t bassNote, uint8_t bassChordType,
+        uint8_t bassAlter1Type, uint8_t bassAlter1Degree,
+        uint8_t bassAlter2Type, uint8_t bassAlter2Degree,
+        uint64_t* result1, uint64_t* result2) {
+    cmidi2_ump_flex_data_complete_packet(group, addressing, channel,
+        CMIDI2_FLEX_DATA_BANK_SETUP_AND_PERFORMANCE,
+        CMIDI2_FLEX_DATA_STATUS_SET_CHORD_NAME,
+        (sharpsFlats << 28) + (chordTonic << 24) + (chordType << 16) + (alter1Type << 12) + (alter1Degree << 8) + (alter2Type << 4) + alter2Degree,
+        (alter3Type << 28) + (alter3Degree << 24) + (alter4Type << 20) + (alter4Degree << 16),
+        (bassSharpsFlats << 28) + (bassNote << 24) + (bassChordType << 16) + (bassAlter1Type << 12) + (bassAlter1Degree << 8) + (bassAlter2Type << 4) + bassAlter2Degree,
+        result1, result2);
 }
 
 
@@ -1099,7 +1330,6 @@ static inline void* cmidi2_ump_sequence_next_be(const void* ptr) {
 
 // --------
 // MIDI CI support.
-// TODO: it still does not support June 2023 updates.
 
 #define CMIDI2_CI_SUB_ID 0xD
 #define CMIDI2_CI_SUB_ID_2_DISCOVERY_INQUIRY 0x70
