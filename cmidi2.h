@@ -31,8 +31,6 @@ enum cmidi2_status_code {
     CMIDI2_STATUS_PER_NOTE_MANAGEMENT = 0xF0,
 };
 
-// TODO: it still does not support all the additions in June 2023 updates.
-
 enum cmidi2_message_type {
     CMIDI2_MESSAGE_TYPE_UTILITY = 0,
     CMIDI2_MESSAGE_TYPE_SYSTEM = 1,
