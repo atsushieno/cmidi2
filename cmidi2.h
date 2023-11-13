@@ -220,10 +220,21 @@ enum cmidi2_system_message_status {
     CMIDI2_SYSTEM_STATUS_RESET = 0xFF,
 };
 
+// TODO: remove this. Use cmidi2_utility_message_status instead
 enum cmidi2_jr_timestamp_status {
     CMIDI2_JR_CLOCK = 0x10,
     CMIDI2_JR_TIMESTAMP = 0x20,
 };
+
+
+enum cmidi2_utility_message_status {
+    CMIDI2_UTILITY_STATUS_NOOP = 0,
+    CMIDI2_UTILITY_STATUS_JR_CLOCK = 0x10,
+    CMIDI2_UTILITY_STATUS_JR_TIMESTAMP = 0x20,
+    CMIDI2_UTILITY_STATUS_DCTPQ = 0x30,
+    CMIDI2_UTILITY_STATUS_DELTA_CLOCKSTAMP = 0x40,
+};
+
 
 enum cmidi2_flex_data_status_bank {
     CMIDI2_FLEX_DATA_BANK_SETUP_AND_PERFORMANCE = 0,
@@ -334,21 +345,30 @@ static inline uint8_t cmidi2_ump_get_num_bytes(uint32_t data) {
 static inline uint32_t cmidi2_ump_noop(uint8_t group) { return (group & 0xF) << 24; }
 
 static inline uint32_t cmidi2_ump_jr_clock_direct(uint8_t group, uint32_t senderClockTime) {
-        return cmidi2_ump_noop(group) + (CMIDI2_JR_CLOCK << 16) + senderClockTime;
+        return cmidi2_ump_noop(group) + (CMIDI2_UTILITY_STATUS_JR_CLOCK << 16) + senderClockTime;
 }
 
 static inline uint32_t cmidi2_ump_jr_clock(uint8_t group, double senderClockTime) {
     uint16_t value = (uint16_t) (senderClockTime * JR_TIMESTAMP_TICKS_PER_SECOND);
-    return cmidi2_ump_noop(group) + (CMIDI2_JR_CLOCK << 16) + value;
+    return cmidi2_ump_noop(group) + (CMIDI2_UTILITY_STATUS_JR_CLOCK << 16) + value;
 }
 
-static inline uint32_t cmidi2_ump_jr_timestamp_direct(uint8_t group, uint32_t senderClockTimestamp) {
-        return cmidi2_ump_noop(group) + (CMIDI2_JR_TIMESTAMP << 16) + senderClockTimestamp;
+static inline uint32_t cmidi2_ump_jr_timestamp_direct(uint8_t group, uint16_t senderClockTimestamp) {
+        return cmidi2_ump_noop(group) + (CMIDI2_UTILITY_STATUS_JR_TIMESTAMP << 16) + senderClockTimestamp;
 }
 
 static inline uint32_t cmidi2_ump_jr_timestamp(uint8_t group, double senderClockTimestamp) {
     uint16_t value = (uint16_t) (senderClockTimestamp * JR_TIMESTAMP_TICKS_PER_SECOND);
-    return cmidi2_ump_noop(group) + (CMIDI2_JR_TIMESTAMP << 16) + value;
+    return cmidi2_ump_noop(group) + (CMIDI2_UTILITY_STATUS_JR_TIMESTAMP << 16) + value;
+}
+
+static inline uint32_t cmidi2_ump_dctpq(uint8_t group, uint32_t dctpq) {
+        return cmidi2_ump_noop(group) + (CMIDI2_UTILITY_STATUS_DCTPQ << 16) + dctpq;
+}
+
+static inline uint32_t cmidi2_ump_dcs(uint8_t group, uint32_t ticks) {
+        // Note that unlike JR timestamp delta clockstamps accepts ticks up to 20 bits.
+        return cmidi2_ump_noop(group) + (CMIDI2_UTILITY_STATUS_DELTA_CLOCKSTAMP << 16) + (ticks & 0xFFFFF);
 }
 
 // 7.6 System Common and System Real Time Messages
@@ -954,6 +974,14 @@ static inline uint16_t cmidi2_ump_get_jr_clock_time(const cmidi2_ump* ump) {
 }
 static inline uint16_t cmidi2_ump_get_jr_timestamp_timestamp(const cmidi2_ump* ump) {
     return (cmidi2_ump_get_byte_at(ump, 2) << 8) + cmidi2_ump_get_byte_at(ump, 3);
+}
+
+static inline uint16_t cmidi2_ump_get_dctpq(const cmidi2_ump* ump) {
+    return (cmidi2_ump_get_byte_at(ump, 2) << 8) + cmidi2_ump_get_byte_at(ump, 3);
+}
+
+static inline uint16_t cmidi2_ump_get_dcs(const cmidi2_ump* ump) {
+    return ((cmidi2_ump_get_byte_at(ump, 1) & 0xF) << 16) + (cmidi2_ump_get_byte_at(ump, 2) << 8) + cmidi2_ump_get_byte_at(ump, 3);
 }
 
 static inline uint8_t cmidi2_ump_get_system_message_byte2(const cmidi2_ump* ump) {
@@ -2372,7 +2400,7 @@ static inline size_t cmidi2_convert_single_ump_to_midi1(uint8_t* dst, size_t max
 
 #define IS_JR_TIMESTAMP(ump) \
     (cmidi2_ump_get_message_type(ump) == CMIDI2_MESSAGE_TYPE_UTILITY && \
-    cmidi2_ump_get_status_code(ump) == CMIDI2_JR_TIMESTAMP)
+    cmidi2_ump_get_status_code(ump) == CMIDI2_UTILITY_STATUS_JR_TIMESTAMP)
 
 static enum cmidi2_midi_conversion_result cmidi2_convert_ump_to_midi1(cmidi2_midi_conversion_context* context) {
     uint8_t* dst = (uint8_t*) context->midi1;
@@ -2525,7 +2553,7 @@ static inline size_t cmidi2_ump_merge_sequences(cmidi2_ump* dst, size_t dstCapac
     while (true) {
         cmidi2_ump* s1 = (cmidi2_ump*) ((uint8_t*) seq1 + seq1Idx);
         while (cmidi2_ump_get_message_type(s1) == CMIDI2_MESSAGE_TYPE_UTILITY &&
-               cmidi2_ump_get_status_code(s1) == CMIDI2_JR_TIMESTAMP) {
+               cmidi2_ump_get_status_code(s1) == CMIDI2_UTILITY_STATUS_JR_TIMESTAMP) {
             timestamp1 += cmidi2_ump_get_jr_timestamp_timestamp(s1);
             seq1Idx += 4;
             if (seq1Idx >= seq1Size)
@@ -2534,7 +2562,7 @@ static inline size_t cmidi2_ump_merge_sequences(cmidi2_ump* dst, size_t dstCapac
         }
         cmidi2_ump* s2 = (cmidi2_ump*) ((uint8_t*) seq2 + seq2Idx);
         while (cmidi2_ump_get_message_type(s2) == CMIDI2_MESSAGE_TYPE_UTILITY &&
-               cmidi2_ump_get_status_code(s2) == CMIDI2_JR_TIMESTAMP) {
+               cmidi2_ump_get_status_code(s2) == CMIDI2_UTILITY_STATUS_JR_TIMESTAMP) {
             timestamp2 += cmidi2_ump_get_jr_timestamp_timestamp(s2);
             seq2Idx += 4;
             if (seq2Idx >= seq2Size)
