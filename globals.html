@@ -78,6 +78,15 @@ $(function() {
 <li>CMIDI2_ATTRIBUTE_TYPE_PROFILE
 : <a class="el" href="cmidi2_8h.html#a1ba7f86e41504a3cf90a03fd31b28341a3ada6fbe8a36407e4721e2de11a79c95">cmidi2.h</a>
 </li>
+<li>CMIDI2_BINARY_READER_RESULT_COMPLETE
+: <a class="el" href="cmidi2_8h.html#a768352205eb27f80cb7a0a5d3333e974a739f4e3e05174edfdc40e002f661a8df">cmidi2.h</a>
+</li>
+<li>CMIDI2_BINARY_READER_RESULT_INCOMPLETE
+: <a class="el" href="cmidi2_8h.html#a768352205eb27f80cb7a0a5d3333e974a4e0e9761d40761180cc754dfb6fca2f1">cmidi2.h</a>
+</li>
+<li>CMIDI2_BINARY_READER_RESULT_NO_SPACE
+: <a class="el" href="cmidi2_8h.html#a768352205eb27f80cb7a0a5d3333e974a483ab43773f782a3dbebee9ed09e2582">cmidi2.h</a>
+</li>
 <li>cmidi2_cc
 : <a class="el" href="cmidi2_8h.html#a4dac5a17d70d4cbbad6c2a70c0213a24">cmidi2.h</a>
 </li>
@@ -321,6 +330,15 @@ $(function() {
 <li>cmidi2_ci_7bit_int28_at()
 : <a class="el" href="cmidi2_8h.html#a4bfadc9311330036a8d737b226ec11d0">cmidi2.h</a>
 </li>
+<li>cmidi2_ci_ack()
+: <a class="el" href="cmidi2_8h.html#a9df4c81b6b26ce7181df55db8bcefbd0">cmidi2.h</a>
+</li>
+<li>cmidi2_ci_ack_nak_common()
+: <a class="el" href="cmidi2_8h.html#ac519bacc11a5daee16d627e08504a414">cmidi2.h</a>
+</li>
+<li>CMIDI2_CI_DEVICE_ID_WHOLE_FUNCTION_BLOCK
+: <a class="el" href="cmidi2_8h.html#a562dc273ad0cd48923cdc451086082d5">cmidi2.h</a>
+</li>
 <li>cmidi2_ci_direct_uint16_at()
 : <a class="el" href="cmidi2_8h.html#a4be690e7e3c60b185d87492323ef77b5">cmidi2.h</a>
 </li>
@@ -328,22 +346,40 @@ $(function() {
 : <a class="el" href="cmidi2_8h.html#a1ddb3b42f42ff30f6ca159b470a39cb2">cmidi2.h</a>
 </li>
 <li>cmidi2_ci_discovery()
-: <a class="el" href="cmidi2_8h.html#a916cbd125f059a329d65fb563b0bd9bc">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#ad21b4dd0c63bd9bb52e4df7ca5392dc2">cmidi2.h</a>
 </li>
 <li>cmidi2_ci_discovery_common()
-: <a class="el" href="cmidi2_8h.html#a6fcce4336bebd0a929b7688f4b236a86">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#aab35832199fbd1397be2ecf88f314119">cmidi2.h</a>
 </li>
 <li>cmidi2_ci_discovery_invalidate_muid()
 : <a class="el" href="cmidi2_8h.html#aabd07ac56ff3f676a15b2460581121c1">cmidi2.h</a>
 </li>
-<li>cmidi2_ci_discovery_nak()
-: <a class="el" href="cmidi2_8h.html#a2cb9cd92488a3ceb08fc92e7874a4ef0">cmidi2.h</a>
-</li>
 <li>cmidi2_ci_discovery_reply()
-: <a class="el" href="cmidi2_8h.html#a74eeb0bcbee8d816e41d413812cf82b0">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a9e105e795f34e19e06e7e715121b1828">cmidi2.h</a>
 </li>
 <li>cmidi2_ci_message_common()
 : <a class="el" href="cmidi2_8h.html#ae1b7dfdf38737bd4a0223aef34bbaa1d">cmidi2.h</a>
+</li>
+<li>cmidi2_ci_nak()
+: <a class="el" href="cmidi2_8h.html#a19332bda973b231b4baec3d1741ebf44">cmidi2.h</a>
+</li>
+<li>cmidi2_ci_process_get_capabilities()
+: <a class="el" href="cmidi2_8h.html#a431749c01878b5446447775cae7e921a">cmidi2.h</a>
+</li>
+<li>cmidi2_ci_process_get_capabilities_reply()
+: <a class="el" href="cmidi2_8h.html#a9710bcf64764c167761edc90f7d418be">cmidi2.h</a>
+</li>
+<li>cmidi2_ci_process_get_midi_report()
+: <a class="el" href="cmidi2_8h.html#a13cc798d77fcef3a1c041601084a0f13">cmidi2.h</a>
+</li>
+<li>cmidi2_ci_process_get_midi_report_end()
+: <a class="el" href="cmidi2_8h.html#afb753bc494d37d9d682ab0426c0adcc8">cmidi2.h</a>
+</li>
+<li>cmidi2_ci_process_get_midi_report_reply()
+: <a class="el" href="cmidi2_8h.html#a51a7b8820e2e8902ebefcd653742567e">cmidi2.h</a>
+</li>
+<li>cmidi2_ci_process_midi_report_common()
+: <a class="el" href="cmidi2_8h.html#af03b52c1067375be1fdd0ae976ddb515">cmidi2.h</a>
 </li>
 <li>cmidi2_ci_profile()
 : <a class="el" href="cmidi2_8h.html#abf82c63f771334e10ddf6686aeaff2e3">cmidi2.h</a>
@@ -369,11 +405,38 @@ $(function() {
 <li>cmidi2_ci_property_common()
 : <a class="el" href="cmidi2_8h.html#a3f54a0068356fb100aa40f81dae6afed">cmidi2.h</a>
 </li>
+<li>cmidi2_ci_property_data_common()
+: <a class="el" href="cmidi2_8h.html#a8abd7f24b152eebfefbbd0aaecb647ec">cmidi2.h</a>
+</li>
 <li>CMIDI2_CI_PROPERTY_EXCHANGE_SUPPORTED
 : <a class="el" href="cmidi2_8h.html#a92b88d136ba7abf4ed3c3882db1a9323">cmidi2.h</a>
 </li>
 <li>cmidi2_ci_property_get_capabilities()
 : <a class="el" href="cmidi2_8h.html#a14f680d6ae2f76295c0409199c6b37c0">cmidi2.h</a>
+</li>
+<li>cmidi2_ci_property_get_capabilities_reply()
+: <a class="el" href="cmidi2_8h.html#af817363e61bd5e93407933bccdefa9cd">cmidi2.h</a>
+</li>
+<li>cmidi2_ci_property_get_data()
+: <a class="el" href="cmidi2_8h.html#a5826940c49d13ae7be08c4c8c6b4f3e9">cmidi2.h</a>
+</li>
+<li>cmidi2_ci_property_get_data_reply()
+: <a class="el" href="cmidi2_8h.html#aba97a559f81f6d8a83236003ef7c64f5">cmidi2.h</a>
+</li>
+<li>cmidi2_ci_property_notify()
+: <a class="el" href="cmidi2_8h.html#a29ec89f5c6996b9194aac9504daa1e53">cmidi2.h</a>
+</li>
+<li>cmidi2_ci_property_set_data()
+: <a class="el" href="cmidi2_8h.html#a0e3a7f2fb0f02716b4997b56750ea393">cmidi2.h</a>
+</li>
+<li>cmidi2_ci_property_set_data_reply()
+: <a class="el" href="cmidi2_8h.html#aefcdf3c03dd29f3a56de1414d6315154">cmidi2.h</a>
+</li>
+<li>cmidi2_ci_property_subscribe()
+: <a class="el" href="cmidi2_8h.html#a47d120e83edf2353dbb923b6a0cd5ed2">cmidi2.h</a>
+</li>
+<li>cmidi2_ci_property_subscribe_reply()
+: <a class="el" href="cmidi2_8h.html#a928c7eeda1f26554a2610ebe5fe8094a">cmidi2.h</a>
 </li>
 <li>cmidi2_ci_protocol
 : <a class="el" href="cmidi2_8h.html#a3e6fed76e0218350569e7ef21df3d170">cmidi2.h</a>
@@ -411,6 +474,9 @@ $(function() {
 <li>CMIDI2_CI_SUB_ID
 : <a class="el" href="cmidi2_8h.html#a6eadbd6354b21dc885f68ae2cdad3b1d">cmidi2.h</a>
 </li>
+<li>CMIDI2_CI_SUB_ID_2_ACK
+: <a class="el" href="cmidi2_8h.html#a66c7c514ab711216a67b6aa1832d192b">cmidi2.h</a>
+</li>
 <li>CMIDI2_CI_SUB_ID_2_CONFIRM_NEW_PROTOCOL_ESTABLISHED
 : <a class="el" href="cmidi2_8h.html#a90d9d3832f0e61b9cdea93ea13b1de5f">cmidi2.h</a>
 </li>
@@ -425,6 +491,21 @@ $(function() {
 </li>
 <li>CMIDI2_CI_SUB_ID_2_NAK
 : <a class="el" href="cmidi2_8h.html#ab849fb6283e28ec5b2ffc749cdbf7e8f">cmidi2.h</a>
+</li>
+<li>CMIDI2_CI_SUB_ID_2_PROCESS_GET_CAPABILITIES
+: <a class="el" href="cmidi2_8h.html#a1b7097386692ea460aec7052374b2bd4">cmidi2.h</a>
+</li>
+<li>CMIDI2_CI_SUB_ID_2_PROCESS_GET_CAPABILITIES_REPLY
+: <a class="el" href="cmidi2_8h.html#afd0ffc891959300faa48b6ed8c6125fc">cmidi2.h</a>
+</li>
+<li>CMIDI2_CI_SUB_ID_2_PROCESS_GET_MIDI_REPORT
+: <a class="el" href="cmidi2_8h.html#a8fc88316e747588177a85e5135335eec">cmidi2.h</a>
+</li>
+<li>CMIDI2_CI_SUB_ID_2_PROCESS_GET_MIDI_REPORT_END
+: <a class="el" href="cmidi2_8h.html#aa58493bd87b6f1dfa1ad1a6a80020247">cmidi2.h</a>
+</li>
+<li>CMIDI2_CI_SUB_ID_2_PROCESS_GET_MIDI_REPORT_REPLY
+: <a class="el" href="cmidi2_8h.html#a5014bae08c1a8efe2b00554b046fe820">cmidi2.h</a>
 </li>
 <li>CMIDI2_CI_SUB_ID_2_PROFILE_DISABLED_REPORT
 : <a class="el" href="cmidi2_8h.html#a4f42839520e0470f84f924dad91c9e7c">cmidi2.h</a>
@@ -447,14 +528,14 @@ $(function() {
 <li>CMIDI2_CI_SUB_ID_2_PROPERTY_CAPABILITIES_REPLY
 : <a class="el" href="cmidi2_8h.html#ae64959ad144f4d6a3a02a546646b6953">cmidi2.h</a>
 </li>
-<li>CMIDI2_CI_SUB_ID_2_PROPERTY_GET_DATA_INQUIRY
-: <a class="el" href="cmidi2_8h.html#aa797e033fd52e003f99abdefd1627cdd">cmidi2.h</a>
+<li>CMIDI2_CI_SUB_ID_2_PROPERTY_GET_DATA
+: <a class="el" href="cmidi2_8h.html#aee34aca510b2483279dd9936453bc151">cmidi2.h</a>
 </li>
 <li>CMIDI2_CI_SUB_ID_2_PROPERTY_GET_DATA_REPLY
 : <a class="el" href="cmidi2_8h.html#a6a358e1ad501667781e9623230ffd145">cmidi2.h</a>
 </li>
-<li>CMIDI2_CI_SUB_ID_2_PROPERTY_HAS_DATA_INQUIRY
-: <a class="el" href="cmidi2_8h.html#acc82778b8aba4050b5e00f9c19c59e08">cmidi2.h</a>
+<li>CMIDI2_CI_SUB_ID_2_PROPERTY_HAS_DATA
+: <a class="el" href="cmidi2_8h.html#aa5e9f5bae294f94e128bfec2ea493832">cmidi2.h</a>
 </li>
 <li>CMIDI2_CI_SUB_ID_2_PROPERTY_HAS_DATA_REPLY
 : <a class="el" href="cmidi2_8h.html#a737a44c0369c672116a2b9d04fb38707">cmidi2.h</a>
@@ -462,8 +543,8 @@ $(function() {
 <li>CMIDI2_CI_SUB_ID_2_PROPERTY_NOTIFY
 : <a class="el" href="cmidi2_8h.html#a1eb393fbf2532fcd11481cd06aee7383">cmidi2.h</a>
 </li>
-<li>CMIDI2_CI_SUB_ID_2_PROPERTY_SET_DATA_INQUIRY
-: <a class="el" href="cmidi2_8h.html#a0f78a7282a57d4c2d6e71e3a714baae5">cmidi2.h</a>
+<li>CMIDI2_CI_SUB_ID_2_PROPERTY_SET_DATA
+: <a class="el" href="cmidi2_8h.html#a92f8c360c6164aff4e60ae6fd5bc7527">cmidi2.h</a>
 </li>
 <li>CMIDI2_CI_SUB_ID_2_PROPERTY_SET_DATA_REPLY
 : <a class="el" href="cmidi2_8h.html#ab20d3f1271b214271c9f9903e25f275b">cmidi2.h</a>
@@ -531,6 +612,99 @@ $(function() {
 <li>cmidi2_convert_ump_to_midi1()
 : <a class="el" href="cmidi2_8h.html#ab33e6f32d6c7ab1fa98073a872e20077">cmidi2.h</a>
 </li>
+<li>CMIDI2_FLEX_DATA_BANK_METADATA_TEXT
+: <a class="el" href="cmidi2_8h.html#a7f3183bd955048794de71a4219d27365a5d466c654760075ad63dcabf7a040252">cmidi2.h</a>
+</li>
+<li>CMIDI2_FLEX_DATA_BANK_PERFORMANCE_TEXT
+: <a class="el" href="cmidi2_8h.html#a7f3183bd955048794de71a4219d27365ad30e3001534859e0702d50a9b898857f">cmidi2.h</a>
+</li>
+<li>CMIDI2_FLEX_DATA_BANK_SETUP_AND_PERFORMANCE
+: <a class="el" href="cmidi2_8h.html#a7f3183bd955048794de71a4219d27365a3d4e783ce85f9653b337bb214126deb3">cmidi2.h</a>
+</li>
+<li>cmidi2_flex_data_handler
+: <a class="el" href="cmidi2_8h.html#a880060c5811e16400aa3c65a60a6715c">cmidi2.h</a>
+</li>
+<li>cmidi2_flex_data_metadata_text_status
+: <a class="el" href="cmidi2_8h.html#a179a9cd5eea5248b02ae04ea8219fa3a">cmidi2.h</a>
+</li>
+<li>cmidi2_flex_data_performance_text_status
+: <a class="el" href="cmidi2_8h.html#a5b2bab6710da577a4bec084425101ebc">cmidi2.h</a>
+</li>
+<li>cmidi2_flex_data_setup_status
+: <a class="el" href="cmidi2_8h.html#abaee51237aac3d2a3792d2a5ae6e3be9">cmidi2.h</a>
+</li>
+<li>CMIDI2_FLEX_DATA_STATUS_ACCOMPANYING_PERFORMAER_NAME
+: <a class="el" href="cmidi2_8h.html#a179a9cd5eea5248b02ae04ea8219fa3aa6236cdef1d4f0d6ecd5649258e9ef9c7">cmidi2.h</a>
+</li>
+<li>CMIDI2_FLEX_DATA_STATUS_ARRANGER_NAME
+: <a class="el" href="cmidi2_8h.html#a179a9cd5eea5248b02ae04ea8219fa3aabdd4deae2d9b641363d2fae76fccc084">cmidi2.h</a>
+</li>
+<li>cmidi2_flex_data_status_bank
+: <a class="el" href="cmidi2_8h.html#a7f3183bd955048794de71a4219d27365">cmidi2.h</a>
+</li>
+<li>CMIDI2_FLEX_DATA_STATUS_CLIP_NAME
+: <a class="el" href="cmidi2_8h.html#a179a9cd5eea5248b02ae04ea8219fa3aa26eadedf2b28917ba4ac7cb5c2ded81a">cmidi2.h</a>
+</li>
+<li>CMIDI2_FLEX_DATA_STATUS_COMPOSER_NAME
+: <a class="el" href="cmidi2_8h.html#a179a9cd5eea5248b02ae04ea8219fa3aaaf94200ef9bd099f9d783eea7c9256d4">cmidi2.h</a>
+</li>
+<li>CMIDI2_FLEX_DATA_STATUS_COPYRIGHT_NAME
+: <a class="el" href="cmidi2_8h.html#a179a9cd5eea5248b02ae04ea8219fa3aac982c0221fb8a38e8db27af44d54018b">cmidi2.h</a>
+</li>
+<li>CMIDI2_FLEX_DATA_STATUS_LYRICIST_NAME
+: <a class="el" href="cmidi2_8h.html#a179a9cd5eea5248b02ae04ea8219fa3aa4606393118906f01d981e8a74ada0aeb">cmidi2.h</a>
+</li>
+<li>CMIDI2_FLEX_DATA_STATUS_LYRICS
+: <a class="el" href="cmidi2_8h.html#a5b2bab6710da577a4bec084425101ebca1075ff6916ca187961344a5c586654b2">cmidi2.h</a>
+</li>
+<li>CMIDI2_FLEX_DATA_STATUS_LYRICS_LANGUAGE
+: <a class="el" href="cmidi2_8h.html#a5b2bab6710da577a4bec084425101ebca9dfbe168311c21c172894efecf2907d5">cmidi2.h</a>
+</li>
+<li>CMIDI2_FLEX_DATA_STATUS_PRIMARY_PERFORMER_NAME
+: <a class="el" href="cmidi2_8h.html#a179a9cd5eea5248b02ae04ea8219fa3aa62450285d406eb7767fe713e85a6148b">cmidi2.h</a>
+</li>
+<li>CMIDI2_FLEX_DATA_STATUS_PROJECT_NAME
+: <a class="el" href="cmidi2_8h.html#a179a9cd5eea5248b02ae04ea8219fa3aad17fdaeacda8fe72eed750febc3d5f99">cmidi2.h</a>
+</li>
+<li>CMIDI2_FLEX_DATA_STATUS_PUBLISHER_NAME
+: <a class="el" href="cmidi2_8h.html#a179a9cd5eea5248b02ae04ea8219fa3aa422733e9c19fba6a98e8973025372c22">cmidi2.h</a>
+</li>
+<li>CMIDI2_FLEX_DATA_STATUS_RECORDING_DATE
+: <a class="el" href="cmidi2_8h.html#a179a9cd5eea5248b02ae04ea8219fa3aaeab04b49212077be2ade9bfae6b29863">cmidi2.h</a>
+</li>
+<li>CMIDI2_FLEX_DATA_STATUS_RECORDING_LOCATION
+: <a class="el" href="cmidi2_8h.html#a179a9cd5eea5248b02ae04ea8219fa3aa08ddaee20a8fb9cd2abe26ed7bb1c288">cmidi2.h</a>
+</li>
+<li>CMIDI2_FLEX_DATA_STATUS_RUBY
+: <a class="el" href="cmidi2_8h.html#a5b2bab6710da577a4bec084425101ebca79a6591302fe3de20114a55aa7cdfb6c">cmidi2.h</a>
+</li>
+<li>CMIDI2_FLEX_DATA_STATUS_RUBY_LANGUAGE
+: <a class="el" href="cmidi2_8h.html#a5b2bab6710da577a4bec084425101ebca6df3805eed9a5ad543f41e8132279e65">cmidi2.h</a>
+</li>
+<li>CMIDI2_FLEX_DATA_STATUS_SET_CHORD_NAME
+: <a class="el" href="cmidi2_8h.html#abaee51237aac3d2a3792d2a5ae6e3be9a43503ae8a4d68b4821d3b24344cb7372">cmidi2.h</a>
+</li>
+<li>CMIDI2_FLEX_DATA_STATUS_SET_KEY_SIGNATURE
+: <a class="el" href="cmidi2_8h.html#abaee51237aac3d2a3792d2a5ae6e3be9afa6ea75b59a093729509e9752d34521c">cmidi2.h</a>
+</li>
+<li>CMIDI2_FLEX_DATA_STATUS_SET_METRONOME
+: <a class="el" href="cmidi2_8h.html#abaee51237aac3d2a3792d2a5ae6e3be9a8b7c0eea9ac991a6bf01cd999aafd64b">cmidi2.h</a>
+</li>
+<li>CMIDI2_FLEX_DATA_STATUS_SET_TEMPO
+: <a class="el" href="cmidi2_8h.html#abaee51237aac3d2a3792d2a5ae6e3be9a7b40da199a23a5d5e6bb78b4ecfbee69">cmidi2.h</a>
+</li>
+<li>CMIDI2_FLEX_DATA_STATUS_SET_TIME_SIGNATURE
+: <a class="el" href="cmidi2_8h.html#abaee51237aac3d2a3792d2a5ae6e3be9a4dd0ba018559eb7672314f32af1957ca">cmidi2.h</a>
+</li>
+<li>CMIDI2_FLEX_DATA_STATUS_SONG_NAME
+: <a class="el" href="cmidi2_8h.html#a179a9cd5eea5248b02ae04ea8219fa3aa2b295bae0854b6d670ff41e53248a2b9">cmidi2.h</a>
+</li>
+<li>CMIDI2_FLEX_DATA_STATUS_UNKNOWN_METADATA_TEXT
+: <a class="el" href="cmidi2_8h.html#a179a9cd5eea5248b02ae04ea8219fa3aa7fcbe7336bce4c9bcbc973ee91c7600b">cmidi2.h</a>
+</li>
+<li>CMIDI2_FLEX_DATA_STATUS_UNKNOWN_PERFORMANCE_TEXT
+: <a class="el" href="cmidi2_8h.html#a5b2bab6710da577a4bec084425101ebca9599adb0414332ee6b5405e1c4b463a0">cmidi2.h</a>
+</li>
 <li>CMIDI2_INTERNAL_ADD_DELTA_TIME
 : <a class="el" href="cmidi2_8h.html#ad62f8d89cc9beb0eeb7d0b52f35c07d2">cmidi2.h</a>
 </li>
@@ -549,6 +723,15 @@ $(function() {
 <li>cmidi2_internal_convert_midi1_dte_to_ump()
 : <a class="el" href="cmidi2_8h.html#a2fed4f9a2721e1d5460b72c5923ed955">cmidi2.h</a>
 </li>
+<li>cmidi2_internal_swap_endian()
+: <a class="el" href="cmidi2_8h.html#adeb0e77c89b9bf7263ddb44cde28ff6d">cmidi2.h</a>
+</li>
+<li>cmidi2_internal_sysex8_copy_data_byte_swapping()
+: <a class="el" href="cmidi2_8h.html#a642bc86a0923320430cbdbde696df291">cmidi2.h</a>
+</li>
+<li>cmidi2_internal_ump_merge_sequence_write_delta_time()
+: <a class="el" href="cmidi2_8h.html#a1d0232cb4135bdf7cb5e44ba51dccb07">cmidi2.h</a>
+</li>
 <li>CMIDI2_JR_CLOCK
 : <a class="el" href="cmidi2_8h.html#a60bb167abecf2a02ff721ad16bb0831da4d9b03f93a9d1910e80d2e7b4c862eb8">cmidi2.h</a>
 </li>
@@ -559,10 +742,13 @@ $(function() {
 : <a class="el" href="cmidi2_8h.html#a60bb167abecf2a02ff721ad16bb0831d">cmidi2.h</a>
 </li>
 <li>cmidi2_mds_handler
-: <a class="el" href="cmidi2_8h.html#a1c1481675e9a8fe4a48b13d2a75cb264">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a452ecf9c54569768c966671bd4e11e8b">cmidi2.h</a>
 </li>
 <li>cmidi2_message_type
 : <a class="el" href="cmidi2_8h.html#adde753403be90167865525f5d280488f">cmidi2.h</a>
+</li>
+<li>CMIDI2_MESSAGE_TYPE_FLEX_DATA
+: <a class="el" href="cmidi2_8h.html#adde753403be90167865525f5d280488fa41709815ba097ee2ac67185adac607a8">cmidi2.h</a>
 </li>
 <li>CMIDI2_MESSAGE_TYPE_MIDI_1_CHANNEL
 : <a class="el" href="cmidi2_8h.html#adde753403be90167865525f5d280488fa626f055370b3f3c2050e3699052b30f3">cmidi2.h</a>
@@ -578,6 +764,9 @@ $(function() {
 </li>
 <li>CMIDI2_MESSAGE_TYPE_SYSTEM
 : <a class="el" href="cmidi2_8h.html#adde753403be90167865525f5d280488fabd344b511055f1719e993a6403187552">cmidi2.h</a>
+</li>
+<li>CMIDI2_MESSAGE_TYPE_UMP_STREAM
+: <a class="el" href="cmidi2_8h.html#adde753403be90167865525f5d280488fa484679da40514b86e028a753f90e3aa2">cmidi2.h</a>
 </li>
 <li>CMIDI2_MESSAGE_TYPE_UTILITY
 : <a class="el" href="cmidi2_8h.html#adde753403be90167865525f5d280488fa46e11747342a8ce6540d84d8b16eb797">cmidi2.h</a>
@@ -825,14 +1014,284 @@ $(function() {
 <li>CMIDI2_SYSTEM_STATUS_TUNE_REQUEST
 : <a class="el" href="cmidi2_8h.html#ac9f9841a9db94c3583dde1d206f43804a1c37b0b83d80135b388a8665b0239f74">cmidi2.h</a>
 </li>
+<li>CMIDI2_TRANSLATOR_BIG_ENDIAN
+: <a class="el" href="cmidi2_8h.html#a03fefccc7745bab2e353d5e1b624fe01ad7e31a9b21a048a14eedec1d8d9a6601">cmidi2.h</a>
+</li>
+<li>CMIDI2_TRANSLATOR_DEFAULT_ENDIAN
+: <a class="el" href="cmidi2_8h.html#a03fefccc7745bab2e353d5e1b624fe01a23bfe89b4879842b4d1b06bfd6e89d90">cmidi2.h</a>
+</li>
+<li>cmidi2_translator_endianness
+: <a class="el" href="cmidi2_8h.html#a03fefccc7745bab2e353d5e1b624fe01">cmidi2.h</a>
+</li>
+<li>CMIDI2_TRANSLATOR_LITTLE_ENDIAN
+: <a class="el" href="cmidi2_8h.html#a03fefccc7745bab2e353d5e1b624fe01a2eb944e8a0937babf7d8ff98b693d75c">cmidi2.h</a>
+</li>
 <li>cmidi2_ump
 : <a class="el" href="cmidi2_8h.html#a4b524ddb9ec1ce3bd7325eba9c3c3539">cmidi2.h</a>
 </li>
+<li>cmidi2_ump128_t
+: <a class="el" href="cmidi2_8h.html#a9fa77ce5e76b3be6d3cce8061a0cfde6">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_binary_read_continuity_checker_func
+: <a class="el" href="cmidi2_8h.html#a1d9798b03c00722c2bd28ca9ffb2f570">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_binary_read_state
+: <a class="el" href="cmidi2_8h.html#a3c0066b7a95496efedd2e9e2bbdfe881">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_binary_read_state_init()
+: <a class="el" href="cmidi2_8h.html#a132dbe8e7eee2b292bf32d42d23ea037">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_binary_read_state_reset()
+: <a class="el" href="cmidi2_8h.html#a6461d442b0744e705755c930c90cc8cb">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_binary_reader_result_code
+: <a class="el" href="cmidi2_8h.html#a768352205eb27f80cb7a0a5d3333e974">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_chor_name_chord_type
+: <a class="el" href="cmidi2_8h.html#a2e87c086576736151a4ca3a321132d35">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_NAME_A
+: <a class="el" href="cmidi2_8h.html#a6f89fd26215fbc35873977c88463e788a988afc6423f40f6636eb2c441af740cf">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_NAME_B
+: <a class="el" href="cmidi2_8h.html#a6f89fd26215fbc35873977c88463e788a76767f2d77aa8f8d11d023ceb49e665a">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_NAME_C
+: <a class="el" href="cmidi2_8h.html#a6f89fd26215fbc35873977c88463e788a55ab201ef2b3d1011d9ec095f701f39b">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_NAME_D
+: <a class="el" href="cmidi2_8h.html#a6f89fd26215fbc35873977c88463e788a4e4bf12fa41aaf7b9f31570b24ebbd4c">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_NAME_DOUBLE_FLAT
+: <a class="el" href="cmidi2_8h.html#aca6b08354890713ab871cb98410b842cabd63997bf32c83d97c90d8e74e941cc3">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_NAME_DOUBLE_SHARP
+: <a class="el" href="cmidi2_8h.html#aca6b08354890713ab871cb98410b842caab437922d34d21609b0895e6bc876c70">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_NAME_E
+: <a class="el" href="cmidi2_8h.html#a6f89fd26215fbc35873977c88463e788a2562470ccce6809fdeee9f01f7331d87">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_NAME_F
+: <a class="el" href="cmidi2_8h.html#a6f89fd26215fbc35873977c88463e788aa0874629aa1e136ecade365c550326ff">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_NAME_FLAT
+: <a class="el" href="cmidi2_8h.html#aca6b08354890713ab871cb98410b842cae65fa746dcc6860d3fbe4845829771da">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_NAME_G
+: <a class="el" href="cmidi2_8h.html#a6f89fd26215fbc35873977c88463e788aba046914f6d963eef3793295e8efbb58">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_NAME_NATURAL
+: <a class="el" href="cmidi2_8h.html#aca6b08354890713ab871cb98410b842ca0a080fc264bd62c060a4ec6e6bb1e37d">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_NAME_SHARP
+: <a class="el" href="cmidi2_8h.html#aca6b08354890713ab871cb98410b842cafed3e4d58641cd12da06f3e2379079a1">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_chord_name_sharps_flats
+: <a class="el" href="cmidi2_8h.html#aca6b08354890713ab871cb98410b842c">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_chord_name_tonic_note
+: <a class="el" href="cmidi2_8h.html#a6f89fd26215fbc35873977c88463e788">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_NAME_UNKNOWN
+: <a class="el" href="cmidi2_8h.html#a6f89fd26215fbc35873977c88463e788a2236e83406e404c6ce8e34dfe867eda9">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_TYPE_7_SUSPENDED_4TH
+: <a class="el" href="cmidi2_8h.html#a2e87c086576736151a4ca3a321132d35a5b9cf0d1ed9a70f83338ce7d360dea44">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_TYPE_AUGMENTED
+: <a class="el" href="cmidi2_8h.html#a2e87c086576736151a4ca3a321132d35a0fd7f85a3a29dfe3c6a968fd984a6162">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_TYPE_AUGMENTED_7TH
+: <a class="el" href="cmidi2_8h.html#a2e87c086576736151a4ca3a321132d35a44592eba450dda7c837402cca5bf5023">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_TYPE_DIMINISHED
+: <a class="el" href="cmidi2_8h.html#a2e87c086576736151a4ca3a321132d35af605ed318ac81da2fdc8691427802577">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_TYPE_DIMINISHED_7TH
+: <a class="el" href="cmidi2_8h.html#a2e87c086576736151a4ca3a321132d35ad284b994ff6fcf5ca1fd959b11773a8b">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_TYPE_DOMINANT
+: <a class="el" href="cmidi2_8h.html#a2e87c086576736151a4ca3a321132d35a781d4374c9b80ebdf2280d333994d375">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_TYPE_DOMINANT_11TH
+: <a class="el" href="cmidi2_8h.html#a2e87c086576736151a4ca3a321132d35ade37979bd040c82d7adb5013cc7b5b81">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_TYPE_DOMINANT_13TH
+: <a class="el" href="cmidi2_8h.html#a2e87c086576736151a4ca3a321132d35a6dfb579f50e566a9f1115d1571797cba">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_TYPE_DOMINANT_9TH
+: <a class="el" href="cmidi2_8h.html#a2e87c086576736151a4ca3a321132d35ad3068fdb27b64e5e4ee6c44cf7a77f3e">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_TYPE_HALF_DIMINISHED
+: <a class="el" href="cmidi2_8h.html#a2e87c086576736151a4ca3a321132d35a51f6e4d8a0649e846eb97c00e77cb476">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_TYPE_MAJOR
+: <a class="el" href="cmidi2_8h.html#a2e87c086576736151a4ca3a321132d35a2931f0c6bc2d85444eba02f75cfaf85f">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_TYPE_MAJOR_11TH
+: <a class="el" href="cmidi2_8h.html#a2e87c086576736151a4ca3a321132d35a13e16d978e98c0638d72cce31128f243">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_TYPE_MAJOR_13TH
+: <a class="el" href="cmidi2_8h.html#a2e87c086576736151a4ca3a321132d35a587602fde13390662bc6dd148de968a2">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_TYPE_MAJOR_6TH
+: <a class="el" href="cmidi2_8h.html#a2e87c086576736151a4ca3a321132d35aa05b14849a2a1b0a50f7044e9266a642">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_TYPE_MAJOR_7TH
+: <a class="el" href="cmidi2_8h.html#a2e87c086576736151a4ca3a321132d35a813ea3d7a2cfdf99781aa3bdea94e073">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_TYPE_MAJOR_9TH
+: <a class="el" href="cmidi2_8h.html#a2e87c086576736151a4ca3a321132d35a80e6533c97b047ddc12c211f40616c07">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_TYPE_MAJOR_MINOR
+: <a class="el" href="cmidi2_8h.html#a2e87c086576736151a4ca3a321132d35ab720b94e868ffd738e3b8995ad0f004f">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_TYPE_MINOR
+: <a class="el" href="cmidi2_8h.html#a2e87c086576736151a4ca3a321132d35a87637a27238d5db8ce2a460a76e3d611">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_TYPE_MINOR_11TH
+: <a class="el" href="cmidi2_8h.html#a2e87c086576736151a4ca3a321132d35aad9d0ee43424bfd0bd35f2b070d26d08">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_TYPE_MINOR_13TH
+: <a class="el" href="cmidi2_8h.html#a2e87c086576736151a4ca3a321132d35ae2fce3206cb742768324a416592dc08b">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_TYPE_MINOR_6TH
+: <a class="el" href="cmidi2_8h.html#a2e87c086576736151a4ca3a321132d35a5177627795c8ac8d11d4616680520265">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_TYPE_MINOR_7TH
+: <a class="el" href="cmidi2_8h.html#a2e87c086576736151a4ca3a321132d35aa36cd8422c30023386be3787ffe5ef06">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_TYPE_MINOR_9TH
+: <a class="el" href="cmidi2_8h.html#a2e87c086576736151a4ca3a321132d35a382af1e94008a80d72497de510263b43">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_TYPE_MINOR_MAJOR
+: <a class="el" href="cmidi2_8h.html#a2e87c086576736151a4ca3a321132d35af9068e00cea32c75184d7ee24a8f1085">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_TYPE_PEDAL
+: <a class="el" href="cmidi2_8h.html#a2e87c086576736151a4ca3a321132d35a64aad5eeaed9945d6a243cf566e1a4f7">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_TYPE_POWER
+: <a class="el" href="cmidi2_8h.html#a2e87c086576736151a4ca3a321132d35a3e0e16ba2f88f16ff5fbe1cadd0006d8">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_TYPE_SUSPENDED_2ND
+: <a class="el" href="cmidi2_8h.html#a2e87c086576736151a4ca3a321132d35a9085a6de952ef567b74ff0995c7d5182">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_TYPE_SUSPENDED_4TH
+: <a class="el" href="cmidi2_8h.html#a2e87c086576736151a4ca3a321132d35aea0d5d2f4f0a3f5782de9b1f4989d513">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_CHORD_TYPE_UNKNOWN
+: <a class="el" href="cmidi2_8h.html#a2e87c086576736151a4ca3a321132d35a7d34f3851d9a48effed51008743f9119">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_dcs()
+: <a class="el" href="cmidi2_8h.html#a6889c214ac43d9c38647a5e839f48dd3">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_dctpq()
+: <a class="el" href="cmidi2_8h.html#a6fbb5b7febf43a3a0277ce4e5d1aa9e1">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_device_identity_notification()
+: <a class="el" href="cmidi2_8h.html#a716a4642e10ed16ac4ee5d63bf699214">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_end_of_clip()
+: <a class="el" href="cmidi2_8h.html#a391a0f923a05181101ec0888b3f18827">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_endpoint_discovery()
+: <a class="el" href="cmidi2_8h.html#a4354a3b880011f205baa333fee810c11">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_ENDPOINT_FILTER_DEVICE_IDENTITY
+: <a class="el" href="cmidi2_8h.html#a48918f58724a859751229c09ed60abf8a635e06929fb192db8aaab28c0d230e4c">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_ENDPOINT_FILTER_ENDPOINT_INFO
+: <a class="el" href="cmidi2_8h.html#a48918f58724a859751229c09ed60abf8ac92d5e9e603712c6a0574a2ebad5d559">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_ENDPOINT_FILTER_ENDPOINT_NAME
+: <a class="el" href="cmidi2_8h.html#a48918f58724a859751229c09ed60abf8a29322fad6ac126fbd1ea11aa6f157afd">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_endpoint_filter_flags
+: <a class="el" href="cmidi2_8h.html#a48918f58724a859751229c09ed60abf8">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_ENDPOINT_FILTER_PRODUCT_INSTANCE_ID
+: <a class="el" href="cmidi2_8h.html#a48918f58724a859751229c09ed60abf8adec7f0487a023fb17da1278ffac962cc">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_ENDPOINT_FILTER_STREAM_CONFIGURATION
+: <a class="el" href="cmidi2_8h.html#a48918f58724a859751229c09ed60abf8a56b883d8df9e9f809cd43c2b05e58b2b">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_endpoint_info_notification()
+: <a class="el" href="cmidi2_8h.html#aae499c89b2441fcff119a0e58e363999">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_endpoint_name_notification()
+: <a class="el" href="cmidi2_8h.html#aa358ca1daf8dcc6da3b44e173c86b681">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_flex_data_complete_packet()
+: <a class="el" href="cmidi2_8h.html#a31626a33ff95d4a30a6b2cef396e3711">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_flex_data_get_num_packets()
+: <a class="el" href="cmidi2_8h.html#ade3caadce80a96243d24a3d9753a1a98">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_flex_data_get_packet_of()
+: <a class="el" href="cmidi2_8h.html#a3cb2d77caeeaf8f5a374da76aeeb1971">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_flex_data_process()
+: <a class="el" href="cmidi2_8h.html#a032fd989e4c9fcd4be339616c8eed7c6">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_flex_data_set_chord_name()
+: <a class="el" href="cmidi2_8h.html#a8a12ca4dd67f329d27880a2845a90d74">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_flex_data_set_key_signature()
+: <a class="el" href="cmidi2_8h.html#a14c0a26d394fd9b2351b9ce3d6e4fed7">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_flex_data_set_metronome()
+: <a class="el" href="cmidi2_8h.html#a1874806a5a3d515e6f9105987b42b9d2">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_flex_data_set_tempo_direct()
+: <a class="el" href="cmidi2_8h.html#aad319836efb25448130f16c277c082f1">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_flex_data_set_time_signature()
+: <a class="el" href="cmidi2_8h.html#a5f00da9d070ca6c07575d21e50513787">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_forge
+: <a class="el" href="cmidi2_8h.html#adade9ae3569a73fade550034806562f3">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_forge_add_packet_128()
+: <a class="el" href="cmidi2_8h.html#ab796f3a0be2ecc6da18c94a1823b319a">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_forge_add_packet_32()
+: <a class="el" href="cmidi2_8h.html#aceef074bd074802485a029ef1e761614">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_forge_add_packet_64()
+: <a class="el" href="cmidi2_8h.html#a602287fbb3a2671d6662b82d4bc052e4">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_forge_add_packets()
+: <a class="el" href="cmidi2_8h.html#aceb4d2c8b1015e0648bbbf262ccf55eb">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_forge_add_single_packet()
+: <a class="el" href="cmidi2_8h.html#aa3b0a6869deaa9230dc8efb0e7aa4433">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_forge_init()
+: <a class="el" href="cmidi2_8h.html#af1af67834f466273694437861a1e1e5d">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_function_block_discovery()
+: <a class="el" href="cmidi2_8h.html#a3434722db4c81f138e62665ff9770ef4">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_function_block_discovery_flags
+: <a class="el" href="cmidi2_8h.html#a5308924952a28f459cd08603c7b8e3d0">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_FUNCTION_BLOCK_FILTER_INFO
+: <a class="el" href="cmidi2_8h.html#a5308924952a28f459cd08603c7b8e3d0a533acb3fc2b4f639eb0842f483b247f2">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_FUNCTION_BLOCK_FILTER_NAME
+: <a class="el" href="cmidi2_8h.html#a5308924952a28f459cd08603c7b8e3d0a0b1df0d38dfefbdcf22728b82fd4a585">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_function_block_info_notification()
+: <a class="el" href="cmidi2_8h.html#a2b665e77bbddcece1de8a1ac3eb2fa0c">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_function_block_name_notification()
+: <a class="el" href="cmidi2_8h.html#abff203b2de486aecc0762b75bff1e444">cmidi2.h</a>
+</li>
 <li>cmidi2_ump_get_32_to_64()
-: <a class="el" href="cmidi2_8h.html#aaf385900c36b55457b4e727e3a56711f">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a6c7252f45290340dadce20dceb34678d">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_byte_at()
-: <a class="el" href="cmidi2_8h.html#a5bbbaf864dc775e2a0f80cc7eba5551e">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a538663e366923020839e9411f004fad1">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_byte_from_uint32()
 : <a class="el" href="cmidi2_8h.html#a81da023ffb03659f885f8c74832989c6">cmidi2.h</a>
@@ -841,190 +1300,205 @@ $(function() {
 : <a class="el" href="cmidi2_8h.html#a4e54c6e0217554fd4bcc050845ea4a34">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_channel()
-: <a class="el" href="cmidi2_8h.html#a816cee9d6ddfda417dc12a58dea6a1b5">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a06a61fec5b25794fac90271cb0f76c60">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_get_dcs()
+: <a class="el" href="cmidi2_8h.html#a536f019113196f364b91a3cf9d2e39e1">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_get_dctpq()
+: <a class="el" href="cmidi2_8h.html#ad4d8f584f94faba62995ca87c67e68bb">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_group()
-: <a class="el" href="cmidi2_8h.html#a504906d7a18caf280c3dcadd51b3e33e">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a8b0ca19d2a8e246e9e6e23f40889e591">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_jr_clock_time()
-: <a class="el" href="cmidi2_8h.html#a78890bed1bc3f1f4c2f90f8e5cdb174b">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#abb0c2d9d6495a4577921084ccc8c2521">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_jr_timestamp_timestamp()
-: <a class="el" href="cmidi2_8h.html#a7e7f44dd95042eea818bcf7b4f0e3554">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#aa9134acf8841e1943946ce0e5695e85c">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_mds_chunk_index()
-: <a class="el" href="cmidi2_8h.html#a38ac8bc601b3f8b8acad73c66086fb1f">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#ac2c1978598f8805cb12b7874e9725a7a">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_mds_device_id()
-: <a class="el" href="cmidi2_8h.html#a49feb7c3e5f9bdb7373fda18a3ff92c9">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#ab99defb66ef1b738e203420e2b11cb81">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_mds_manufacturer_id()
-: <a class="el" href="cmidi2_8h.html#ab017284d29edc12228b49eadc35f5c00">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#af9a31ff30586efdcafa956d995c7ecd2">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_mds_mds_id()
-: <a class="el" href="cmidi2_8h.html#afb585b1983f6e252feb15fb5ff68d9f8">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#ab78adfeb986e529d8ece1443dcb628db">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_mds_num_chunk_bytes()
-: <a class="el" href="cmidi2_8h.html#a5d0a68961b982cb88f0cf7469e25fefd">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a7be43ed00eadffa0e8ccd6e788e80964">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_mds_num_chunks()
-: <a class="el" href="cmidi2_8h.html#a6514ad58fac8097a0231c19578323c21">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a5cf386cc0df9e858964cc631618b4325">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_mds_sub_id_1()
-: <a class="el" href="cmidi2_8h.html#aab22ac916f0be0684b76d6e11a903bcd">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a2efda314a41800d4fb7460c51dff68f4">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_mds_sub_id_2()
-: <a class="el" href="cmidi2_8h.html#a31dcec7c2fab3df7a9b23b07e8a5f3c9">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a191e7be2e45deeedfc8fa02a9c080cb3">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_get_message_size_bytes()
+: <a class="el" href="cmidi2_8h.html#ad03654aa910d4419ff93a3289064cc7e">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_message_type()
-: <a class="el" href="cmidi2_8h.html#a11f21c8b288d1e98e284c6fdf9ad5d9c">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#acb14c2f480abf8d6555f1a4a5df0286c">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_midi1_byte2()
-: <a class="el" href="cmidi2_8h.html#adbf9bb15222bc74313f8ab40f081ce74">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#aaab8fea5253fec094f90754eed5e27ac">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_midi1_byte3()
-: <a class="el" href="cmidi2_8h.html#a3ec0ffa3dd38035f5b9af9ba294bfaab">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#ab41a52c5a71e4aaaddee7317d0fd9af9">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_midi1_caf_data()
-: <a class="el" href="cmidi2_8h.html#a76bb86f23526a557301ec29dce00d5c8">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#ad71ce11910244f16b56a6be7c76b6253">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_midi1_cc_data()
-: <a class="el" href="cmidi2_8h.html#ae72b16bc00858c5d4709190f0ce4713d">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a7b6f99ff000be91effeca7dcbd3a4472">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_midi1_cc_index()
-: <a class="el" href="cmidi2_8h.html#a633416d02994e797c72110b782e8d8d4">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a9fb6318cc262ec370bbc8f1e7cd90ce4">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_midi1_note_note()
-: <a class="el" href="cmidi2_8h.html#a9337229f29562ef9aec74cc250d1643b">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#abc91d4d220a73f96354cbf126e10781f">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_midi1_note_velocity()
-: <a class="el" href="cmidi2_8h.html#ac087cbb7094426815e4fd4eb6f89d89b">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a133505703009ac85fe3723547cb45746">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_midi1_paf_data()
-: <a class="el" href="cmidi2_8h.html#a0ac87e19ef865abbb315cb6214014750">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a41ff758629f93c7a8437c8a18b08b0a3">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_midi1_paf_note()
-: <a class="el" href="cmidi2_8h.html#a5d55770c9d52aab5184c6c337190c0fa">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a952713019e3c64d4e8c0c3ba5d63961a">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_midi1_pitch_bend_data()
-: <a class="el" href="cmidi2_8h.html#a1333525ae7cb02006d67c44f1c60ef88">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#afe1155cec6887b973259b81940bf6316">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_midi1_program_program()
-: <a class="el" href="cmidi2_8h.html#af93b6f5d43b75063a56611c9a15020cb">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a44821289fbe0c7f4aaf8e68a01816107">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_midi2_caf_data()
-: <a class="el" href="cmidi2_8h.html#aae465c16cbdbf993e22126b14becba75">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#afb7065713b965e918798fa27ebc78457">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_midi2_cc_data()
-: <a class="el" href="cmidi2_8h.html#a5551238b6f1978f795bbb1cd2933d47d">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#afead698933b1ed2aa0d011ec597616c2">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_midi2_cc_index()
-: <a class="el" href="cmidi2_8h.html#a797b97831854d7f2508d1c542b779bc0">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a7c74f8d0d7f9cfbfe6f79352e052df4d">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_midi2_note_attribute_data()
-: <a class="el" href="cmidi2_8h.html#a2077bafd2cc77aad8e4de4a91e6deb8c">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#aa1a59f02a5ceeecb0b2198ac4ac74a91">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_midi2_note_attribute_type()
-: <a class="el" href="cmidi2_8h.html#adad684b31f225ae9f6fd868e4e729891">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a1bc00b23f7aa27e28a606bff31f387d4">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_midi2_note_note()
-: <a class="el" href="cmidi2_8h.html#a81de21a9c14742d220ed06388005705c">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a444588bc0c237a255f95337ab74b0dc4">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_midi2_note_velocity()
-: <a class="el" href="cmidi2_8h.html#a3a62a1e19de1cc4e1abb127de24eff89">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#ac3560674061cfb8f8cc390dfd48cfcee">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_midi2_nrpn_data()
-: <a class="el" href="cmidi2_8h.html#abebc75812eb38b733cf4c0e1b86f42d8">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a3387f1097061a677cd5b05091550fb93">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_midi2_nrpn_lsb()
-: <a class="el" href="cmidi2_8h.html#a665bc333c60c347ab5ba5c23dd99a0a9">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a3687c40ceca0ae1e4dbf511a58a0564b">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_midi2_nrpn_msb()
-: <a class="el" href="cmidi2_8h.html#a71217aa333e3dd471cc7299449f181df">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a8846c7c5d1321e76342319b632ce4f01">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_midi2_paf_data()
-: <a class="el" href="cmidi2_8h.html#aba983c1540a8c4d94d3609fccae2ae3e">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a932ccc90df1dd4c7073438b0bbca8716">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_midi2_paf_note()
-: <a class="el" href="cmidi2_8h.html#a0ac0fb88bd6ebc05092eaafcfaca2adf">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a57448e97b4f432f0f7ea9f4ebfbdb8ca">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_midi2_pitch_bend_data()
-: <a class="el" href="cmidi2_8h.html#aff17c9a72bee9ef15aa3b426a5147052">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a6abd0bab641ce9a87c7e302e6dab66d3">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_midi2_pn_management_note()
-: <a class="el" href="cmidi2_8h.html#ac020c5417f641fc1fe3b3601a7e23813">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#add14ee59d831678cb0469acf418fc4ae">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_midi2_pn_management_options()
-: <a class="el" href="cmidi2_8h.html#a3a6bb6669d9134c689d186f03bcbc842">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#adfcc1eba5e5392363baac7cea9a943f4">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_midi2_pn_pitch_bend_note()
-: <a class="el" href="cmidi2_8h.html#a830fc645c7e345f277347b8760192c95">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#abe95598efa04911b244c99f1f4bc6363">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_midi2_pnacc_data()
-: <a class="el" href="cmidi2_8h.html#acb16d27c1a0fc4027cea02c0601c9ec4">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#abc708d79b8ab5c242d00d36d8ae0482e">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_midi2_pnacc_index()
-: <a class="el" href="cmidi2_8h.html#a61f82048495df164e2e446ec0c515cf7">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#ade9c3aa4fb05cbb116b97a7498adee54">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_midi2_pnacc_note()
-: <a class="el" href="cmidi2_8h.html#a917db68066c9fc9e3255e018d713f5c8">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a34bbb52c65a2c003ae51c742b3915070">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_midi2_pnrcc_data()
-: <a class="el" href="cmidi2_8h.html#ace7b6f6fbcbb990363699943e0ab663a">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a481a93d5667d5587c9fba38d5aa8882c">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_midi2_pnrcc_index()
-: <a class="el" href="cmidi2_8h.html#a37aef6bc478a2c1dd395f6374a209d8f">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a67b52640648ad15d082f9b547a6906f7">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_midi2_pnrcc_note()
-: <a class="el" href="cmidi2_8h.html#aec49ebb6ee1fe57bbcb8e6c0ef97cae5">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a856776816b4452127bdbdb014b50c517">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_midi2_program_bank_lsb()
-: <a class="el" href="cmidi2_8h.html#aeb6fe1d988879a0a10bbab7e61e17f6e">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a809f800165b1cb625ce67e945fccd02b">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_midi2_program_bank_msb()
-: <a class="el" href="cmidi2_8h.html#ab03fc4a742093ab304876777f0c1f787">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a086cca057d6c718c10826af5638665cf">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_midi2_program_options()
-: <a class="el" href="cmidi2_8h.html#af94874cf9fde4550e0eb1255e08c7868">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a32a942bf6c145203140015fd58ba80bb">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_midi2_program_program()
-: <a class="el" href="cmidi2_8h.html#abf2b0c8abaa468a11d575fdffdd3d461">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#af5c309a162a3439081823de84ea53ba8">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_midi2_rpn_data()
-: <a class="el" href="cmidi2_8h.html#ae34588cdad3d581505be9d5c130065df">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a89a96fdc4723b474f3ca30bc8bcf7bd7">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_midi2_rpn_lsb()
-: <a class="el" href="cmidi2_8h.html#a73be90de274d31155e50592a1b7c53af">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#ac7f50b6f8e6d4d23f6fbe9d89d250295">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_midi2_rpn_msb()
-: <a class="el" href="cmidi2_8h.html#a0d1c7e649cfbb078e4f620314cb22eec">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a9f1e87f1353d64e004f0f29753876242">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_num_bytes()
 : <a class="el" href="cmidi2_8h.html#a57246ad2f067cef168e5f16c53ec8b06">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_status_code()
-: <a class="el" href="cmidi2_8h.html#a4fcfdf349b0a20be90967bfb247a5f1c">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a6f8e24884f0385bd372e7fffc073571b">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_sysex7_num_bytes()
-: <a class="el" href="cmidi2_8h.html#acbce0cbab6ffc67ae14f1110fac5d6c7">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a67b1b8599fb2c399128612d6243131c6">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_get_sysex8_data()
+: <a class="el" href="cmidi2_8h.html#ada7a8470c4462f1c3048459c32372e50">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_sysex8_num_bytes()
-: <a class="el" href="cmidi2_8h.html#af4a440bd2c1489f13f8758d4f9927e9c">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#ae792900fa11a3362a8bc369b8ba35d5d">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_sysex8_stream_id()
-: <a class="el" href="cmidi2_8h.html#a3d99f7de98d1d8b8837d9977c480924d">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a099612bb0e02972c03baa7e5a8ac15d9">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_system_message_byte2()
-: <a class="el" href="cmidi2_8h.html#a48c7aa507f9dcc60aaefb6d8335f5d07">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#ab227dd18f12dcade6fe466861700e975">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_get_system_message_byte3()
-: <a class="el" href="cmidi2_8h.html#aecff299408c574bfc7dcc253851b9029">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#ab9bac5fc19b05c14895c1aa3f074be36">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_handler_u128
 : <a class="el" href="cmidi2_8h.html#a35cab62e79baf736b356b48842d97bfb">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_handler_u64
 : <a class="el" href="cmidi2_8h.html#af07954d355cdfc0a10238363a3f3844c">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_internal_name_notification()
+: <a class="el" href="cmidi2_8h.html#ad7c129b5686dfc4f3b0b66dcd554887c">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_jr_clock()
 : <a class="el" href="cmidi2_8h.html#aa7c162fe7ea06889979203c79a8bc47a">cmidi2.h</a>
@@ -1036,7 +1510,7 @@ $(function() {
 : <a class="el" href="cmidi2_8h.html#aba5bbf878ba96ebd0e5d47fc7fa97ed0">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_jr_timestamp_direct()
-: <a class="el" href="cmidi2_8h.html#ad03c7a8d7d1b262b1e9fcfe4cfbcec72">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#aa1a8e57b20f5c8466c47975d2b4699a7">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_mds_get_header()
 : <a class="el" href="cmidi2_8h.html#a13c7eefe3720085c3503b1d6846120af">cmidi2.h</a>
@@ -1048,10 +1522,13 @@ $(function() {
 : <a class="el" href="cmidi2_8h.html#acb6d79c0e9e5979d0d2e6d916202ffa1">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_mds_get_payload_of()
-: <a class="el" href="cmidi2_8h.html#a8579f51a30220dca39424f37f0057783">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#ad8825c2b55595deb7d6a71f71eb573d4">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_mds_process()
-: <a class="el" href="cmidi2_8h.html#a2ac019d81ac5baff8ef0bcf7c8ea6bf0">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#aa73be7fd1523d6915d43232f59096772">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_merge_sequences()
+: <a class="el" href="cmidi2_8h.html#abfd900d7a50d7ae2bc1b7a2d0267187a">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_midi1_caf()
 : <a class="el" href="cmidi2_8h.html#a70e2292ca06ffc68b8dc7173b735bd70">cmidi2.h</a>
@@ -1149,35 +1626,95 @@ $(function() {
 <li>cmidi2_ump_pitch_7_9_split()
 : <a class="el" href="cmidi2_8h.html#a2389341038c0bbc2de3bcfa819a8548f">cmidi2.h</a>
 </li>
+<li>cmidi2_ump_product_instance_id_notification()
+: <a class="el" href="cmidi2_8h.html#a6ac0f18e5f9c78c15be29fda225c6411">cmidi2.h</a>
+</li>
 <li>cmidi2_ump_read_uint32_bytes()
-: <a class="el" href="cmidi2_8h.html#a9f74e0fc69cb3f2fddddfd0a584637a3">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a4c35196098bac0fea90de5d37ec747ae">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_read_uint32_bytes_be()
-: <a class="el" href="cmidi2_8h.html#a892a0842e0a3a5e054ecf11bd927cdbb">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#af3e92c843c3093c17dc6110ca9124e27">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_read_uint32_bytes_le()
-: <a class="el" href="cmidi2_8h.html#a189dea47df1f74339a99db579ca24966">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a3bb0990289e6e7467e7925639470ae73">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_read_uint64_bytes()
-: <a class="el" href="cmidi2_8h.html#a927570b02ad8c0346fb4ea4f3f6f57d0">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a3522857db1b0b8ce46c21d5129da5d6c">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_read_uint64_bytes_be()
-: <a class="el" href="cmidi2_8h.html#abbe0e543e8fb5e9cae2f4a419d73b170">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a339f7c94994ad1879d6405feadcff116">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_read_uint64_bytes_le()
-: <a class="el" href="cmidi2_8h.html#a4e86e5f284038a02fb2f3fca76d3ccd7">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a88ace25867263b06a6920f2d5fec2e44">cmidi2.h</a>
 </li>
 <li>CMIDI2_UMP_SEQUENCE_FOREACH
 : <a class="el" href="cmidi2_8h.html#a191e7ccb92bae9e9da139378745cb7b5">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_SEQUENCE_FOREACH_BE
+: <a class="el" href="cmidi2_8h.html#ac87a8ecb9b55c40a81ed4771a60e29f8">cmidi2.h</a>
 </li>
 <li>CMIDI2_UMP_SEQUENCE_FOREACH_LE
 : <a class="el" href="cmidi2_8h.html#a20d16d897827f0b357bd4128785a4057">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_sequence_next()
-: <a class="el" href="cmidi2_8h.html#abb46fe060a1462d4c85cf522f54f4918">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a61643fc526f9031aa582d22ff071ba90">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_sequence_next_be()
+: <a class="el" href="cmidi2_8h.html#acf69918791f4f35d6ea9b65d7032fb99">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_sequence_next_le()
-: <a class="el" href="cmidi2_8h.html#a59037ce9ebd63257e537e12dbfd5a39c">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#ad27005bf3d17fa9c26052ddc56213291">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_start_of_clip()
+: <a class="el" href="cmidi2_8h.html#a7f31b1ed0674ac20cfd85a76a9d58ab3">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_stream_configuration_notification()
+: <a class="el" href="cmidi2_8h.html#a68999eb5f42ce55164775ce1f3046996">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_stream_configuration_request()
+: <a class="el" href="cmidi2_8h.html#ad36550a3df043e92cf4b2feaa5b8d144">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_stream_selector_func
+: <a class="el" href="cmidi2_8h.html#a26e1e86a2ba5213be2ace45127b75101">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_stream_status
+: <a class="el" href="cmidi2_8h.html#a1a20a0b98922e70383a2c80c9908580d">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_STREAM_STATUS_DEVICE_IDENTITY
+: <a class="el" href="cmidi2_8h.html#a1a20a0b98922e70383a2c80c9908580da157158bea80c8274f09223d5fb0666eb">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_STREAM_STATUS_END_OF_CLIP
+: <a class="el" href="cmidi2_8h.html#a1a20a0b98922e70383a2c80c9908580daee78d8a709b03afdc5a9db25be72c34a">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_STREAM_STATUS_ENDPOINT_DISCOVERY
+: <a class="el" href="cmidi2_8h.html#a1a20a0b98922e70383a2c80c9908580dae58b8cb02a5238335e344e0f01b7fd5b">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_STREAM_STATUS_ENDPOINT_INFO
+: <a class="el" href="cmidi2_8h.html#a1a20a0b98922e70383a2c80c9908580da5bf9aa7a406c6b6904162c574605874d">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_STREAM_STATUS_ENDPOINT_NAME
+: <a class="el" href="cmidi2_8h.html#a1a20a0b98922e70383a2c80c9908580dad3d542cc205cba109aa3ec7e339014f6">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_STREAM_STATUS_FUNCTION_BLOCK_DISCOVERY
+: <a class="el" href="cmidi2_8h.html#a1a20a0b98922e70383a2c80c9908580dafcbbd1add980d18c0b133559570fef96">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_STREAM_STATUS_FUNCTION_BLOCK_INFO
+: <a class="el" href="cmidi2_8h.html#a1a20a0b98922e70383a2c80c9908580dab98714f04808d31cc024fc760b25599b">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_STREAM_STATUS_FUNCTION_BLOCK_NAME
+: <a class="el" href="cmidi2_8h.html#a1a20a0b98922e70383a2c80c9908580daded5ebda0fa7830a141dd17a2d30c73d">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_STREAM_STATUS_PRODUCT_INSTANCE_ID
+: <a class="el" href="cmidi2_8h.html#a1a20a0b98922e70383a2c80c9908580dac24194478c8ae09f7cfeeb42dd86f886">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_STREAM_STATUS_START_OF_CLIP
+: <a class="el" href="cmidi2_8h.html#a1a20a0b98922e70383a2c80c9908580daab9df03c126256de919558883e5d0b53">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_STREAM_STATUS_STREAM_CONFIGURATION_NOTIFICATION
+: <a class="el" href="cmidi2_8h.html#a1a20a0b98922e70383a2c80c9908580da7a36d8cec4917e810f7500c8c4e05dc3">cmidi2.h</a>
+</li>
+<li>CMIDI2_UMP_STREAM_STATUS_STREAM_CONFIGURATION_REQUEST
+: <a class="el" href="cmidi2_8h.html#a1a20a0b98922e70383a2c80c9908580dacc52dc7ffc5b42bd9ee53f19be92581b">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_sysex7_direct()
 : <a class="el" href="cmidi2_8h.html#a3f9b054eb56a428000240b3055026edb">cmidi2.h</a>
@@ -1186,10 +1723,10 @@ $(function() {
 : <a class="el" href="cmidi2_8h.html#aa8b63959509c7cc51a8f1ea4451514f1">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_sysex7_get_packet_of()
-: <a class="el" href="cmidi2_8h.html#a8a8f984838a9dcae087f1d6bf11b72f9">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#ad619e3185f4ec7bb4d4c094eecbb753a">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_sysex7_get_sysex_length()
-: <a class="el" href="cmidi2_8h.html#a90a1e18d1b493e4a01cf0821b51e5a66">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a3434d0ce1e4cd4f8d2c2dcb348eda412">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_sysex7_process()
 : <a class="el" href="cmidi2_8h.html#aa1c0a9f15a6ce21a794d3a9628a9f585">cmidi2.h</a>
@@ -1198,7 +1735,7 @@ $(function() {
 : <a class="el" href="cmidi2_8h.html#a0592a75657cc2641ca588698f9ddd72f">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_sysex8_get_packet_of()
-: <a class="el" href="cmidi2_8h.html#a170812e5122ba20992fc03143efad14d">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#ad3ca5fd974cf56c7818ea2d2ff80e4a1">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_sysex8_process()
 : <a class="el" href="cmidi2_8h.html#a986635056d2001749aabb4c3f1cf2a63">cmidi2.h</a>
@@ -1207,10 +1744,13 @@ $(function() {
 : <a class="el" href="cmidi2_8h.html#ae304432c0f8a7f4cfb23fc3b280072da">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_sysex_get_packet_of()
-: <a class="el" href="cmidi2_8h.html#a439840838d31b1042f2d00daa1683704">cmidi2.h</a>
+: <a class="el" href="cmidi2_8h.html#a0fb7acbe81813665f3f07a6282c7bb25">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_system_message()
 : <a class="el" href="cmidi2_8h.html#a4a363e3c2ea535a20b8b1bcdf385e3dd">cmidi2.h</a>
+</li>
+<li>cmidi2_ump_version_t
+: <a class="el" href="cmidi2_8h.html#aec173cc4a3d03ed48a3695134026a4e1">cmidi2.h</a>
 </li>
 <li>cmidi2_ump_write128()
 : <a class="el" href="cmidi2_8h.html#a658a973d3551e46510e1c880e66f1061">cmidi2.h</a>
@@ -1223,6 +1763,24 @@ $(function() {
 </li>
 <li>cmidi2_util_is_platform_little_endian()
 : <a class="el" href="cmidi2_8h.html#a889d508652a3cfd0dd4501a785d09e52">cmidi2.h</a>
+</li>
+<li>cmidi2_utility_message_status
+: <a class="el" href="cmidi2_8h.html#a6cbfa2c5526a2bf3aa3f9582ca0db965">cmidi2.h</a>
+</li>
+<li>CMIDI2_UTILITY_STATUS_DCTPQ
+: <a class="el" href="cmidi2_8h.html#a6cbfa2c5526a2bf3aa3f9582ca0db965a1ced731a59363592a354149cefe4fb84">cmidi2.h</a>
+</li>
+<li>CMIDI2_UTILITY_STATUS_DELTA_CLOCKSTAMP
+: <a class="el" href="cmidi2_8h.html#a6cbfa2c5526a2bf3aa3f9582ca0db965a6c130e17781c5144365ef29b327fbff1">cmidi2.h</a>
+</li>
+<li>CMIDI2_UTILITY_STATUS_JR_CLOCK
+: <a class="el" href="cmidi2_8h.html#a6cbfa2c5526a2bf3aa3f9582ca0db965a2113d2f8df3f5083a8c3374c2fb7e2d5">cmidi2.h</a>
+</li>
+<li>CMIDI2_UTILITY_STATUS_JR_TIMESTAMP
+: <a class="el" href="cmidi2_8h.html#a6cbfa2c5526a2bf3aa3f9582ca0db965a412d9c69a057fc613763271a8597a374">cmidi2.h</a>
+</li>
+<li>CMIDI2_UTILITY_STATUS_NOOP
+: <a class="el" href="cmidi2_8h.html#a6cbfa2c5526a2bf3aa3f9582ca0db965a79bb7a10cb1c74b98e5b1dd5f1012262">cmidi2.h</a>
 </li>
 </ul>
 </div><!-- contents -->
