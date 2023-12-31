@@ -196,12 +196,14 @@ void testType5Messages_sysex()
 }
 
 void* sysex8_binary_reader_helper_read_into_ump_forge(uint64_t data1, uint64_t data2, size_t index, void* context) {
+    (void) index;
     cmidi2_ump_forge* forge = (cmidi2_ump_forge*) context;
     cmidi2_ump_forge_add_packet_128(forge, data1, data2);
     return NULL;
 }
 
 cmidi2_ump_binary_read_state* sysex8_binary_reader_helper_select_stream(uint8_t targetStreamId, void* context) {
+    (void) targetStreamId;
     return (cmidi2_ump_binary_read_state*) context;
 }
 
@@ -421,7 +423,7 @@ void testForEach()
     };
 
     uint8_t buf[sizeof(ump)];
-    for (int i = 0; i < sizeof(buf) / sizeof(uint64_t); i++) {
+    for (size_t i = 0; i < sizeof(buf) / sizeof(uint64_t); i++) {
         // first 32 bits
         uint32_t head = ump[i] >> 32;
         for (int b = 0; b < 4; b++) {
@@ -437,7 +439,7 @@ void testForEach()
     }
 
     uint8_t bufBE[sizeof(ump)];
-    for (int i = 0; i < sizeof(bufBE) / sizeof(uint64_t); i++) {
+    for (size_t i = 0; i < sizeof(bufBE) / sizeof(uint64_t); i++) {
         // first 32 bits
         uint32_t head = ump[i] >> 32;
         for (int b = 0; b < 4; b++) {
@@ -899,7 +901,6 @@ int testConvertSingleUmpToMidi1 ()
 {
     cmidi2_ump src[4];
     uint8_t dst[16];
-    size_t retSize;
 
     // MIDI1 Channel Voice Messages
 
@@ -1013,7 +1014,6 @@ int testConvertSingleUmpToMidi1 ()
 int testConvertMidi1ToUmpNoteOn()
 {
     uint32_t dst[32];
-    cmidi2_ump* ump = (cmidi2_ump*) dst;
     cmidi2_midi_conversion_context context;
 
     // note on
@@ -1038,7 +1038,6 @@ int testConvertMidi1ToUmpNoteOn()
 int testConvertMidi1ToUmpPAf()
 {
     uint32_t dst[32];
-    cmidi2_ump* ump = (cmidi2_ump*) dst;
     cmidi2_midi_conversion_context context;
 
     // PAf
@@ -1063,7 +1062,6 @@ int testConvertMidi1ToUmpPAf()
 int testConvertMidi1ToUmpSimpleCC()
 {
     uint32_t dst[32];
-    cmidi2_ump* ump = (cmidi2_ump*) dst;
     cmidi2_midi_conversion_context context;
 
     // CC Volume
@@ -1088,7 +1086,6 @@ int testConvertMidi1ToUmpSimpleCC()
 int testConvertMidi1ToUmpValidRPN()
 {
     uint32_t dst[32];
-    cmidi2_ump* ump = (cmidi2_ump*) dst;
     cmidi2_midi_conversion_context context;
 
     // RPN
@@ -1113,7 +1110,6 @@ int testConvertMidi1ToUmpValidRPN()
 int testConvertMidi1ToUmpValidNRPN()
 {
     uint32_t dst[32];
-    cmidi2_ump* ump = (cmidi2_ump*) dst;
     cmidi2_midi_conversion_context context;
 
     // NRPN
@@ -1138,7 +1134,6 @@ int testConvertMidi1ToUmpValidNRPN()
 int testConvertMidi1ToUmpInvalidRPN()
 {
     uint32_t dst[32];
-    cmidi2_ump* ump = (cmidi2_ump*) dst;
     cmidi2_midi_conversion_context context;
 
     // only RPN MSB -> error
@@ -1189,7 +1184,6 @@ int testConvertMidi1ToUmpInvalidRPN()
 int testConvertMidi1ToUmpInvalidNRPN()
 {
     uint32_t dst[32];
-    cmidi2_ump* ump = (cmidi2_ump*) dst;
     cmidi2_midi_conversion_context context;
 
     // only RPN MSB -> error
@@ -1240,7 +1234,6 @@ int testConvertMidi1ToUmpInvalidNRPN()
 int testConvertMidi1ToUmpSimpleProgramChange()
 {
     uint32_t dst[32];
-    cmidi2_ump* ump = (cmidi2_ump*) dst;
     cmidi2_midi_conversion_context context;
 
     // simple program change
@@ -1265,7 +1258,6 @@ int testConvertMidi1ToUmpSimpleProgramChange()
 int testConvertMidi1ToUmpBankMsbLsbAndProgramChange()
 {
     uint32_t dst[32];
-    cmidi2_ump* ump = (cmidi2_ump*) dst;
     cmidi2_midi_conversion_context context;
 
     // bank select MSB, bank select LSB, program change
@@ -1291,7 +1283,6 @@ int testConvertMidi1ToUmpBankMsbLsbAndProgramChange()
 int testConvertMidi1ToUmpBankMsbAndProgramChange()
 {
     uint32_t dst[32];
-    cmidi2_ump* ump = (cmidi2_ump*) dst;
     cmidi2_midi_conversion_context context;
 
     // bank select MSB, then program change (LSB skipped)
@@ -1317,7 +1308,6 @@ int testConvertMidi1ToUmpBankMsbAndProgramChange()
 int testConvertMidi1ToUmpBankLsbAndProgramChange()
 {
     uint32_t dst[32];
-    cmidi2_ump* ump = (cmidi2_ump*) dst;
     cmidi2_midi_conversion_context context;
 
     // bank select LSB, then program change (MSB skipped)
@@ -1342,7 +1332,6 @@ int testConvertMidi1ToUmpBankLsbAndProgramChange()
 int testConvertMidi1ToUmpCAf()
 {
     uint32_t dst[32];
-    cmidi2_ump* ump = (cmidi2_ump*) dst;
     cmidi2_midi_conversion_context context;
 
     // CAf
@@ -1367,7 +1356,6 @@ int testConvertMidi1ToUmpCAf()
 int testConvertMidi1ToUmpPitchBend()
 {
     uint32_t dst[32];
-    cmidi2_ump* ump = (cmidi2_ump*) dst;
     cmidi2_midi_conversion_context context;
 
     // Pitchbend
@@ -1440,7 +1428,6 @@ int testConvertUmpToMidi1Notes()
 int testConvertUmpToMidi1Sysex()
 {
     uint8_t dst[16];
-    cmidi2_ump* ump = (cmidi2_ump*) dst;
     cmidi2_midi_conversion_context context;
 
     // Sysex1 - JR Timestamp - Sysex2
