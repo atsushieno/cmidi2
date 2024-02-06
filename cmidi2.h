@@ -680,6 +680,9 @@ static inline uint32_t cmidi2_ump_read_uint32_bytes_le(const void *sequence) {
 static inline uint32_t cmidi2_ump_read_uint32_bytes_be(const void *sequence) {
     const uint8_t *bytes = (const uint8_t*) sequence;
     uint32_t ret = 0;
+#if ANDROID
+#pragma clang loop vectorize(disable) interleave(disable)
+#endif
     for (int i = 0; i < 4; i++)
         ret += ((uint32_t) bytes[i]) << ((7 - i) * 8);
     return ret;
@@ -738,6 +741,9 @@ static inline void cmidi2_ump_sysex_get_packet_of(uint64_t* result1, uint64_t* r
         dst8[2] = streamId;
 
     uint8_t dstOffset = hasStreamId ? 3 : 2;
+#if ANDROID
+#pragma clang loop vectorize(disable) interleave(disable)
+#endif
     for (uint8_t i = 0, j = index * radix; i < size; i++, j++)
         dst8[i + dstOffset] = src8[j];
 
