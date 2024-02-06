@@ -680,11 +680,8 @@ static inline uint32_t cmidi2_ump_read_uint32_bytes_le(const void *sequence) {
 static inline uint32_t cmidi2_ump_read_uint32_bytes_be(const void *sequence) {
     const uint8_t *bytes = (const uint8_t*) sequence;
     uint32_t ret = 0;
-#if ANDROID
-#pragma clang loop vectorize(disable) interleave(disable)
-#endif
     for (int i = 0; i < 4; i++)
-        ret += ((uint32_t) bytes[i]) << ((7 - i) * 8);
+        ret += ((uint32_t) bytes[i]) << ((3 - i) * 8);
     return ret;
 }
 
