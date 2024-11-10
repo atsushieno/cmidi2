@@ -1207,7 +1207,7 @@ static inline uint8_t cmidi2_ump_get_midi2_pnacc_index(const cmidi2_ump* ump) {
 static inline uint32_t cmidi2_ump_get_midi2_pnacc_data(const cmidi2_ump* ump) {
     return cmidi2_ump_get_32_to_64(ump);
 }
-static inline uint32_t cmidi2_ump_get_midi2_pn_management_note(const cmidi2_ump* ump) {
+static inline uint8_t cmidi2_ump_get_midi2_pn_management_note(const cmidi2_ump* ump) {
     return cmidi2_ump_get_byte_at(ump, 2);
 }
 static inline uint32_t cmidi2_ump_get_midi2_pn_management_options(const cmidi2_ump* ump) {
