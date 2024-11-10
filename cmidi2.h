@@ -288,7 +288,7 @@ enum cmidi2_ump_chord_name_tonic_note {
     CMIDI2_UMP_CHORD_NAME_G = 7,
 };
 
-enum cmidi2_ump_chor_name_chord_type {
+enum cmidi2_ump_chord_name_chord_type {
     CMIDI2_UMP_CHORD_TYPE_UNKNOWN = 0,
     CMIDI2_UMP_CHORD_TYPE_MAJOR = 1,
     CMIDI2_UMP_CHORD_TYPE_MAJOR_6TH = 2,
