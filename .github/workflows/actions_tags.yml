@@ -7,10 +7,10 @@ on:
 jobs:
   linux-build:
     name: build on linux
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
     - name: checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         submodules: recursive
     - name: apt update
