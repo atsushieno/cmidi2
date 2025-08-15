@@ -778,9 +778,8 @@ static inline uint64_t cmidi2_ump_sysex7_get_packet_of(uint8_t group, uint8_t nu
 typedef void*(*cmidi2_ump_handler_u64)(uint64_t data, void* context);
 
 // This returns NULL for success, or anything else that `sendUMP` returns for failure.
-static inline void* cmidi2_ump_sysex7_process(uint8_t group, void* sysex, cmidi2_ump_handler_u64 sendUMP, void* context)
+static inline void* cmidi2_ump_sysex7_process_n(uint8_t group, void* sysex, uint32_t length, cmidi2_ump_handler_u64 sendUMP, void* context)
 {
-    int32_t length = cmidi2_ump_sysex7_get_sysex_length(sysex);
     int32_t numPackets = cmidi2_ump_sysex7_get_num_packets(length);
     for (int p = 0; p < numPackets; p++) {
         int64_t ump = cmidi2_ump_sysex7_get_packet_of(group, length, sysex, p);
@@ -789,6 +788,12 @@ static inline void* cmidi2_ump_sysex7_process(uint8_t group, void* sysex, cmidi2
             return retCode;
     }
     return NULL;
+}
+
+// This returns NULL for success, or anything else that `sendUMP` returns for failure.
+static inline void* cmidi2_ump_sysex7_process(uint8_t group, void* sysex, cmidi2_ump_handler_u64 sendUMP, void* context) {
+    uint32_t length = cmidi2_ump_sysex7_get_sysex_length(sysex);
+    return cmidi2_ump_sysex7_process_n(group, sysex, length, sendUMP, context);
 }
 
 // 7.8 System Exclusive 8-Bit Messages
