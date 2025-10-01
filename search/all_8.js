@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['jr_5ftimestamp_5fticks_5fper_5fsecond_600',['JR_TIMESTAMP_TICKS_PER_SECOND',['../cmidi2_8h.html#afca68f9f0963d746a7155e56b62e9ce8',1,'cmidi2.h']]]
+  ['group_0',['group',['../structcmidi2__midi__conversion__context.html#ab64b3cdba1cf16672f8b1e175c41f68a',1,'cmidi2_midi_conversion_context']]]
 ];

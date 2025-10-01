@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['data_591',['data',['../structcmidi2__ump__binary__read__state.html#ad94f5e9dd08b62fc0ef217251ced4e52',1,'cmidi2_ump_binary_read_state']]],
-  ['datacapacity_592',['dataCapacity',['../structcmidi2__ump__binary__read__state.html#a7d825e669c05fc523ee501102a44be61',1,'cmidi2_ump_binary_read_state']]],
-  ['datasize_593',['dataSize',['../structcmidi2__ump__binary__read__state.html#af96a8ee33b56061ca14dcae67e69c697',1,'cmidi2_ump_binary_read_state']]],
-  ['dst_5foffset_594',['dst_offset',['../structcmidi2__convert__sysex__context.html#ac1683d65a3963c1963b0abadd5da9baf',1,'cmidi2_convert_sysex_context']]]
+  ['bank_0',['bank',['../structcmidi2__profile__id.html#a1260cf052fd19505c4dcf73f1c496124',1,'cmidi2_profile_id']]],
+  ['binary_20processor_20library_1',['cmidi2: header-only MIDI 2.0 UMP and MIDI-CI binary processor library',['../md_README.html',1,'']]]
 ];

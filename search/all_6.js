@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['group_597',['group',['../structcmidi2__midi__conversion__context.html#ab64b3cdba1cf16672f8b1e175c41f68a',1,'cmidi2_midi_conversion_context']]]
+  ['extensions_0',['extensions',['../structcmidi2__ci__protocol__tag.html#ae0b7b3931540ff989c657b8ec1153d2c',1,'cmidi2_ci_protocol_tag::extensions'],['../structcmidi2__ci__protocol__type__info.html#a1d680f98d563d7e6bc19807a44685de6',1,'cmidi2_ci_protocol_type_info::extensions']]]
 ];
