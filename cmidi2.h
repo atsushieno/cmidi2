@@ -1103,6 +1103,10 @@ static inline uint8_t cmidi2_ump_get_group(const cmidi2_ump* ump) {
     return (*ump >> 24) & 0xF;
 }
 
+static inline uint8_t cmidi2_ump_get_status_byte(const cmidi2_ump* ump) {
+    return (*ump >> 16) & 0xFF;
+}
+
 static inline uint8_t cmidi2_ump_get_status_code(const cmidi2_ump* ump) {
     return (*ump >> 16) & 0xF0;
 }
@@ -2224,7 +2228,8 @@ static enum cmidi2_midi_conversion_result cmidi2_convert_midi1_to_ump(cmidi2_mid
     while (*sIdx < sLen) {
         // FIXME: implement deltaTime to JR Timestamp conversion.
 
-        if (context->midi1[*sIdx] == 0xF0) {
+        uint8_t status = context->midi1[*sIdx];
+        if (status == 0xF0) {
             // sysex
             uint8_t *f7 = (uint8_t*) memchr(context->midi1 + *sIdx, 0xF7, context->midi1_num_bytes - *sIdx);
             if (f7 == NULL) {
@@ -2258,10 +2263,10 @@ static enum cmidi2_midi_conversion_result cmidi2_convert_midi1_to_ump(cmidi2_mid
 
             uint8_t byte2 = context->midi1[*sIdx + 1];
             uint8_t byte3 = len > 2 ? context->midi1[*sIdx + 2] : 0;
-            uint8_t channel = context->midi1[*sIdx] & 0xF;
+            uint8_t channel = status & 0xF;
             if (context->midi_protocol == CMIDI2_PROTOCOL_TYPE_MIDI1) {
                 // generate MIDI1 UMPs
-                dst[*dIdx] = cmidi2_ump_midi1_message(context->group, context->midi1[*sIdx] & 0xF0, channel, byte2, byte3);
+                dst[*dIdx] = cmidi2_ump_midi1_message(context->group, status & 0xF0, channel, byte2, byte3);
                 *sIdx += len;
                 *dIdx += 4;
             } else {
@@ -2271,7 +2276,7 @@ static enum cmidi2_midi_conversion_result cmidi2_convert_midi1_to_ump(cmidi2_mid
                 const int16_t NO_ATTRIBUTE_DATA = 0;
                 bool bankValid, bankMsbValid, bankLsbValid;
                 bool skipEmitUmp = false;
-                switch (context->midi1[*sIdx] & 0xF0) {
+                switch (status & 0xF0) {
                     case CMIDI2_STATUS_NOTE_OFF:
                         m2 = cmidi2_ump_midi2_note_off(context->group, channel, byte2, NO_ATTRIBUTE_TYPE, byte3 << 9, NO_ATTRIBUTE_DATA);
                         break;
@@ -2348,7 +2353,29 @@ static enum cmidi2_midi_conversion_result cmidi2_convert_midi1_to_ump(cmidi2_mid
                         m2 = cmidi2_ump_midi2_pitch_bend_direct(context->group, channel, ((byte3 << 7) + byte2) << 18);
                         break;
                     default:
-                        return CMIDI2_CONVERSION_RESULT_INVALID_STATUS;
+                        switch (status) {
+                            case CMIDI2_SYSTEM_STATUS_MIDI_TIME_CODE:
+                            case CMIDI2_SYSTEM_STATUS_SONG_SELECT:
+                                    len = 2;
+                                    m2 = cmidi2_ump_system_message(context->group, status, byte2, byte3);
+                                break;
+                            case CMIDI2_SYSTEM_STATUS_SONG_POSITION:
+                                    len = 3;
+                                    m2 = cmidi2_ump_system_message(context->group, status, byte2, byte3);
+                                    break;
+                            case CMIDI2_SYSTEM_STATUS_TUNE_REQUEST:
+                            case CMIDI2_SYSTEM_STATUS_TIMING_CLOCK:
+                            case CMIDI2_SYSTEM_STATUS_START:
+                            case CMIDI2_SYSTEM_STATUS_STOP:
+                            case CMIDI2_SYSTEM_STATUS_ACTIVE_SENSING:
+                            case CMIDI2_SYSTEM_STATUS_RESET:
+                                    len = 1;
+                                    m2 = cmidi2_ump_system_message(context->group, status, 0, 0);
+                                    break;
+                            default:
+                                return CMIDI2_CONVERSION_RESULT_INVALID_STATUS;
+                        }
+                        break;
                 }
                 if (!skipEmitUmp) {
                     int platEndian = cmidi2_util_is_platform_little_endian() ?                             CMIDI2_TRANSLATOR_LITTLE_ENDIAN : CMIDI2_TRANSLATOR_BIG_ENDIAN;
@@ -2414,17 +2441,23 @@ static inline size_t cmidi2_convert_single_ump_to_timed_midi1(
     switch (messageType) {
     case CMIDI2_MESSAGE_TYPE_SYSTEM:
         CMIDI2_INTERNAL_ADD_DELTA_TIME
-        midiEventSize = 1;
+
         switch (statusCode) {
-        case 0xF1:
-        case 0xF3:
-        case 0xF9:
+        case CMIDI2_SYSTEM_STATUS_SONG_POSITION:
+            midiEventSize = 3;
+            break;
+        case CMIDI2_SYSTEM_STATUS_MIDI_TIME_CODE:
+        case CMIDI2_SYSTEM_STATUS_SONG_SELECT:
             midiEventSize = 2;
-            if (maxBytes < midiEventSize)
-                return 0;
-            dst[1] = cmidi2_ump_get_system_message_byte2(ump);
+        default:
+            midiEventSize = 1;
             break;
         }
+        if (maxBytes < midiEventSize)
+            return 0;
+        dst[0] = cmidi2_ump_get_status_byte(ump); // no channel filtering
+        dst[1] = cmidi2_ump_get_midi1_byte2(ump);
+        dst[2] = cmidi2_ump_get_midi1_byte3(ump);
         break;
     case CMIDI2_MESSAGE_TYPE_MIDI_1_CHANNEL:
         CMIDI2_INTERNAL_ADD_DELTA_TIME
