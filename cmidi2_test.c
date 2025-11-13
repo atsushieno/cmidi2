@@ -12,12 +12,11 @@ cmidi2_ump* asUMP(int32_t i) { __ump = i; return &__ump; }
 void testType0Messages()
 {
     /* type 0 */
-    assert(cmidi2_ump_noop(0) == 0);
-    assert(cmidi2_ump_noop(1) == 0x01000000);
-    assert(cmidi2_ump_jr_clock(0, 0) == 0x00100000);
-    assert(cmidi2_ump_jr_clock(0, 1.0) == 0x00107A12);
-    assert(cmidi2_ump_jr_timestamp(0, 0) == 0x00200000);
-    assert(cmidi2_ump_jr_timestamp(1, 1.0) == 0x01207A12);
+    assert(cmidi2_ump_noop() == 0);
+    assert(cmidi2_ump_jr_clock(0) == 0x00100000);
+    assert(cmidi2_ump_jr_clock(1.0) == 0x00107A12);
+    assert(cmidi2_ump_jr_timestamp(0.0) == 0x00200000);
+    assert(cmidi2_ump_jr_timestamp(1.0) == 0x00207A12);
 
     assert(cmidi2_ump_get_jr_clock_time(asUMP(0x00107A12)) == 31250);
     assert(cmidi2_ump_get_jr_timestamp_timestamp(asUMP(0x01207A12)) == 31250);
@@ -416,9 +415,9 @@ void testTypeDMessages()
 void testForEach()
 {
     int64_t ump[] = {
-	cmidi2_ump_jr_clock(1, 0.0) * 0x100000000 + cmidi2_ump_jr_timestamp(1, 0),
+	cmidi2_ump_jr_clock(0.0) * 0x100000000 + cmidi2_ump_jr_timestamp(0),
 	cmidi2_ump_midi2_note_on(1, 1, 60, 0, 120 * 0x100, 0),
-	cmidi2_ump_jr_clock(1, 0.0) * 0x100000000 + cmidi2_ump_jr_timestamp(1, 1),
+	cmidi2_ump_jr_clock(0.0) * 0x100000000 + cmidi2_ump_jr_timestamp(1),
 	cmidi2_ump_midi2_note_off(1, 1, 60, 0, 120 * 0x100, 0),
     };
 
@@ -455,11 +454,11 @@ void testForEach()
     }
 
     uint64_t expected [] = {
-        0x01100000,
-        0x01200000,
+        0x00100000,
+        0x00200000,
         0x41913c0078000000,
-        0x01100000,
-        0x01207a12,
+        0x00100000,
+        0x00207a12,
         0x41813c0078000000
     };
 
@@ -1481,17 +1480,17 @@ int testMergeSequences()
     cmidi2_ump_forge forge1, forge2;
     cmidi2_ump_forge_init(&forge1, (cmidi2_ump*) seq1, sizeof(seq1));
     cmidi2_ump_forge_add_packet_64(&forge1, cmidi2_ump_midi2_note_on(0, 0, 0x54, 0, 0xE000, 0));
-    cmidi2_ump_forge_add_packet_32(&forge1, cmidi2_ump_jr_timestamp_direct(0, 0x8000));
+    cmidi2_ump_forge_add_packet_32(&forge1, cmidi2_ump_jr_timestamp_direct(0x8000));
     cmidi2_ump_forge_add_packet_64(&forge1, cmidi2_ump_midi2_note_off(0, 0, 0x54, 0, 0, 0));
 
     cmidi2_ump_forge_init(&forge2, (cmidi2_ump*) seq2, sizeof(seq2));
-    cmidi2_ump_forge_add_packet_32(&forge2, cmidi2_ump_jr_timestamp_direct(0, 0x4000));
+    cmidi2_ump_forge_add_packet_32(&forge2, cmidi2_ump_jr_timestamp_direct(0x4000));
     cmidi2_ump_forge_add_packet_64(&forge2, cmidi2_ump_midi2_note_on(0, 0, 0x60, 0, 0xD800, 0));
-    cmidi2_ump_forge_add_packet_32(&forge2, cmidi2_ump_jr_timestamp_direct(0, 0x4000));
+    cmidi2_ump_forge_add_packet_32(&forge2, cmidi2_ump_jr_timestamp_direct(0x4000));
     cmidi2_ump_forge_add_packet_64(&forge2, cmidi2_ump_midi2_note_off(0, 0, 0x60, 0, 0, 0));
     // it is merged *after* seq1, meaning that it will be appended *after* note-off, at the same timestamp.
     cmidi2_ump_forge_add_packet_64(&forge2, cmidi2_ump_midi2_note_on(0, 0, 0x54, 0, 0xD800, 0));
-    cmidi2_ump_forge_add_packet_32(&forge2, cmidi2_ump_jr_timestamp_direct(0, 0x8000));
+    cmidi2_ump_forge_add_packet_32(&forge2, cmidi2_ump_jr_timestamp_direct(0x8000));
     cmidi2_ump_forge_add_packet_64(&forge2, cmidi2_ump_midi2_note_off(0, 0, 0x54, 0, 0x1000, 0));
 
     cmidi2_ump_merge_sequences((cmidi2_ump*) dst, sizeof(dst), forge1.ump, forge1.offset, forge2.ump, forge2.offset);

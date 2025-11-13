@@ -8,7 +8,7 @@ MIDI 2.0 is designed to be allocation free by defining every message in 32bit,
 This library populates those packets simply in integer values.
 It should be usable within realtime audio applications.
 
-v0.6 supports June 2023 Updates to the MIDI 2.0 specifications.
+<del>v0.6 supports June 2023 Updates to the MIDI 2.0 specifications.</del> As of v0.6 supports June 2023 Updates to the MIDI 2.0 specifications, but turned out that we did not fully update Type 0 Utility messages. They became "groupless" - as a result, those functions took extraneous `group` field that affected UMP bytes output, unless they were to group 0. This issue is fixed at v0.9 release of cmidi2 API, but that means the API is not backward compatible. Please update the use of those functions and get comformant UMP outputs.
 
 As of v0.6, every function is static inline (if you are familiar with [LV2](lv2plug.in/) you would notice that this implementation style is quite simiar to it, namely LV2 Atom).
 

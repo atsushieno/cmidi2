@@ -483,33 +483,33 @@ static inline cmidi2_ump128_t cmidi2_ump_end_of_clip() {
 }
 
 // 7.2 Utility Messages
-static inline uint32_t cmidi2_ump_noop(uint8_t group) { return (group & 0xF) << 24; }
+static inline uint32_t cmidi2_ump_noop() { return 0; }
 
-static inline uint32_t cmidi2_ump_jr_clock_direct(uint8_t group, uint32_t senderClockTime) {
-    return cmidi2_ump_noop(group) + (CMIDI2_UTILITY_STATUS_JR_CLOCK << 16) + senderClockTime;
+static inline uint32_t cmidi2_ump_jr_clock_direct(uint16_t senderClockTime) {
+    return (CMIDI2_UTILITY_STATUS_JR_CLOCK << 16) + senderClockTime;
 }
 
-static inline uint32_t cmidi2_ump_jr_clock(uint8_t group, double senderClockTime) {
+static inline uint32_t cmidi2_ump_jr_clock(double senderClockTime) {
     uint16_t value = (uint16_t) (senderClockTime * JR_TIMESTAMP_TICKS_PER_SECOND);
-    return cmidi2_ump_noop(group) + (CMIDI2_UTILITY_STATUS_JR_CLOCK << 16) + value;
+    return (CMIDI2_UTILITY_STATUS_JR_CLOCK << 16) + value;
 }
 
-static inline uint32_t cmidi2_ump_jr_timestamp_direct(uint8_t group, uint16_t senderClockTimestamp) {
-    return cmidi2_ump_noop(group) + (CMIDI2_UTILITY_STATUS_JR_TIMESTAMP << 16) + senderClockTimestamp;
+static inline uint32_t cmidi2_ump_jr_timestamp_direct(uint16_t senderClockTimestamp) {
+    return (CMIDI2_UTILITY_STATUS_JR_TIMESTAMP << 16) + senderClockTimestamp;
 }
 
-static inline uint32_t cmidi2_ump_jr_timestamp(uint8_t group, double senderClockTimestamp) {
+static inline uint32_t cmidi2_ump_jr_timestamp(double senderClockTimestamp) {
     uint16_t value = (uint16_t) (senderClockTimestamp * JR_TIMESTAMP_TICKS_PER_SECOND);
-    return cmidi2_ump_noop(group) + (CMIDI2_UTILITY_STATUS_JR_TIMESTAMP << 16) + value;
+    return (CMIDI2_UTILITY_STATUS_JR_TIMESTAMP << 16) + value;
 }
 
-static inline uint32_t cmidi2_ump_dctpq(uint8_t group, uint32_t dctpq) {
-    return cmidi2_ump_noop(group) + (CMIDI2_UTILITY_STATUS_DCTPQ << 16) + dctpq;
+static inline uint32_t cmidi2_ump_dctpq(uint32_t dctpq) {
+    return (CMIDI2_UTILITY_STATUS_DCTPQ << 16) + dctpq;
 }
 
-static inline uint32_t cmidi2_ump_dcs(uint8_t group, uint32_t ticks) {
+static inline uint32_t cmidi2_ump_dcs(uint32_t ticks) {
     // Note that unlike JR timestamp delta clockstamps accepts ticks up to 20 bits.
-    return cmidi2_ump_noop(group) + (CMIDI2_UTILITY_STATUS_DELTA_CLOCKSTAMP << 16) + (ticks & 0xFFFFF);
+    return (CMIDI2_UTILITY_STATUS_DELTA_CLOCKSTAMP << 16) + (ticks & 0xFFFFF);
 }
 
 // 7.6 System Common and System Real Time Messages
@@ -2757,7 +2757,7 @@ static inline bool cmidi2_internal_ump_merge_sequence_write_delta_time(int32_t t
         return false;
     for (int32_t dt = deltaTime; dt > 0; dt -= 0x10000) {
         cmidi2_ump_write32((cmidi2_ump*) ((uint8_t*) dst + *dIdx),
-        cmidi2_ump_jr_timestamp_direct(0, deltaTime > 0xFFFF ? 0xFFFF : deltaTime));
+        cmidi2_ump_jr_timestamp_direct(deltaTime > 0xFFFF ? 0xFFFF : deltaTime));
         *dIdx += 4;
     }
     *lastTimestamp += deltaTime;
