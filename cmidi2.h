@@ -218,13 +218,6 @@ enum cmidi2_system_message_status {
     CMIDI2_SYSTEM_STATUS_RESET = 0xFF,
 };
 
-// TODO: remove this. Use cmidi2_utility_message_status instead
-enum cmidi2_jr_timestamp_status {
-    CMIDI2_JR_CLOCK = 0x10,
-    CMIDI2_JR_TIMESTAMP = 0x20,
-};
-
-
 enum cmidi2_utility_message_status {
     CMIDI2_UTILITY_STATUS_NOOP = 0,
     CMIDI2_UTILITY_STATUS_JR_CLOCK = 0x10,
@@ -257,7 +250,7 @@ enum cmidi2_flex_data_metadata_text_status {
     CMIDI2_FLEX_DATA_STATUS_ARRANGER_NAME = 7,
     CMIDI2_FLEX_DATA_STATUS_PUBLISHER_NAME = 8,
     CMIDI2_FLEX_DATA_STATUS_PRIMARY_PERFORMER_NAME = 9,
-    CMIDI2_FLEX_DATA_STATUS_ACCOMPANYING_PERFORMAER_NAME = 10,
+    CMIDI2_FLEX_DATA_STATUS_ACCOMPANYING_PERFORMER_NAME = 10,
     CMIDI2_FLEX_DATA_STATUS_RECORDING_DATE = 11,
     CMIDI2_FLEX_DATA_STATUS_RECORDING_LOCATION = 12
 };
