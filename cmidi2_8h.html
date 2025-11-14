@@ -462,10 +462,6 @@ Enumerations</h2></td></tr>
 <br />
  }</td></tr>
 <tr class="separator:ac9f9841a9db94c3583dde1d206f43804"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a60bb167abecf2a02ff721ad16bb0831d" id="r_a60bb167abecf2a02ff721ad16bb0831d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a60bb167abecf2a02ff721ad16bb0831d">cmidi2_jr_timestamp_status</a> { <a class="el" href="cmidi2_8h.html#a60bb167abecf2a02ff721ad16bb0831da4d9b03f93a9d1910e80d2e7b4c862eb8">CMIDI2_JR_CLOCK</a> = 0x10
-, <a class="el" href="cmidi2_8h.html#a60bb167abecf2a02ff721ad16bb0831daf5f5c6437496ccbc489257b3b4357784">CMIDI2_JR_TIMESTAMP</a> = 0x20
- }</td></tr>
-<tr class="separator:a60bb167abecf2a02ff721ad16bb0831d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6cbfa2c5526a2bf3aa3f9582ca0db965" id="r_a6cbfa2c5526a2bf3aa3f9582ca0db965"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a6cbfa2c5526a2bf3aa3f9582ca0db965">cmidi2_utility_message_status</a> { <br />
 &#160;&#160;<a class="el" href="cmidi2_8h.html#a6cbfa2c5526a2bf3aa3f9582ca0db965a79bb7a10cb1c74b98e5b1dd5f1012262">CMIDI2_UTILITY_STATUS_NOOP</a> = 0
 , <a class="el" href="cmidi2_8h.html#a6cbfa2c5526a2bf3aa3f9582ca0db965a2113d2f8df3f5083a8c3374c2fb7e2d5">CMIDI2_UTILITY_STATUS_JR_CLOCK</a> = 0x10
@@ -504,7 +500,7 @@ Enumerations</h2></td></tr>
 , <br />
 &#160;&#160;<a class="el" href="cmidi2_8h.html#a179a9cd5eea5248b02ae04ea8219fa3aa422733e9c19fba6a98e8973025372c22">CMIDI2_FLEX_DATA_STATUS_PUBLISHER_NAME</a> = 8
 , <a class="el" href="cmidi2_8h.html#a179a9cd5eea5248b02ae04ea8219fa3aa62450285d406eb7767fe713e85a6148b">CMIDI2_FLEX_DATA_STATUS_PRIMARY_PERFORMER_NAME</a> = 9
-, <a class="el" href="cmidi2_8h.html#a179a9cd5eea5248b02ae04ea8219fa3aa6236cdef1d4f0d6ecd5649258e9ef9c7">CMIDI2_FLEX_DATA_STATUS_ACCOMPANYING_PERFORMAER_NAME</a> = 10
+, <a class="el" href="cmidi2_8h.html#a179a9cd5eea5248b02ae04ea8219fa3aae85d33d6d46a3d6cb0ee290185e8745c">CMIDI2_FLEX_DATA_STATUS_ACCOMPANYING_PERFORMER_NAME</a> = 10
 , <a class="el" href="cmidi2_8h.html#a179a9cd5eea5248b02ae04ea8219fa3aaeab04b49212077be2ade9bfae6b29863">CMIDI2_FLEX_DATA_STATUS_RECORDING_DATE</a> = 11
 , <br />
 &#160;&#160;<a class="el" href="cmidi2_8h.html#a179a9cd5eea5248b02ae04ea8219fa3aa08ddaee20a8fb9cd2abe26ed7bb1c288">CMIDI2_FLEX_DATA_STATUS_RECORDING_LOCATION</a> = 12
@@ -1658,8 +1654,8 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line">        dst += <a class="code hl_function" href="cmidi2_8h.html#ad1b6aec5ee5f3f5da802bac28f6af1e9">cmidi2_internal_add_midi1_delta_time</a>(dst, context, deltaTime); \</div>
 <div class="line">        dst[0] = statusCode | <a class="code hl_function" href="cmidi2_8h.html#a06a61fec5b25794fac90271cb0f76c60">cmidi2_ump_get_channel</a>(ump);</div>
-<div class="ttc" id="acmidi2_8h_html_a06a61fec5b25794fac90271cb0f76c60"><div class="ttname"><a href="cmidi2_8h.html#a06a61fec5b25794fac90271cb0f76c60">cmidi2_ump_get_channel</a></div><div class="ttdeci">static uint8_t cmidi2_ump_get_channel(const cmidi2_ump *ump)</div><div class="ttdef"><b>Definition</b> cmidi2.h:1114</div></div>
-<div class="ttc" id="acmidi2_8h_html_ad1b6aec5ee5f3f5da802bac28f6af1e9"><div class="ttname"><a href="cmidi2_8h.html#ad1b6aec5ee5f3f5da802bac28f6af1e9">cmidi2_internal_add_midi1_delta_time</a></div><div class="ttdeci">static size_t cmidi2_internal_add_midi1_delta_time(uint8_t *dst, cmidi2_midi_conversion_context *context, int32_t deltaTime)</div><div class="ttdef"><b>Definition</b> cmidi2.h:2411</div></div>
+<div class="ttc" id="acmidi2_8h_html_a06a61fec5b25794fac90271cb0f76c60"><div class="ttname"><a href="cmidi2_8h.html#a06a61fec5b25794fac90271cb0f76c60">cmidi2_ump_get_channel</a></div><div class="ttdeci">static uint8_t cmidi2_ump_get_channel(const cmidi2_ump *ump)</div><div class="ttdef"><b>Definition</b> cmidi2.h:1107</div></div>
+<div class="ttc" id="acmidi2_8h_html_ad1b6aec5ee5f3f5da802bac28f6af1e9"><div class="ttname"><a href="cmidi2_8h.html#ad1b6aec5ee5f3f5da802bac28f6af1e9">cmidi2_internal_add_midi1_delta_time</a></div><div class="ttdeci">static size_t cmidi2_internal_add_midi1_delta_time(uint8_t *dst, cmidi2_midi_conversion_context *context, int32_t deltaTime)</div><div class="ttdef"><b>Definition</b> cmidi2.h:2404</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -1697,7 +1693,7 @@ Functions</h2></td></tr>
 <b>Value:</b><div class="fragment"><div class="line">    <span class="keywordflow">for</span> (uint8_t* (iter) = (uint8_t*) ptr; \</div>
 <div class="line">        (iter) &lt; ((uint8_t*) ptr) + numBytes; \</div>
 <div class="line">        (iter) = (uint8_t*) <a class="code hl_function" href="cmidi2_8h.html#a4bd5212e033fbfdc2f596f216ba3a4d8">cmidi2_ump_sequence_next</a>(iter))</div>
-<div class="ttc" id="acmidi2_8h_html_a4bd5212e033fbfdc2f596f216ba3a4d8"><div class="ttname"><a href="cmidi2_8h.html#a4bd5212e033fbfdc2f596f216ba3a4d8">cmidi2_ump_sequence_next</a></div><div class="ttdeci">static void * cmidi2_ump_sequence_next(const void *ptr)</div><div class="ttdef"><b>Definition</b> cmidi2.h:1481</div></div>
+<div class="ttc" id="acmidi2_8h_html_a4bd5212e033fbfdc2f596f216ba3a4d8"><div class="ttname"><a href="cmidi2_8h.html#a4bd5212e033fbfdc2f596f216ba3a4d8">cmidi2_ump_sequence_next</a></div><div class="ttdeci">static void * cmidi2_ump_sequence_next(const void *ptr)</div><div class="ttdef"><b>Definition</b> cmidi2.h:1474</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -1735,7 +1731,7 @@ Functions</h2></td></tr>
 <b>Value:</b><div class="fragment"><div class="line">    <span class="keywordflow">for</span> (uint8_t* (iter) = (uint8_t*) ptr; \</div>
 <div class="line">        (iter) &lt; ((uint8_t*) ptr) + numBytes; \</div>
 <div class="line">        (iter) = (uint8_t*) <a class="code hl_function" href="cmidi2_8h.html#a90c47c803b8c5a7e8294f18eeef8497b">cmidi2_ump_sequence_next_be</a>(iter))</div>
-<div class="ttc" id="acmidi2_8h_html_a90c47c803b8c5a7e8294f18eeef8497b"><div class="ttname"><a href="cmidi2_8h.html#a90c47c803b8c5a7e8294f18eeef8497b">cmidi2_ump_sequence_next_be</a></div><div class="ttdeci">static void * cmidi2_ump_sequence_next_be(const void *ptr)</div><div class="ttdef"><b>Definition</b> cmidi2.h:1500</div></div>
+<div class="ttc" id="acmidi2_8h_html_a90c47c803b8c5a7e8294f18eeef8497b"><div class="ttname"><a href="cmidi2_8h.html#a90c47c803b8c5a7e8294f18eeef8497b">cmidi2_ump_sequence_next_be</a></div><div class="ttdeci">static void * cmidi2_ump_sequence_next_be(const void *ptr)</div><div class="ttdef"><b>Definition</b> cmidi2.h:1493</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -1773,7 +1769,7 @@ Functions</h2></td></tr>
 <b>Value:</b><div class="fragment"><div class="line">    <span class="keywordflow">for</span> (uint8_t* (iter) = (uint8_t*) ptr; \</div>
 <div class="line">        (iter) &lt; ((uint8_t*) ptr) + numBytes; \</div>
 <div class="line">        (iter) = (uint8_t*) <a class="code hl_function" href="cmidi2_8h.html#aecab2fd5be691f8dab5911c43d94fbf1">cmidi2_ump_sequence_next_le</a>(iter))</div>
-<div class="ttc" id="acmidi2_8h_html_aecab2fd5be691f8dab5911c43d94fbf1"><div class="ttname"><a href="cmidi2_8h.html#aecab2fd5be691f8dab5911c43d94fbf1">cmidi2_ump_sequence_next_le</a></div><div class="ttdeci">static void * cmidi2_ump_sequence_next_le(const void *ptr)</div><div class="ttdef"><b>Definition</b> cmidi2.h:1491</div></div>
+<div class="ttc" id="acmidi2_8h_html_aecab2fd5be691f8dab5911c43d94fbf1"><div class="ttname"><a href="cmidi2_8h.html#aecab2fd5be691f8dab5911c43d94fbf1">cmidi2_ump_sequence_next_le</a></div><div class="ttdeci">static void * cmidi2_ump_sequence_next_le(const void *ptr)</div><div class="ttdef"><b>Definition</b> cmidi2.h:1484</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -1794,8 +1790,8 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line">    (<a class="code hl_function" href="cmidi2_8h.html#acb14c2f480abf8d6555f1a4a5df0286c">cmidi2_ump_get_message_type</a>(ump) == <a class="code hl_enumvalue" href="cmidi2_8h.html#adde753403be90167865525f5d280488fa46e11747342a8ce6540d84d8b16eb797">CMIDI2_MESSAGE_TYPE_UTILITY</a> &amp;&amp; \</div>
 <div class="line">    cmidi2_ump_get_status_code(ump) == <a class="code hl_enumvalue" href="cmidi2_8h.html#a6cbfa2c5526a2bf3aa3f9582ca0db965a412d9c69a057fc613763271a8597a374">CMIDI2_UTILITY_STATUS_JR_TIMESTAMP</a>)</div>
-<div class="ttc" id="acmidi2_8h_html_a6cbfa2c5526a2bf3aa3f9582ca0db965a412d9c69a057fc613763271a8597a374"><div class="ttname"><a href="cmidi2_8h.html#a6cbfa2c5526a2bf3aa3f9582ca0db965a412d9c69a057fc613763271a8597a374">CMIDI2_UTILITY_STATUS_JR_TIMESTAMP</a></div><div class="ttdeci">@ CMIDI2_UTILITY_STATUS_JR_TIMESTAMP</div><div class="ttdef"><b>Definition</b> cmidi2.h:231</div></div>
-<div class="ttc" id="acmidi2_8h_html_acb14c2f480abf8d6555f1a4a5df0286c"><div class="ttname"><a href="cmidi2_8h.html#acb14c2f480abf8d6555f1a4a5df0286c">cmidi2_ump_get_message_type</a></div><div class="ttdeci">static uint8_t cmidi2_ump_get_message_type(const cmidi2_ump *ump)</div><div class="ttdef"><b>Definition</b> cmidi2.h:1083</div></div>
+<div class="ttc" id="acmidi2_8h_html_a6cbfa2c5526a2bf3aa3f9582ca0db965a412d9c69a057fc613763271a8597a374"><div class="ttname"><a href="cmidi2_8h.html#a6cbfa2c5526a2bf3aa3f9582ca0db965a412d9c69a057fc613763271a8597a374">CMIDI2_UTILITY_STATUS_JR_TIMESTAMP</a></div><div class="ttdeci">@ CMIDI2_UTILITY_STATUS_JR_TIMESTAMP</div><div class="ttdef"><b>Definition</b> cmidi2.h:224</div></div>
+<div class="ttc" id="acmidi2_8h_html_acb14c2f480abf8d6555f1a4a5df0286c"><div class="ttname"><a href="cmidi2_8h.html#acb14c2f480abf8d6555f1a4a5df0286c">cmidi2_ump_get_message_type</a></div><div class="ttdeci">static uint8_t cmidi2_ump_get_message_type(const cmidi2_ump *ump)</div><div class="ttdef"><b>Definition</b> cmidi2.h:1076</div></div>
 <div class="ttc" id="acmidi2_8h_html_adde753403be90167865525f5d280488fa46e11747342a8ce6540d84d8b16eb797"><div class="ttname"><a href="cmidi2_8h.html#adde753403be90167865525f5d280488fa46e11747342a8ce6540d84d8b16eb797">CMIDI2_MESSAGE_TYPE_UTILITY</a></div><div class="ttdeci">@ CMIDI2_MESSAGE_TYPE_UTILITY</div><div class="ttdef"><b>Definition</b> cmidi2.h:35</div></div>
 </div><!-- fragment -->
 </div>
@@ -2202,7 +2198,7 @@ Functions</h2></td></tr>
 <tr><td class="fieldname"><a id="a179a9cd5eea5248b02ae04ea8219fa3aabdd4deae2d9b641363d2fae76fccc084" name="a179a9cd5eea5248b02ae04ea8219fa3aabdd4deae2d9b641363d2fae76fccc084"></a>CMIDI2_FLEX_DATA_STATUS_ARRANGER_NAME&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a179a9cd5eea5248b02ae04ea8219fa3aa422733e9c19fba6a98e8973025372c22" name="a179a9cd5eea5248b02ae04ea8219fa3aa422733e9c19fba6a98e8973025372c22"></a>CMIDI2_FLEX_DATA_STATUS_PUBLISHER_NAME&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a179a9cd5eea5248b02ae04ea8219fa3aa62450285d406eb7767fe713e85a6148b" name="a179a9cd5eea5248b02ae04ea8219fa3aa62450285d406eb7767fe713e85a6148b"></a>CMIDI2_FLEX_DATA_STATUS_PRIMARY_PERFORMER_NAME&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a179a9cd5eea5248b02ae04ea8219fa3aa6236cdef1d4f0d6ecd5649258e9ef9c7" name="a179a9cd5eea5248b02ae04ea8219fa3aa6236cdef1d4f0d6ecd5649258e9ef9c7"></a>CMIDI2_FLEX_DATA_STATUS_ACCOMPANYING_PERFORMAER_NAME&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a179a9cd5eea5248b02ae04ea8219fa3aae85d33d6d46a3d6cb0ee290185e8745c" name="a179a9cd5eea5248b02ae04ea8219fa3aae85d33d6d46a3d6cb0ee290185e8745c"></a>CMIDI2_FLEX_DATA_STATUS_ACCOMPANYING_PERFORMER_NAME&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a179a9cd5eea5248b02ae04ea8219fa3aaeab04b49212077be2ade9bfae6b29863" name="a179a9cd5eea5248b02ae04ea8219fa3aaeab04b49212077be2ade9bfae6b29863"></a>CMIDI2_FLEX_DATA_STATUS_RECORDING_DATE&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a179a9cd5eea5248b02ae04ea8219fa3aa08ddaee20a8fb9cd2abe26ed7bb1c288" name="a179a9cd5eea5248b02ae04ea8219fa3aa08ddaee20a8fb9cd2abe26ed7bb1c288"></a>CMIDI2_FLEX_DATA_STATUS_RECORDING_LOCATION&#160;</td><td class="fielddoc"></td></tr>
 </table>
@@ -2266,24 +2262,6 @@ Functions</h2></td></tr>
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a7f3183bd955048794de71a4219d27365a3d4e783ce85f9653b337bb214126deb3" name="a7f3183bd955048794de71a4219d27365a3d4e783ce85f9653b337bb214126deb3"></a>CMIDI2_FLEX_DATA_BANK_SETUP_AND_PERFORMANCE&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a7f3183bd955048794de71a4219d27365a5d466c654760075ad63dcabf7a040252" name="a7f3183bd955048794de71a4219d27365a5d466c654760075ad63dcabf7a040252"></a>CMIDI2_FLEX_DATA_BANK_METADATA_TEXT&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a7f3183bd955048794de71a4219d27365ad30e3001534859e0702d50a9b898857f" name="a7f3183bd955048794de71a4219d27365ad30e3001534859e0702d50a9b898857f"></a>CMIDI2_FLEX_DATA_BANK_PERFORMANCE_TEXT&#160;</td><td class="fielddoc"></td></tr>
-</table>
-
-</div>
-</div>
-<a id="a60bb167abecf2a02ff721ad16bb0831d" name="a60bb167abecf2a02ff721ad16bb0831d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a60bb167abecf2a02ff721ad16bb0831d">&#9670;&#160;</a></span>cmidi2_jr_timestamp_status</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="cmidi2_8h.html#a60bb167abecf2a02ff721ad16bb0831d">cmidi2_jr_timestamp_status</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a60bb167abecf2a02ff721ad16bb0831da4d9b03f93a9d1910e80d2e7b4c862eb8" name="a60bb167abecf2a02ff721ad16bb0831da4d9b03f93a9d1910e80d2e7b4c862eb8"></a>CMIDI2_JR_CLOCK&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a60bb167abecf2a02ff721ad16bb0831daf5f5c6437496ccbc489257b3b4357784" name="a60bb167abecf2a02ff721ad16bb0831daf5f5c6437496ccbc489257b3b4357784"></a>CMIDI2_JR_TIMESTAMP&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
 </div>
