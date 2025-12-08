@@ -658,7 +658,7 @@ static inline uint8_t cmidi2_ump_get_byte_from_uint64(uint64_t src, uint8_t inde
     return (uint8_t) (src >> ((7 - index) * 8) & 0xFF);
 }
 
-static inline uint8_t cmidi2_ump_sysex_get_num_packets(uint8_t numBytes, uint8_t radix) {
+static inline uint8_t cmidi2_ump_sysex_get_num_packets(size_t numBytes, uint8_t radix) {
     return numBytes <= radix ? 1 : numBytes / radix + (numBytes % radix ? 1 : 0);
 }
 
@@ -699,7 +699,7 @@ static inline uint64_t cmidi2_ump_read_uint64_bytes(const void *sequence) {
     return cmidi2_util_is_platform_little_endian() ? cmidi2_ump_read_uint64_bytes_le(sequence) : cmidi2_ump_read_uint64_bytes_be(sequence);
 }
 
-static inline void cmidi2_ump_sysex_get_packet_of(uint64_t* result1, uint64_t* result2, uint8_t group, uint8_t numBytes, const void* srcData, int32_t index,
+static inline void cmidi2_ump_sysex_get_packet_of(uint64_t* result1, uint64_t* result2, uint8_t group, size_t numBytes, const void* srcData, int32_t index,
         enum cmidi2_message_type messageType, int radix, bool hasStreamId, uint8_t streamId) {
     uint8_t dst8[16];
     memset(dst8, 0, 16);
@@ -754,11 +754,11 @@ static inline uint32_t cmidi2_ump_sysex7_get_sysex_length(const void* srcData) {
     return i - (csrc[0] == 0xF0 ? 1 : 0);
 }
 
-static inline uint8_t cmidi2_ump_sysex7_get_num_packets(uint8_t numSysex7Bytes) {
+static inline uint8_t cmidi2_ump_sysex7_get_num_packets(size_t numSysex7Bytes) {
     return cmidi2_ump_sysex_get_num_packets(numSysex7Bytes, 6);
 }
 
-static inline uint64_t cmidi2_ump_sysex7_get_packet_of(uint8_t group, uint8_t numBytes, const void* srcData, int32_t index) {
+static inline uint64_t cmidi2_ump_sysex7_get_packet_of(uint8_t group, size_t numBytes, const void* srcData, int32_t index) {
     uint64_t result;
     int srcOffset = numBytes > 0 && ((const uint8_t*) srcData)[0] == 0xF0 ? 1 : 0;
     cmidi2_ump_sysex_get_packet_of(&result, NULL, group, numBytes, (const uint8_t*) srcData + srcOffset, index, CMIDI2_MESSAGE_TYPE_SYSEX7, 6, false, 0);
@@ -770,6 +770,7 @@ static inline uint64_t cmidi2_ump_sysex7_get_packet_of(uint8_t group, uint8_t nu
 // This returns NULL for success, or anything else for failure.
 typedef void*(*cmidi2_ump_handler_u64)(uint64_t data, void* context);
 
+// Processes sysex7 inputs where we do not always end at F7 and thus takes length as the argument.
 // This returns NULL for success, or anything else that `sendUMP` returns for failure.
 static inline void* cmidi2_ump_sysex7_process_n(uint8_t group, void* sysex, uint32_t length, cmidi2_ump_handler_u64 sendUMP, void* context)
 {
@@ -791,11 +792,11 @@ static inline void* cmidi2_ump_sysex7_process(uint8_t group, void* sysex, cmidi2
 
 // 7.8 System Exclusive 8-Bit Messages
 
-static inline int8_t cmidi2_ump_sysex8_get_num_packets(uint8_t numBytes) {
+static inline int8_t cmidi2_ump_sysex8_get_num_packets(size_t numBytes) {
     return cmidi2_ump_sysex_get_num_packets(numBytes, 13);
 }
 
-static inline void cmidi2_ump_sysex8_get_packet_of(uint8_t group, uint8_t streamId, uint8_t numBytes, const void* srcData, int32_t index, uint64_t* result1, uint64_t* result2) {
+static inline void cmidi2_ump_sysex8_get_packet_of(uint8_t group, uint8_t streamId, size_t numBytes, const void* srcData, size_t index, uint64_t* result1, uint64_t* result2) {
     cmidi2_ump_sysex_get_packet_of(result1, result2, group, numBytes, srcData, index, CMIDI2_MESSAGE_TYPE_SYSEX8_MDS, 13, true, streamId);
 }
 
@@ -810,7 +811,7 @@ static inline void* cmidi2_ump_sysex8_process(uint8_t group, void* sysex, uint32
     uint32_t numPackets = cmidi2_ump_sysex8_get_num_packets(length);
     for (size_t p = 0; p < numPackets; p++) {
         uint64_t result1, result2;
-        cmidi2_ump_sysex8_get_packet_of(group, streamId, length, sysex, p, &result1, &result2);
+        cmidi2_ump_sysex8_get_packet_of(group, streamId, p + 1 == numPackets ? 13 : length % 13, sysex, p, &result1, &result2);
         void* retCode = sendUMP(result1, result2, p, context);
         if (retCode != 0)
             return retCode;
