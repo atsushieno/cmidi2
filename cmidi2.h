@@ -658,8 +658,8 @@ static inline uint8_t cmidi2_ump_get_byte_from_uint64(uint64_t src, uint8_t inde
     return (uint8_t) (src >> ((7 - index) * 8) & 0xFF);
 }
 
-static inline uint8_t cmidi2_ump_sysex_get_num_packets(size_t numBytes, uint8_t radix) {
-    return numBytes <= radix ? 1 : numBytes / radix + (numBytes % radix ? 1 : 0);
+static inline size_t cmidi2_ump_sysex_get_num_packets(size_t numBytes, uint8_t radix) {
+    return numBytes <= radix ? 1 : (numBytes / radix + (numBytes % radix ? 1 : 0));
 }
 
 static inline uint32_t cmidi2_ump_read_uint32_bytes_le(const void *sequence) {
@@ -754,7 +754,7 @@ static inline uint32_t cmidi2_ump_sysex7_get_sysex_length(const void* srcData) {
     return i - (csrc[0] == 0xF0 ? 1 : 0);
 }
 
-static inline uint8_t cmidi2_ump_sysex7_get_num_packets(size_t numSysex7Bytes) {
+static inline size_t cmidi2_ump_sysex7_get_num_packets(size_t numSysex7Bytes) {
     return cmidi2_ump_sysex_get_num_packets(numSysex7Bytes, 6);
 }
 
@@ -792,7 +792,7 @@ static inline void* cmidi2_ump_sysex7_process(uint8_t group, void* sysex, cmidi2
 
 // 7.8 System Exclusive 8-Bit Messages
 
-static inline int8_t cmidi2_ump_sysex8_get_num_packets(size_t numBytes) {
+static inline size_t cmidi2_ump_sysex8_get_num_packets(size_t numBytes) {
     return cmidi2_ump_sysex_get_num_packets(numBytes, 13);
 }
 
