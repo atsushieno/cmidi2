@@ -811,7 +811,7 @@ static inline void* cmidi2_ump_sysex8_process(uint8_t group, void* sysex, uint32
     uint32_t numPackets = cmidi2_ump_sysex8_get_num_packets(length);
     for (size_t p = 0; p < numPackets; p++) {
         uint64_t result1, result2;
-        cmidi2_ump_sysex8_get_packet_of(group, streamId, p + 1 == numPackets ? 13 : length % 13, sysex, p, &result1, &result2);
+        cmidi2_ump_sysex8_get_packet_of(group, streamId, length, sysex, p, &result1, &result2);
         void* retCode = sendUMP(result1, result2, p, context);
         if (retCode != 0)
             return retCode;
