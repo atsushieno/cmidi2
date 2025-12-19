@@ -6,6 +6,9 @@
 #include <stdint.h>
 #include <memory.h>
 
+#define CMIDI2_MIDI_2_0_RESERVED 0
+#define CMIDI2_JR_TIMESTAMP_TICKS_PER_SECOND 31250
+// FIXME: remove those global defs that are quite harmful (conflicts with other libraries)
 #define MIDI_2_0_RESERVED 0
 #define JR_TIMESTAMP_TICKS_PER_SECOND 31250
 
