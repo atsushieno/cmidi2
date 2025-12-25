@@ -113,6 +113,10 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
 Macros</h2></td></tr>
+<tr class="memitem:a5d9fb8cae13518e24b658085fcfeb34d" id="r_a5d9fb8cae13518e24b658085fcfeb34d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a5d9fb8cae13518e24b658085fcfeb34d">CMIDI2_MIDI_2_0_RESERVED</a>&#160;&#160;&#160;0</td></tr>
+<tr class="separator:a5d9fb8cae13518e24b658085fcfeb34d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2bf88417ebf299eea232d20a83a50446" id="r_a2bf88417ebf299eea232d20a83a50446"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#a2bf88417ebf299eea232d20a83a50446">CMIDI2_JR_TIMESTAMP_TICKS_PER_SECOND</a>&#160;&#160;&#160;31250</td></tr>
+<tr class="separator:a2bf88417ebf299eea232d20a83a50446"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aef3c287c3f466f2aa3e4124a0c7bd009" id="r_aef3c287c3f466f2aa3e4124a0c7bd009"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#aef3c287c3f466f2aa3e4124a0c7bd009">MIDI_2_0_RESERVED</a>&#160;&#160;&#160;0</td></tr>
 <tr class="separator:aef3c287c3f466f2aa3e4124a0c7bd009"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afca68f9f0963d746a7155e56b62e9ce8" id="r_afca68f9f0963d746a7155e56b62e9ce8"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cmidi2_8h.html#afca68f9f0963d746a7155e56b62e9ce8">JR_TIMESTAMP_TICKS_PER_SECOND</a>&#160;&#160;&#160;31250</td></tr>
@@ -1654,9 +1658,37 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line">        dst += <a class="code hl_function" href="cmidi2_8h.html#ad1b6aec5ee5f3f5da802bac28f6af1e9">cmidi2_internal_add_midi1_delta_time</a>(dst, context, deltaTime); \</div>
 <div class="line">        dst[0] = statusCode | <a class="code hl_function" href="cmidi2_8h.html#a06a61fec5b25794fac90271cb0f76c60">cmidi2_ump_get_channel</a>(ump);</div>
-<div class="ttc" id="acmidi2_8h_html_a06a61fec5b25794fac90271cb0f76c60"><div class="ttname"><a href="cmidi2_8h.html#a06a61fec5b25794fac90271cb0f76c60">cmidi2_ump_get_channel</a></div><div class="ttdeci">static uint8_t cmidi2_ump_get_channel(const cmidi2_ump *ump)</div><div class="ttdef"><b>Definition</b> cmidi2.h:1108</div></div>
-<div class="ttc" id="acmidi2_8h_html_ad1b6aec5ee5f3f5da802bac28f6af1e9"><div class="ttname"><a href="cmidi2_8h.html#ad1b6aec5ee5f3f5da802bac28f6af1e9">cmidi2_internal_add_midi1_delta_time</a></div><div class="ttdeci">static size_t cmidi2_internal_add_midi1_delta_time(uint8_t *dst, cmidi2_midi_conversion_context *context, int32_t deltaTime)</div><div class="ttdef"><b>Definition</b> cmidi2.h:2405</div></div>
+<div class="ttc" id="acmidi2_8h_html_a06a61fec5b25794fac90271cb0f76c60"><div class="ttname"><a href="cmidi2_8h.html#a06a61fec5b25794fac90271cb0f76c60">cmidi2_ump_get_channel</a></div><div class="ttdeci">static uint8_t cmidi2_ump_get_channel(const cmidi2_ump *ump)</div><div class="ttdef"><b>Definition</b> cmidi2.h:1111</div></div>
+<div class="ttc" id="acmidi2_8h_html_ad1b6aec5ee5f3f5da802bac28f6af1e9"><div class="ttname"><a href="cmidi2_8h.html#ad1b6aec5ee5f3f5da802bac28f6af1e9">cmidi2_internal_add_midi1_delta_time</a></div><div class="ttdeci">static size_t cmidi2_internal_add_midi1_delta_time(uint8_t *dst, cmidi2_midi_conversion_context *context, int32_t deltaTime)</div><div class="ttdef"><b>Definition</b> cmidi2.h:2408</div></div>
 </div><!-- fragment -->
+</div>
+</div>
+<a id="a2bf88417ebf299eea232d20a83a50446" name="a2bf88417ebf299eea232d20a83a50446"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2bf88417ebf299eea232d20a83a50446">&#9670;&#160;</a></span>CMIDI2_JR_TIMESTAMP_TICKS_PER_SECOND</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CMIDI2_JR_TIMESTAMP_TICKS_PER_SECOND&#160;&#160;&#160;31250</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5d9fb8cae13518e24b658085fcfeb34d" name="a5d9fb8cae13518e24b658085fcfeb34d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d9fb8cae13518e24b658085fcfeb34d">&#9670;&#160;</a></span>CMIDI2_MIDI_2_0_RESERVED</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CMIDI2_MIDI_2_0_RESERVED&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
 </div>
 </div>
 <a id="a191e7ccb92bae9e9da139378745cb7b5" name="a191e7ccb92bae9e9da139378745cb7b5"></a>
@@ -1693,7 +1725,7 @@ Functions</h2></td></tr>
 <b>Value:</b><div class="fragment"><div class="line">    <span class="keywordflow">for</span> (uint8_t* (iter) = (uint8_t*) ptr; \</div>
 <div class="line">        (iter) &lt; ((uint8_t*) ptr) + numBytes; \</div>
 <div class="line">        (iter) = (uint8_t*) <a class="code hl_function" href="cmidi2_8h.html#a4bd5212e033fbfdc2f596f216ba3a4d8">cmidi2_ump_sequence_next</a>(iter))</div>
-<div class="ttc" id="acmidi2_8h_html_a4bd5212e033fbfdc2f596f216ba3a4d8"><div class="ttname"><a href="cmidi2_8h.html#a4bd5212e033fbfdc2f596f216ba3a4d8">cmidi2_ump_sequence_next</a></div><div class="ttdeci">static void * cmidi2_ump_sequence_next(const void *ptr)</div><div class="ttdef"><b>Definition</b> cmidi2.h:1475</div></div>
+<div class="ttc" id="acmidi2_8h_html_a4bd5212e033fbfdc2f596f216ba3a4d8"><div class="ttname"><a href="cmidi2_8h.html#a4bd5212e033fbfdc2f596f216ba3a4d8">cmidi2_ump_sequence_next</a></div><div class="ttdeci">static void * cmidi2_ump_sequence_next(const void *ptr)</div><div class="ttdef"><b>Definition</b> cmidi2.h:1478</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -1731,7 +1763,7 @@ Functions</h2></td></tr>
 <b>Value:</b><div class="fragment"><div class="line">    <span class="keywordflow">for</span> (uint8_t* (iter) = (uint8_t*) ptr; \</div>
 <div class="line">        (iter) &lt; ((uint8_t*) ptr) + numBytes; \</div>
 <div class="line">        (iter) = (uint8_t*) <a class="code hl_function" href="cmidi2_8h.html#a90c47c803b8c5a7e8294f18eeef8497b">cmidi2_ump_sequence_next_be</a>(iter))</div>
-<div class="ttc" id="acmidi2_8h_html_a90c47c803b8c5a7e8294f18eeef8497b"><div class="ttname"><a href="cmidi2_8h.html#a90c47c803b8c5a7e8294f18eeef8497b">cmidi2_ump_sequence_next_be</a></div><div class="ttdeci">static void * cmidi2_ump_sequence_next_be(const void *ptr)</div><div class="ttdef"><b>Definition</b> cmidi2.h:1494</div></div>
+<div class="ttc" id="acmidi2_8h_html_a90c47c803b8c5a7e8294f18eeef8497b"><div class="ttname"><a href="cmidi2_8h.html#a90c47c803b8c5a7e8294f18eeef8497b">cmidi2_ump_sequence_next_be</a></div><div class="ttdeci">static void * cmidi2_ump_sequence_next_be(const void *ptr)</div><div class="ttdef"><b>Definition</b> cmidi2.h:1497</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -1769,7 +1801,7 @@ Functions</h2></td></tr>
 <b>Value:</b><div class="fragment"><div class="line">    <span class="keywordflow">for</span> (uint8_t* (iter) = (uint8_t*) ptr; \</div>
 <div class="line">        (iter) &lt; ((uint8_t*) ptr) + numBytes; \</div>
 <div class="line">        (iter) = (uint8_t*) <a class="code hl_function" href="cmidi2_8h.html#aecab2fd5be691f8dab5911c43d94fbf1">cmidi2_ump_sequence_next_le</a>(iter))</div>
-<div class="ttc" id="acmidi2_8h_html_aecab2fd5be691f8dab5911c43d94fbf1"><div class="ttname"><a href="cmidi2_8h.html#aecab2fd5be691f8dab5911c43d94fbf1">cmidi2_ump_sequence_next_le</a></div><div class="ttdeci">static void * cmidi2_ump_sequence_next_le(const void *ptr)</div><div class="ttdef"><b>Definition</b> cmidi2.h:1485</div></div>
+<div class="ttc" id="acmidi2_8h_html_aecab2fd5be691f8dab5911c43d94fbf1"><div class="ttname"><a href="cmidi2_8h.html#aecab2fd5be691f8dab5911c43d94fbf1">cmidi2_ump_sequence_next_le</a></div><div class="ttdeci">static void * cmidi2_ump_sequence_next_le(const void *ptr)</div><div class="ttdef"><b>Definition</b> cmidi2.h:1488</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -1790,9 +1822,9 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line">    (<a class="code hl_function" href="cmidi2_8h.html#acb14c2f480abf8d6555f1a4a5df0286c">cmidi2_ump_get_message_type</a>(ump) == <a class="code hl_enumvalue" href="cmidi2_8h.html#adde753403be90167865525f5d280488fa46e11747342a8ce6540d84d8b16eb797">CMIDI2_MESSAGE_TYPE_UTILITY</a> &amp;&amp; \</div>
 <div class="line">    cmidi2_ump_get_status_code(ump) == <a class="code hl_enumvalue" href="cmidi2_8h.html#a6cbfa2c5526a2bf3aa3f9582ca0db965a412d9c69a057fc613763271a8597a374">CMIDI2_UTILITY_STATUS_JR_TIMESTAMP</a>)</div>
-<div class="ttc" id="acmidi2_8h_html_a6cbfa2c5526a2bf3aa3f9582ca0db965a412d9c69a057fc613763271a8597a374"><div class="ttname"><a href="cmidi2_8h.html#a6cbfa2c5526a2bf3aa3f9582ca0db965a412d9c69a057fc613763271a8597a374">CMIDI2_UTILITY_STATUS_JR_TIMESTAMP</a></div><div class="ttdeci">@ CMIDI2_UTILITY_STATUS_JR_TIMESTAMP</div><div class="ttdef"><b>Definition</b> cmidi2.h:224</div></div>
-<div class="ttc" id="acmidi2_8h_html_acb14c2f480abf8d6555f1a4a5df0286c"><div class="ttname"><a href="cmidi2_8h.html#acb14c2f480abf8d6555f1a4a5df0286c">cmidi2_ump_get_message_type</a></div><div class="ttdeci">static uint8_t cmidi2_ump_get_message_type(const cmidi2_ump *ump)</div><div class="ttdef"><b>Definition</b> cmidi2.h:1077</div></div>
-<div class="ttc" id="acmidi2_8h_html_adde753403be90167865525f5d280488fa46e11747342a8ce6540d84d8b16eb797"><div class="ttname"><a href="cmidi2_8h.html#adde753403be90167865525f5d280488fa46e11747342a8ce6540d84d8b16eb797">CMIDI2_MESSAGE_TYPE_UTILITY</a></div><div class="ttdeci">@ CMIDI2_MESSAGE_TYPE_UTILITY</div><div class="ttdef"><b>Definition</b> cmidi2.h:35</div></div>
+<div class="ttc" id="acmidi2_8h_html_a6cbfa2c5526a2bf3aa3f9582ca0db965a412d9c69a057fc613763271a8597a374"><div class="ttname"><a href="cmidi2_8h.html#a6cbfa2c5526a2bf3aa3f9582ca0db965a412d9c69a057fc613763271a8597a374">CMIDI2_UTILITY_STATUS_JR_TIMESTAMP</a></div><div class="ttdeci">@ CMIDI2_UTILITY_STATUS_JR_TIMESTAMP</div><div class="ttdef"><b>Definition</b> cmidi2.h:227</div></div>
+<div class="ttc" id="acmidi2_8h_html_acb14c2f480abf8d6555f1a4a5df0286c"><div class="ttname"><a href="cmidi2_8h.html#acb14c2f480abf8d6555f1a4a5df0286c">cmidi2_ump_get_message_type</a></div><div class="ttdeci">static uint8_t cmidi2_ump_get_message_type(const cmidi2_ump *ump)</div><div class="ttdef"><b>Definition</b> cmidi2.h:1080</div></div>
+<div class="ttc" id="acmidi2_8h_html_adde753403be90167865525f5d280488fa46e11747342a8ce6540d84d8b16eb797"><div class="ttname"><a href="cmidi2_8h.html#adde753403be90167865525f5d280488fa46e11747342a8ce6540d84d8b16eb797">CMIDI2_MESSAGE_TYPE_UTILITY</a></div><div class="ttdeci">@ CMIDI2_MESSAGE_TYPE_UTILITY</div><div class="ttdef"><b>Definition</b> cmidi2.h:38</div></div>
 </div><!-- fragment -->
 </div>
 </div>
