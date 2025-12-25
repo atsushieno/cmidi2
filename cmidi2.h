@@ -734,7 +734,7 @@ static inline void cmidi2_ump_sysex_get_packet_of(uint64_t* result1, uint64_t* r
         dst8[2] = streamId;
 
     uint8_t dstOffset = hasStreamId ? 3 : 2;
-    for (uint8_t i = 0, j = index * radix; i < size; i++, j++)
+    for (size_t i = 0, j = index * radix; i < size; i++, j++)
         dst8[i + dstOffset] = src8[j];
 
     *result1 = cmidi2_ump_read_uint64_bytes_be(dst8);
