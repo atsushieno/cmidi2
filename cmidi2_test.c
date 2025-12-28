@@ -872,7 +872,10 @@ void testMidi1MessageSizes ()
     uint8_t a7[] = {0xF0, 0x7E, 0x7F, 1, 2, 3, 4, 5, 6, 7, 0xF7};
     assert(cmidi2_midi1_get_message_size(a7, 11) == 11);  // Sysex
     uint8_t a8[] = {0xFF, 2, 0, 1};
-    assert(cmidi2_midi1_get_message_size(a8, 4) == 4);  // Meta
+    assert(cmidi2_midi1_get_message_size_smf(a8, 4) == 4); // Meta (SMF)
+    uint8_t a9[] = {0xFF};
+    assert(cmidi2_midi1_get_message_size_live(a9, 1) == 1); // Reset (Live MIDI)
+    assert(cmidi2_midi1_get_message_size(a9, 1) == 1);      // Size without suffix is for live MIDI
 }
 
 void testMidi1Write7BitEncodedInt ()
