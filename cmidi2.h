@@ -2012,41 +2012,64 @@ static inline uint32_t cmidi2_midi1_get_7bit_encoded_int(uint8_t* bytes, uint32_
 }
 
 static inline uint32_t cmidi2_midi1_get_message_size(uint8_t* bytes, uint32_t length) {
-    uint32_t metaLength;
-    uint8_t* start = bytes;
-    uint8_t* end = bytes + length;
     switch (bytes[0]) {
-    case 0xF0:
+    case 0xF0: {
+        uint8_t* start = bytes;
+        uint8_t* end = bytes + length;
         for (bytes++; bytes < end; bytes++)
             if (*bytes == 0xF7)
                 break;
         bytes++;
-        break;
+        return bytes - start;
+    }
+    case CMIDI2_SYSTEM_STATUS_MIDI_TIME_CODE:
+    case CMIDI2_SYSTEM_STATUS_SONG_SELECT:
+        return 2;
+    case CMIDI2_SYSTEM_STATUS_SONG_POSITION:
+        return 3;
+    case CMIDI2_SYSTEM_STATUS_TUNE_REQUEST:
     case CMIDI2_SYSTEM_STATUS_TIMING_CLOCK:
     case CMIDI2_SYSTEM_STATUS_START:
     case CMIDI2_SYSTEM_STATUS_CONTINUE:
     case CMIDI2_SYSTEM_STATUS_STOP:
     case CMIDI2_SYSTEM_STATUS_ACTIVE_SENSING:
-        bytes += 1;
-        break;
-    case 0xFF:
-        bytes++;
-        metaLength = cmidi2_midi1_get_7bit_encoded_int(bytes, end - bytes);
-        bytes += metaLength + cmidi2_midi1_get_7bit_encoded_int_length(metaLength);
-        break;
+    case CMIDI2_SYSTEM_STATUS_RESET: // Use cmidi2_midi1_get_message_size_smf to handle meta-events
+        return 1;
     default:
         switch (bytes[0] & 0xF0) {
         case 0xC0:
         case 0xD0:
-            bytes += 2;
-            break;
+            return 2;
         default:
-            bytes += 3;
-            break;
+            return 3;
         }
         break;
     }
-    return bytes - start;
+    return 0;
+}
+
+static inline uint32_t cmidi2_midi1_get_message_size_live(uint8_t* bytes, uint32_t length) {
+    // 0xFF in live MIDI stream indicates reset. We handle it there.
+    return cmidi2_midi1_get_message_size(bytes, length);
+}
+
+static inline uint32_t cmidi2_midi1_get_message_size_smf(uint8_t* bytes, uint32_t length) {
+    switch (bytes[0]) {
+    case 0xFF: // 0xFF in standard MIDI file indicates Meta-events, not RESET
+    {
+        uint32_t metaLength;
+        uint8_t* start = bytes;
+        uint8_t* end = bytes + length;
+
+        bytes++;
+        metaLength = cmidi2_midi1_get_7bit_encoded_int(bytes, end - bytes);
+        bytes += metaLength + cmidi2_midi1_get_7bit_encoded_int_length(metaLength);
+
+        return bytes - start;
+    }
+    default:
+        return cmidi2_midi1_get_message_size(bytes, length);
+    }
 }
 
 // MIDI1 to UMP Translator
@@ -2114,7 +2137,7 @@ typedef struct cmidi2_midi_conversion_context {
     int32_t context_rpn;
     int32_t context_nrpn;
     int32_t context_dte;
-    // MIDI 2.0 Defalult Translation (UMP specification Appendix D.3) accepts only DTE LSB
+    // MIDI 2.0 Default Translation (UMP specification Appendix D.3) accepts only DTE LSB
     // as the conversion terminator, but cmidi2 allows DTE LSB to come first,
     // if this flag is enabled.
     bool allow_reordered_dte;
@@ -2174,7 +2197,8 @@ static inline void* cmidi2_internal_convert_add_midi1_sysex7_ump_to_list(uint64_
     cmidi2_convert_sysex_context* s7ctx = (cmidi2_convert_sysex_context*) context;
     s7ctx->conversion_context->ump[s7ctx->dst_offset] = data >> 32;
     s7ctx->conversion_context->ump[s7ctx->dst_offset + 1] = data & 0xFFFFFFFF;
-    s7ctx->conversion_context->ump_proceeded_bytes += 2;
+    s7ctx->conversion_context->ump_proceeded_bytes += 2 * sizeof(cmidi2_ump);
+    s7ctx->dst_offset += 2;
     return NULL;
 }
 
@@ -2185,7 +2209,8 @@ static inline void* cmidi2_internal_convert_add_midi1_sysex8_ump_to_list(uint64_
     s8ctx->conversion_context->ump[s8ctx->dst_offset + 1] = data1 & 0xFFFFFFFF;
     s8ctx->conversion_context->ump[s8ctx->dst_offset + 2] = data2 >> 32;
     s8ctx->conversion_context->ump[s8ctx->dst_offset + 3] = data2 & 0xFFFFFFFF;
-    s8ctx->conversion_context->ump_proceeded_bytes += 4;
+    s8ctx->conversion_context->ump_proceeded_bytes += 4 * sizeof(cmidi2_ump);
+    s8ctx->dst_offset += 4;
     return NULL;
 }
 
@@ -2244,11 +2269,12 @@ static enum cmidi2_midi_conversion_result cmidi2_convert_midi1_to_ump(cmidi2_mid
                 cmidi2_ump_sysex7_process(context->group, context->midi1 + *sIdx,
                                           cmidi2_internal_convert_add_midi1_sysex7_ump_to_list, &sysExCtx);
             }
-            *sIdx += sysexSize + 1; // +1 for 0xF7
+            *sIdx += sysexSize + 2; // +1 for 0xF0 and 0xF7
         } else {
             // fixed sized message
             size_t remaining = sLen - *sIdx;
-            size_t inputMidi1Len = cmidi2_midi1_get_message_size(context->midi1 + *sIdx, remaining);
+            size_t inputMidi1Len = context->is_midi1_smf ? cmidi2_midi1_get_message_size_smf(context->midi1 + *sIdx, remaining)
+                                                         : cmidi2_midi1_get_message_size_live(context->midi1 + *sIdx, remaining);
             if (inputMidi1Len > remaining)
                 return CMIDI2_CONVERSION_RESULT_INVALID_INPUT;
 
@@ -2347,6 +2373,7 @@ static enum cmidi2_midi_conversion_result cmidi2_convert_midi1_to_ump(cmidi2_mid
                     m2 = cmidi2_ump_midi2_program(context->group, channel,
                                                   bankValid ? CMIDI2_PROGRAM_CHANGE_OPTION_BANK_VALID : CMIDI2_PROGRAM_CHANGE_OPTION_NONE,
                                                   byte2, bankMsbValid ? context->context_bank >> 8 : 0, bankLsbValid ? context->context_bank & 0x7F : 0);
+                    outputUmpLen = 2;
                     context->context_bank = 0x8080;
                     break;
                 case CMIDI2_STATUS_CAF:
@@ -2364,16 +2391,17 @@ static enum cmidi2_midi_conversion_result cmidi2_convert_midi1_to_ump(cmidi2_mid
                     case CMIDI2_SYSTEM_STATUS_SONG_SELECT:
                         inputMidi1Len = 2;
                         m2 = cmidi2_ump_system_message(context->group, status, byte2, byte3);
-                        outputUmpLen = 2;
+                        outputUmpLen = 1;
                         break;
                     case CMIDI2_SYSTEM_STATUS_SONG_POSITION:
                         inputMidi1Len = 3;
                         m2 = cmidi2_ump_system_message(context->group, status, byte2, byte3);
-                        outputUmpLen = 2;
+                        outputUmpLen = 1;
                         break;
                     case CMIDI2_SYSTEM_STATUS_TUNE_REQUEST:
                     case CMIDI2_SYSTEM_STATUS_TIMING_CLOCK:
                     case CMIDI2_SYSTEM_STATUS_START:
+                    case CMIDI2_SYSTEM_STATUS_CONTINUE:
                     case CMIDI2_SYSTEM_STATUS_STOP:
                     case CMIDI2_SYSTEM_STATUS_ACTIVE_SENSING:
                     case CMIDI2_SYSTEM_STATUS_RESET:
@@ -2460,6 +2488,7 @@ static inline size_t cmidi2_convert_single_ump_to_timed_midi1(
 
     switch (messageType) {
     case CMIDI2_MESSAGE_TYPE_SYSTEM:
+        statusCode = cmidi2_ump_get_status_byte(ump);
         CMIDI2_INTERNAL_ADD_DELTA_TIME
 
         switch (statusCode) {
@@ -2469,15 +2498,18 @@ static inline size_t cmidi2_convert_single_ump_to_timed_midi1(
         case CMIDI2_SYSTEM_STATUS_MIDI_TIME_CODE:
         case CMIDI2_SYSTEM_STATUS_SONG_SELECT:
             midiEventSize = 2;
+            break;
         default:
             midiEventSize = 1;
             break;
         }
         if (maxBytes < midiEventSize)
             return 0;
-        dst[0] = cmidi2_ump_get_status_byte(ump); // no channel filtering
-        dst[1] = cmidi2_ump_get_midi1_byte2(ump);
-        dst[2] = cmidi2_ump_get_midi1_byte3(ump);
+        dst[0] = statusCode; // no channel filtering
+        if (midiEventSize >= 2)
+            dst[1] = cmidi2_ump_get_midi1_byte2(ump);
+        if (midiEventSize >= 3)
+            dst[2] = cmidi2_ump_get_midi1_byte3(ump);
         break;
     case CMIDI2_MESSAGE_TYPE_MIDI_1_CHANNEL:
         CMIDI2_INTERNAL_ADD_DELTA_TIME
