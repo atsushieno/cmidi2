@@ -327,9 +327,11 @@ static inline uint8_t cmidi2_ump_get_num_bytes(uint32_t data) {
     case CMIDI2_MESSAGE_TYPE_SYSEX7:
         return 8;
     case CMIDI2_MESSAGE_TYPE_SYSEX8_MDS:
+    case CMIDI2_MESSAGE_TYPE_FLEX_DATA:
+    case CMIDI2_MESSAGE_TYPE_UMP_STREAM:
         return 16;
     }
-    return 0xFF; /* wrong */
+    return 4; /* wrong */
 }
 
 typedef struct cmidi2_ump128 {
@@ -1081,19 +1083,9 @@ static inline uint8_t cmidi2_ump_get_message_type(const cmidi2_ump* ump) {
     return *ump >> 28;
 }
 
+// I figured it works the same way as cmidi2_ump_get_num_bytes() except for the type...
 static inline uint8_t cmidi2_ump_get_message_size_bytes(const cmidi2_ump* ump) {
-    switch (cmidi2_ump_get_message_type(ump)) {
-        case CMIDI2_MESSAGE_TYPE_UTILITY:
-        case CMIDI2_MESSAGE_TYPE_SYSTEM:
-        case CMIDI2_MESSAGE_TYPE_MIDI_1_CHANNEL:
-            return 4;
-        case CMIDI2_MESSAGE_TYPE_SYSEX7:
-        case CMIDI2_MESSAGE_TYPE_MIDI_2_CHANNEL:
-            return 8;
-        case CMIDI2_MESSAGE_TYPE_SYSEX8_MDS:
-            return 16;
-    }
-    return 0; // invalid
+    return ump ? cmidi2_ump_get_num_bytes(*ump) : 0;
 }
 
 static inline uint8_t cmidi2_ump_get_group(const cmidi2_ump* ump) {
