@@ -1396,8 +1396,11 @@ static inline void cmidi2_internal_sysex8_copy_data_byte_swapping(uint8_t* dst, 
         d[i++] = i32 & 0xFF;
         s++;
     }
-    for (; i < sizeInBytes; i++)
-        d[i] = s[i + 3 - i % 4];
+    if (i < sizeInBytes) {
+        uint32_t i32 = *s;
+        for (; i < sizeInBytes; i++)
+            d[i] = (i32 >> (24 - i % 4 * 8)) & 0xFF;
+    }
 }
 
 /// Parse and store sysex8 binary, using some fine-tuned behavioral functions.

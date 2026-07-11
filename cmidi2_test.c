@@ -278,6 +278,34 @@ void testType5Messages_sysex8_reader_writer()
     assert(parseBuffer[8] == 0x41);
 }
 
+void testType5Messages_sysex8_reader_writer_partial_word()
+{
+    uint8_t source[] = {0x34, 0, 0, 0};
+    uint8_t umpBuffer[16];
+    memset(umpBuffer, 0, sizeof(umpBuffer));
+
+    cmidi2_ump_forge forge;
+    cmidi2_ump_forge_init(&forge, (cmidi2_ump*) umpBuffer, sizeof(umpBuffer));
+    assert(NULL == cmidi2_ump_sysex8_process(0, source, sizeof(source), 0,
+        sysex8_binary_reader_helper_read_into_ump_forge, &forge));
+
+    uint8_t parsed[sizeof(source) + 1];
+    memset(parsed, 0xFF, sizeof(parsed));
+    cmidi2_ump_binary_read_state readState;
+    cmidi2_ump_binary_read_state_init(&readState, NULL, parsed, sizeof(parsed), false);
+    size_t numUmpParsed = cmidi2_ump_get_sysex8_data(
+        sysex8_binary_reader_helper_select_stream,
+        &readState,
+        cmidi2_ump_binary_reader_helper_check_continuity,
+        (cmidi2_ump*) umpBuffer,
+        sizeof(umpBuffer) / sizeof(cmidi2_ump));
+
+    assert(numUmpParsed == 4);
+    assert(readState.dataSize == sizeof(source));
+    assert(readState.resultCode == CMIDI2_BINARY_READER_RESULT_COMPLETE);
+    assert(memcmp(parsed, source, sizeof(source)) == 0);
+}
+
 void testType5Messages_mds()
 {
     int length = cmidi2_ump_mds_get_num_payloads(0);
@@ -329,6 +357,7 @@ void testType5Messages()
 {
     testType5Messages_sysex();
     testType5Messages_sysex8_reader_writer();
+    testType5Messages_sysex8_reader_writer_partial_word();
     testType5Messages_mds();
 }
 
