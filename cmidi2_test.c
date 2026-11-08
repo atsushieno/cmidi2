@@ -1545,6 +1545,39 @@ int testMergeSequences()
     return 0;
 }
 
+int testMergeSequencesWithEmptySequence()
+{
+    // The first timestamp must survive when the other sequence is empty.
+    uint32_t seq[] = { 0x00200180, 0x40903c00, 0xE0000000, 0x00200010, 0x40803c00, 0x00000000 };
+    uint32_t dst[16], stale[2] = { 0x00207000, 0x40904000 };
+    memset(dst, 0, sizeof(dst));
+    assert(cmidi2_ump_merge_sequences((cmidi2_ump*) dst, sizeof(dst), (cmidi2_ump*) seq, sizeof(seq), (cmidi2_ump*) stale, 0) == sizeof(seq));
+    for (int i = 0; i < 6; i++)
+        assert(dst[i] == seq[i]);
+    memset(dst, 0, sizeof(dst));
+    assert(cmidi2_ump_merge_sequences((cmidi2_ump*) dst, sizeof(dst), (cmidi2_ump*) stale, 0, (cmidi2_ump*) seq, sizeof(seq)) == sizeof(seq));
+    for (int i = 0; i < 6; i++)
+        assert(dst[i] == seq[i]);
+    return 0;
+}
+
+int testMergeSequencesLongDeltaAndCapacity()
+{
+    uint32_t seq1[] = { 0x0020FFFF, 0x0020FFFF, 0x00200002, 0x20903c40 };
+    uint32_t seq2[] = { 0x00200001, 0x20904040 };
+    uint32_t dst[8];
+    memset(dst, 0, sizeof(dst));
+    assert(cmidi2_ump_merge_sequences((cmidi2_ump*) dst, sizeof(dst), (cmidi2_ump*) seq1, sizeof(seq1), (cmidi2_ump*) seq2, sizeof(seq2)) == 6 * 4);
+    uint32_t reference[] = { 0x00200001, 0x20904040, 0x0020FFFF, 0x0020FFFF, 0x00200001, 0x20903c40 };
+    for (int i = 0; i < 6; i++)
+        assert(dst[i] == reference[i]);
+    // A message that does not fit is dropped together with its timestamps.
+    memset(dst, 0, sizeof(dst));
+    assert(cmidi2_ump_merge_sequences((cmidi2_ump*) dst, 4 * 4, (cmidi2_ump*) seq1, sizeof(seq1), (cmidi2_ump*) seq2, sizeof(seq2)) == 2 * 4);
+    assert(dst[2] == 0);
+    return 0;
+}
+
 int testConvertMidi1ToUmp()
 {
     testConvertMidi1ToUmpNoteOn();
@@ -1580,6 +1613,8 @@ int testConversions ()
 int testMergers()
 {
     testMergeSequences();
+    testMergeSequencesWithEmptySequence();
+    testMergeSequencesLongDeltaAndCapacity();
     return 0;
 }
 
